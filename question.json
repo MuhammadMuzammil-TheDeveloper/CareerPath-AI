@@ -1,0 +1,70 @@
+{
+    "questions": [
+      {
+        "id": 1,
+        "text": "Which of these activities do you enjoy most?",
+        "options": [
+          {"text": "Solving complex problems", "value": "analytical"},
+          {"text": "Creating art or designs", "value": "creative"},
+          {"text": "Helping others directly", "value": "social"},
+          {"text": "Building or fixing things", "value": "practical"}
+        ]
+      },
+      {
+        "id": 2,
+        "text": "How do you prefer to work?",
+        "options": [
+          {"text": "Independently", "value": "independent"},
+          {"text": "In a team", "value": "team"},
+          {"text": "A mix of both", "value": "balanced"}
+        ]
+      },
+      {
+        "id": 3,
+        "text": "What's most important to you in a job?",
+        "options": [
+          {"text": "High earning potential", "value": "earning"},
+          {"text": "Work-life balance", "value": "balance"},
+          {"text": "Making an impact", "value": "impact"},
+          {"text": "Creative freedom", "value": "creative"}
+        ]
+      },
+      {
+        "id": 4,
+        "text": "Which subjects interest you most?",
+        "options": [
+          {"text": "Technology and computers", "value": "tech"},
+          {"text": "Business and finance", "value": "business"},
+          {"text": "Arts and humanities", "value": "arts"},
+          {"text": "Sciences and research", "value": "science"}
+        ]
+      }
+    ],
+    "careers": [
+      {
+        "id": "software-engineer",
+        "title": "Software Engineer",
+        "description": "You enjoy solving complex problems with technology. Software engineering offers creative problem-solving opportunities with excellent growth potential.",
+        "traits": ["analytical", "tech", "independent", "earning"]
+      },
+      {
+        "id": "ux-designer",
+        "title": "UX Designer",
+        "description": "Your creative and analytical skills make you perfect for UX design, where you'll create intuitive digital experiences.",
+        "traits": ["creative", "tech", "balanced", "impact"]
+      },
+      {
+        "id": "financial-analyst",
+        "title": "Financial Analyst",
+        "value": "financial-analyst",
+        "description": "Your analytical mind and interest in business make financial analysis a great fit for you.",
+        "traits": ["analytical", "business", "independent", "earning"]
+      },
+      {
+        "id": "teacher",
+        "title": "Teacher/Educator",
+        "description": "Your social skills and desire to make an impact would thrive in an educational setting.",
+        "traits": ["social", "arts", "team", "impact"]
+      }
+    ]
+  }
