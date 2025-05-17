@@ -75,6 +75,27 @@ body {
   height: 2px;
   background: #cbd5e1;
 }
+/* Mobile menu styles */
+.nav-menu {
+  top: 100%;
+  z-index: 40;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+
+/* Add to your existing CSS */
+#mobile-menu .btn-primary {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+/* Prevent scrolling when menu is open */
+body.menu-open {
+  overflow: hidden;
+  height: 100vh;
+}
 
 @media (max-width: 768px) {
   .how-it-works-step:not(:last-child):after {
