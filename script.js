@@ -187,36 +187,40 @@ const careerResults = {
   }
 };
 
-// Quiz Variables
+
 
 // Quiz Variables
 let currentQuestion = 0;
 let userAnswers = [];
 
-// DOM Elements - Keep all original selectors
-const quizModal = document.getElementById('quiz-modal');
-const resultsModal = document.getElementById('results-modal');
+// DOM Elements
+const quizForm = document.getElementById('quiz-form');
+const closeForm = document.getElementById('closeForm');
+const userForm = document.getElementById('userForm');
+const assessmentButtons = document.querySelectorAll('.btn-primary[href="#quiz"]');
+const quizDashboard = document.getElementById('quiz-dashboard');
+const dashboardBack = document.getElementById('dashboard-back');
 const quizContainer = document.getElementById('quiz-container');
 const quizProgress = document.getElementById('quiz-progress');
 const prevButton = document.getElementById('prev-question');
 const nextButton = document.getElementById('next-question');
 const submitButton = document.getElementById('submit-quiz');
+const resultsModal = document.getElementById('results-modal');
 const resultsContent = document.getElementById('results-content');
 const closeResults = document.getElementById('close-results');
-const quizForm = document.getElementById('quiz-form');
-const closeForm = document.getElementById('closeForm');
-const userForm = document.getElementById('userForm');
-const assessmentButtons = document.querySelectorAll('.btn-primary[href="#quiz"]');
 
-// Initialize Quiz - Keep original function
+// Initialize Quiz
 function initQuiz() {
   currentQuestion = 0;
   userAnswers = [];
   renderQuestion();
-  quizModal.classList.remove('hidden');
+  // Hide main content and show dashboard
+  document.body.classList.add('overflow-hidden');
+  quizDashboard.classList.remove('hidden');
+  window.scrollTo(0, 0);
 }
 
-// Render Current Question - Keep original function
+// Render Current Question
 function renderQuestion() {
   const question = quizQuestions[currentQuestion];
   
@@ -225,19 +229,17 @@ function renderQuestion() {
   let optionsHTML = '';
   question.options.forEach((option, index) => {
     optionsHTML += `
-      <label class="flex items-center p-4 border border-gray-200 rounded-lg mb-2 cursor-pointer hover:bg-primary-50">
-        <input type="radio" name="quiz-answer" value="${index}" class="mr-3" 
+      <label class="flex items-center p-4 border border-gray-200 rounded-lg mb-3 cursor-pointer hover:bg-primary-50 transition">
+        <input type="radio" name="quiz-answer" value="${index}" class="mr-3 h-5 w-5 text-primary-600" 
                ${userAnswers[currentQuestion] === index ? 'checked' : ''}>
-        <span>${option}</span>
+        <span class="text-secondary-700">${option}</span>
       </label>
     `;
   });
   
   quizContainer.innerHTML = `
-    <div class="mb-6">
-      <h3 class="text-lg font-semibold mb-4">${question.question}</h3>
-      <div class="space-y-2">${optionsHTML}</div>
-    </div>
+    <h3 class="text-lg md:text-xl font-semibold mb-6 text-secondary-800">${question.question}</h3>
+    <div class="space-y-3">${optionsHTML}</div>
   `;
   
   // Update button states
@@ -246,17 +248,21 @@ function renderQuestion() {
   submitButton.classList.toggle('hidden', currentQuestion !== quizQuestions.length - 1);
 }
 
-// Save User Answer - Keep original function
+// Save User Answer
 function saveAnswer() {
   const selectedOption = document.querySelector('input[name="quiz-answer"]:checked');
   if (selectedOption) {
     userAnswers[currentQuestion] = parseInt(selectedOption.value);
+  } else if (typeof userAnswers[currentQuestion] === 'undefined') {
+    // If no answer selected and no previous answer stored
+    return false;
   }
+  return true;
 }
 
-// Show Results - Keep original function
+// Show Results
 function showResults() {
-  quizModal.classList.add('hidden');
+  quizDashboard.classList.add('hidden');
   
   // Calculate results
   const categoryScores = {};
@@ -272,48 +278,64 @@ function showResults() {
   
   const result = careerResults[topCategory] || careerResults["Analytical"];
   
-  // Render results - Keep original UI structure
+  // Render results
   resultsContent.innerHTML = `
-    <div class="bg-primary-50 rounded-lg p-6 mb-6">
-      <h3 class="text-xl font-bold text-primary-700 mb-2">${result.title}</h3>
-      <p class="text-secondary-700 mb-4">${result.description}</p>
+    <div class="bg-primary-50 rounded-xl p-6 mb-6">
+      <div class="flex items-start mb-4">
+        <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center mr-4 flex-shrink-0">
+          <i class="fas fa-user-graduate text-white text-xl"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-primary-700 mb-1">${result.title}</h3>
+          <p class="text-secondary-700">${result.description}</p>
+        </div>
+      </div>
       
       <div class="mb-6">
-        <h4 class="font-semibold text-secondary-800 mb-2">Recommended Careers:</h4>
+        <h4 class="font-semibold text-secondary-800 mb-3">Recommended Careers:</h4>
         <div class="flex flex-wrap gap-2">
           ${result.careers.map(career => `
-            <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm">${career}</span>
+            <span class="bg-white px-3 py-1 rounded-full text-sm shadow-sm border border-gray-100">${career}</span>
           `).join('')}
         </div>
       </div>
       
       <div>
-        <h4 class="font-semibold text-secondary-800 mb-2">Your Career Roadmap:</h4>
-        <ol class="space-y-2 list-decimal list-inside">
-          ${result.roadmap.map(step => `<li class="text-secondary-700">${step}</li>`).join('')}
+        <h4 class="font-semibold text-secondary-800 mb-3">Your Career Roadmap:</h4>
+        <ol class="space-y-3">
+          ${result.roadmap.map(step => `
+            <li class="flex items-start">
+              <span class="bg-primary-100 text-primary-600 rounded-full w-6 h-6 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">${result.roadmap.indexOf(step)+1}</span>
+              <span class="text-secondary-700">${step}</span>
+            </li>
+          `).join('')}
         </ol>
       </div>
     </div>
     
     <div class="text-center">
-      <p class="text-secondary-600">Want to explore more career options?</p>
-      <button class="btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-medium mt-2">
+      <p class="text-secondary-600 mb-4">Want to explore more career options?</p>
+      <button class="btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-3 rounded-full font-medium">
         View Full Report <i class="fas fa-arrow-right ml-2"></i>
       </button>
     </div>
   `;
   
   resultsModal.classList.remove('hidden');
+  document.body.classList.remove('overflow-hidden');
 }
 
-// Event Listeners - Modified to implement the flow without data storage
+// Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-  // Quiz navigation - Keep original
+  // Quiz navigation
   nextButton.addEventListener('click', () => {
-    saveAnswer();
-    if (currentQuestion < quizQuestions.length - 1) {
-      currentQuestion++;
-      renderQuestion();
+    if (saveAnswer()) {
+      if (currentQuestion < quizQuestions.length - 1) {
+        currentQuestion++;
+        renderQuestion();
+      }
+    } else {
+      alert('Please select an answer before proceeding.');
     }
   });
 
@@ -325,33 +347,65 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   submitButton.addEventListener('click', () => {
-    saveAnswer();
-    showResults();
+    if (saveAnswer()) {
+      showResults();
+    } else {
+      alert('Please select an answer before submitting.');
+    }
   });
 
   closeResults.addEventListener('click', () => {
     resultsModal.classList.add('hidden');
   });
 
-  // Form handling - Modified to show form first, then quiz
+  // Form handling
   assessmentButtons.forEach(button => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       quizForm.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
     });
   });
 
   closeForm.addEventListener('click', () => {
     quizForm.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
   });
 
   userForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    quizForm.classList.add('hidden');
-    initQuiz();
+    // Validate form
+    const requiredFields = ['fullName', 'email', 'age', 'gender', 'education', 'country'];
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+      const element = document.getElementById(field);
+      if (!element.value.trim()) {
+        element.classList.add('border-red-500');
+        isValid = false;
+      } else {
+        element.classList.remove('border-red-500');
+      }
+    });
+    
+    if (isValid) {
+      quizForm.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+      initQuiz();
+    } else {
+      alert('Please fill in all required fields.');
+    }
   });
 
-  // Keep all other original event listeners
+  dashboardBack.addEventListener('click', () => {
+    if (confirm('Are you sure you want to leave? Your progress will be lost.')) {
+      quizDashboard.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+      window.scrollTo(0, 0);
+    }
+  });
+
+  // Mobile menu toggle - updated to not affect body overflow
   document.getElementById('mobile-menu-button')?.addEventListener('click', function() {
     const menu = document.getElementById('mobile-menu');
     const icon = this.querySelector('i');
@@ -362,6 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Close mobile menu when clicking links
   document.querySelectorAll('#mobile-menu a').forEach(link => {
     link.addEventListener('click', () => {
       document.getElementById('mobile-menu').classList.add('hidden');
@@ -374,24 +429,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // FAQ accordion toggle
   document.querySelectorAll('.faq button').forEach(button => {
     button.addEventListener('click', () => {
       const content = button.nextElementSibling;
       const icon = button.querySelector('i');
       if (content) content.classList.toggle('hidden');
       if (icon) {
-        icon.classList.toggle('transform');
-        icon.classList.toggle('rotate-180');
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
       }
     });
   });
 
+  // Smooth scrolling for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       if (this.getAttribute('href') !== '#quiz') {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
-        if (target) target.scrollIntoView({ behavior: 'smooth' });
+        if (target) {
+          document.body.classList.remove('overflow-hidden');
+          target.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
       }
     });
   });
