@@ -102,3 +102,99 @@ body.menu-open {
     display: none;
   }
 }
+
+
+
+/* Add to your existing CSS */
+#quiz-dashboard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 50;
+}
+
+#quiz-container label input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  transition: all 0.2s ease;
+}
+
+#quiz-container label input[type="radio"]:checked {
+  border-color: #0ea5e9;
+  background-color: #0ea5e9;
+  background-image: radial-gradient(circle, white 35%, transparent 40%);
+}
+
+#quiz-container label:hover input[type="radio"] {
+  border-color: #0ea5e9;
+}
+
+body.overflow-hidden {
+  overflow: hidden;
+}
+
+/* Add to style.css */
+#quiz-dashboard {
+  position: static;
+  min-height: 100vh;
+}
+
+#quiz-container label {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#quiz-container label:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+#quiz-container input[type="radio"] {
+  margin-right: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+#quiz-container .question-text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+}
+
+
+
+/* Add this to your existing CSS */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+  /* Remove overflow-y: hidden if it exists */
+}
+
+/* Only apply overflow-hidden when modals are open */
+body.overflow-hidden {
+  overflow: hidden;
+}
+
+/* Ensure the mobile menu can scroll if content is long */
+#mobile-menu {
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
