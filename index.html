@@ -6,7 +6,6 @@
   <title>CareerPath AI | Discover Your Ideal Career</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
   <script>
     tailwind.config = {
       theme: {
@@ -53,7 +52,6 @@
       }
     }
   </script>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
@@ -139,7 +137,6 @@
       }
     }
   </style>
-
 </head>
 <body class="bg-gradient-to-br from-primary-50 to-white text-secondary-900">
 
@@ -261,7 +258,9 @@
     </form>
   </div>
 </section>
-  
+
+
+
   <!-- Hero Section -->
   <section id="home" class="relative overflow-hidden">
     <div class="absolute top-0 left-0 w-full h-full opacity-5">
@@ -437,6 +436,55 @@
     </div>
   </section>
 
+<!-- Quiz Modal -->
+<section id="quiz-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-lg mx-4 transform transition-all duration-300 overflow-y-auto max-h-[90vh]">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-primary-600">CareerPath AI Assessment</h2>
+      <div id="quiz-progress" class="text-sm text-secondary-500">Question 1 of 10</div>
+    </div>
+    
+    <div id="quiz-container">
+      <!-- Quiz questions will be inserted here by JavaScript -->
+    </div>
+    
+    <div class="flex justify-between mt-6">
+      <button id="prev-question" class="text-primary-600 font-medium px-4 py-2 rounded-lg disabled:opacity-50" disabled>
+        <i class="fas fa-arrow-left mr-2"></i> Previous
+      </button>
+      <button id="next-question" class="btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-medium">
+        Next <i class="fas fa-arrow-right ml-2"></i>
+      </button>
+      <button id="submit-quiz" class="hidden btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-medium">
+        Submit <i class="fas fa-check ml-2"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Results Modal -->
+<section id="results-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-2xl mx-4 transform transition-all duration-300 overflow-y-auto max-h-[90vh]">
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-trophy text-white text-2xl"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-primary-600">Your Career Path Results</h2>
+      <p class="text-secondary-500">Based on your assessment, here are your ideal career matches</p>
+    </div>
+    
+    <div id="results-content">
+      <!-- Results will be inserted here by JavaScript -->
+    </div>
+    
+    <div class="mt-6 text-center">
+      <button id="close-results" class="btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-medium">
+        Close <i class="fas fa-times ml-2"></i>
+      </button>
+    </div>
+  </div>
+</section>
+  
   <!-- Testimonials Section -->
   <section id="testimonials" class="py-20 bg-primary-50">
     <div class="container mx-auto px-6">
@@ -678,8 +726,16 @@
     </div>
   </footer>
 
-  <script src="script.js">
-  </script>
-  
+
+
+
+
+<script src="script.js">
+</script>
+
 </body>
 </html>
+
+
+
+
