@@ -245,20 +245,76 @@
                class="w-full px-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600" />
       </div>
 
+      <!-- In index.html, update the form footer section -->
+<div class="flex flex-col sm:flex-row justify-between items-center gap-3 mt-6">
+  <div class="flex items-center gap-3">
+    <button type="button" id="showLogin" 
+            class="text-primary-600 hover:text-primary-800 font-medium text-sm md:text-base transition px-4 py-2">
+      Already have an account? Login
+    </button>
+    <button type="button" id="closeForm"
+            class="text-red-500 hover:text-red-700 font-medium text-sm md:text-base transition px-4 py-2">
+      Cancel
+    </button>
+  </div>
+  <button type="submit"
+          class="w-full sm:w-auto bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-semibold text-sm md:text-base shadow-md hover:shadow-lg transition">
+    Start Quiz
+  </button>
+</div>
+    </form>
+  </div>
+</section>
+
+<!-- Login Form -->
+<section id="login-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
+  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-lg mx-4 transform transition-all duration-300 overflow-y-auto max-h-[90vh]">
+    <div class="flex flex-col items-center mb-6">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-primary-600 to-indigo-600 flex items-center justify-center mb-3">
+        <i class="fas fa-brain text-white text-xl"></i>
+      </div>
+      <h2 class="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600 text-center">
+        CareerPath AI Login
+      </h2>
+      <p class="text-center text-gray-500 text-xs md:text-sm mt-2">
+        Sign in to continue your career journey
+      </p>
+    </div>
+
+    <form id="loginForm" class="space-y-3 md:space-y-4">
+      <div>
+        <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1">Email Address</label>
+        <input type="email" placeholder="your.email@example.com" required
+               class="w-full px-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600" />
+      </div>
+
+      <div>
+        <label class="block text-xs md:text-sm font-medium text-gray-700 mb-1">Password</label>
+        <input type="password" placeholder="••••••••" required
+               class="w-full px-3 py-2 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600" />
+      </div>
+
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <input id="remember-me" type="checkbox" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+          <label for="remember-me" class="ml-2 block text-sm text-gray-700">Remember me</label>
+        </div>
+        <a href="#" class="text-sm text-primary-600 hover:text-primary-800">Forgot password?</a>
+      </div>
+
       <div class="flex flex-col-reverse sm:flex-row justify-between items-center gap-3 mt-6">
-        <button type="button" id="closeForm"
+        <button type="button" id="closeLogin"
                 class="w-full sm:w-auto text-red-500 hover:text-red-700 font-medium text-sm md:text-base transition px-4 py-2">
           Cancel
         </button>
         <button type="submit"
                 class="w-full sm:w-auto bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-semibold text-sm md:text-base shadow-md hover:shadow-lg transition">
-          Start Quiz
+          Login
         </button>
       </div>
     </form>
   </div>
 </section>
-
 
 
   <!-- Hero Section -->
@@ -784,7 +840,6 @@
 
 </body>
 </html>
-
 
 
 
