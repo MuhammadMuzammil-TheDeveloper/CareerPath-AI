@@ -372,30 +372,61 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('overflow-hidden');
   });
 
-  userForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    // Validate form
-    const requiredFields = ['fullName', 'email', 'age', 'gender', 'education', 'country'];
-    let isValid = true;
-    
-    requiredFields.forEach(field => {
-      const element = document.getElementById(field);
-      if (!element.value.trim()) {
-        element.classList.add('border-red-500');
-        isValid = false;
-      } else {
-        element.classList.remove('border-red-500');
-      }
-    });
-    
-    if (isValid) {
-      quizForm.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-      initQuiz();
+ userForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  // Validate form
+  const requiredFields = ['fullName', 'email', 'age', 'gender', 'education', 'country'];
+  let isValid = true;
+  
+  requiredFields.forEach(field => {
+    const element = document.getElementById(field);
+    if (!element.value.trim()) {
+      element.classList.add('border-red-500');
+      isValid = false;
     } else {
-      alert('Please fill in all required fields.');
+      element.classList.remove('border-red-500');
     }
   });
+  
+  if (isValid) {
+    try {
+      // Get form data
+      const formData = {
+        name: document.getElementById('fullName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: '', // Add phone field if needed
+        country: document.getElementById('country').value.trim(),
+        age: document.getElementById('age').value.trim(),
+        gender: document.getElementById('gender').value.trim(),
+        education: document.getElementById('education').value.trim()
+      };
+
+      // Send data to backend
+      const response = await fetch('http://localhost:3000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        quizForm.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        initQuiz();
+      } else {
+        alert(result.message || 'Registration failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while submitting the form');
+    }
+  } else {
+    alert('Please fill in all required fields.');
+  }
+});
 
   dashboardBack.addEventListener('click', () => {
     if (confirm('Are you sure you want to leave? Your progress will be lost.')) {
@@ -458,4 +489,38 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+});// Add these variables at the top with other DOM elements
+const showLogin = document.getElementById('showLogin');
+const loginForm = document.getElementById('login-form');
+const closeLogin = document.getElementById('closeLogin');
+const loginFormElement = document.getElementById('loginForm');
+
+// Add these event listeners in the DOMContentLoaded section
+showLogin.addEventListener('click', () => {
+  quizForm.classList.add('hidden');
+  loginForm.classList.remove('hidden');
+});
+
+closeLogin.addEventListener('click', () => {
+  loginForm.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+});
+
+loginFormElement.addEventListener('submit', (e) => {
+  e.preventDefault();
+  // No actual login validation needed per requirements
+  loginForm.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+  // Redirect to dashboard
+  window.location.href = 'Dashboard.html';
+});
+
+// Update the existing userForm submit handler to redirect to dashboard
+userForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  // Skip all validation and backend submission
+  quizForm.classList.add('hidden');
+  document.body.classList.remove('overflow-hidden');
+  // Redirect to dashboard
+  window.location.href = 'Dashboard.html';
 });
