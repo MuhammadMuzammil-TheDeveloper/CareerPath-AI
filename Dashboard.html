@@ -7,6 +7,50 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+     .setting-group {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 1.5rem;
+  }
+  
+  .setting-group:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  .theme-btn.active, .quiz-pref-btn.active, 
+  .skill-level-btn.active, .reminder-btn.active,
+  .text-size-btn.active {
+    background-color: #2563eb;
+    color: white;
+    border-color: #2563eb;
+  }
+  
+  .quiz-pref-btn, .skill-level-btn, 
+  .reminder-btn, .text-size-btn {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+  }
+  
+  .text-size-btn {
+    width: 2rem;
+    text-align: center;
+  }
+  
+  .tag {
+    padding: 0.25rem 0.75rem;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    color: #4b5563;
+  }
+  
+  .tag.active {
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
     .gradient-text {
       background: linear-gradient(90deg, #0ea5e9, #6366f1);
       -webkit-background-clip: text;
@@ -63,41 +107,305 @@
     .animate-float {
       animation: float 6s ease-in-out infinite;
     }
+    .relative{
+      position: relative;
+    }
   </style>
+
 </head>
 <body class="bg-gray-50">
   <!-- User Dashboard -->
   <section id="user-dashboard" class="min-h-screen">
-    <header class="sticky top-0 z-40 bg-white shadow-sm">
-      <div class="container mx-auto px-6 py-4">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-2">
-            <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center">
-              <i class="fas fa-brain text-white text-xl"></i>
-            </div>
-            <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              CareerPath AI
-            </span>
+ <header class="sticky top-0 z-40 bg-white shadow-sm">
+  <div class="container mx-auto px-6 py-4">
+    <div class="flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center space-x-2">
+        <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center">
+          <i class="fas fa-brain text-white text-xl"></i>
+        </div>
+        <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+          CareerPath AI
+        </span>
+      </div>
+  <button id="settings-icon" class="p-2 rounded-full hover:bg-gray-100 text-gray-600">
+    <i class="fas fa-cog"></i>
+  </button>
+      <!-- User & Settings -->
+      <div id="settings-card" class="hidden absolute right-6 top-16 mt-2 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50 border border-gray-100">
+  <!-- Settings Header -->
+  <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 text-white">
+    <div class="flex justify-between items-center">
+      <h3 class="font-semibold text-lg flex items-center">
+        <i class="fas fa-cog mr-2"></i> Advanced Settings
+      </h3>
+      <button id="close-settings" class="text-white hover:text-blue-200 focus:outline-none">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <p class="text-xs opacity-80 mt-1">Customize your CareerPath AI experience</p>
+  </div>
+  
+  <!-- Settings Content (Scrollable) -->
+  <div class="max-h-[70vh] overflow-y-auto p-4">
+    <!-- 1. Theme Settings -->
+    <div class="setting-group mb-6">
+      <div class="flex justify-between items-center mb-2">
+        <h4 class="font-medium text-gray-700 flex items-center">
+          <i class="fas fa-palette text-blue-500 mr-2 text-sm"></i> Theme Settings
+        </h4>
+        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Auto Mode</span>
+      </div>
+      <div class="grid grid-cols-4 gap-2">
+        <button class="theme-btn flex flex-col items-center p-2 rounded-lg border hover:border-blue-400 transition-all" data-theme="light">
+          <div class="w-10 h-10 bg-white border border-gray-300 rounded mb-1"></div>
+          <span class="text-xs">Light</span>
+        </button>
+        <button class="theme-btn flex flex-col items-center p-2 rounded-lg border hover:border-blue-400 transition-all" data-theme="dark">
+          <div class="w-10 h-10 bg-gray-800 border border-gray-600 rounded mb-1"></div>
+          <span class="text-xs">Dark</span>
+        </button>
+        <button class="theme-btn flex flex-col items-center p-2 rounded-lg border hover:border-blue-400 transition-all" data-theme="auto">
+          <div class="w-10 h-10 bg-gradient-to-r from-white to-gray-800 border border-gray-300 rounded mb-1"></div>
+          <span class="text-xs">Auto</span>
+        </button>
+        <button class="theme-btn flex flex-col items-center p-2 rounded-lg border hover:border-blue-400 transition-all" data-theme="high-contrast">
+          <div class="w-10 h-10 bg-yellow-300 border border-black rounded mb-1"></div>
+          <span class="text-xs">High Contrast</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Language Preference -->
+    <div class="setting-group mb-6">
+      <h4 class="font-medium text-gray-700 mb-2 flex items-center">
+        <i class="fas fa-language text-blue-500 mr-2 text-sm"></i> Language Preference
+      </h4>
+      <select class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+        <option>English</option>
+        <option>Urdu</option>
+        <option>Hindi</option>
+        <option>Auto-detect browser language</option>
+      </select>
+    </div>
+
+    <!-- 3. Quiz Preferences -->
+    <div class="setting-group mb-6">
+      <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+        <i class="fas fa-question-circle text-blue-500 mr-2 text-sm"></i> Quiz Preferences
+      </h4>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Difficulty Level</label>
+          <div class="flex space-x-2">
+            <button class="quiz-pref-btn active">Easy</button>
+            <button class="quiz-pref-btn">Medium</button>
+            <button class="quiz-pref-btn">Hard</button>
           </div>
-          <div class="flex items-center space-x-4">
-            <div class="relative">
-              <button id="user-menu-button" class="user-menu-button flex items-center space-x-2 focus:outline-none">
-                <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center text-white font-semibold">
-                  <span>JD</span>
-                </div>
-                <span class="font-medium">John Doe</span>
-                <i class="fas fa-chevron-down text-sm text-gray-500"></i>
-              </button>
-              <div id="user-menu" class="user-menu absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
-              </div>
-            </div>
+        </div>
+        
+        <div class="flex justify-between items-center">
+          <span class="text-sm text-gray-600">Show Hints</span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" checked class="sr-only peer">
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+        
+        <div class="flex justify-between items-center">
+          <span class="text-sm text-gray-600">Time Limit</span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" class="sr-only peer">
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+        
+        <div class="flex justify-between items-center">
+          <span class="text-sm text-gray-600">Show Explanations</span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" checked class="sr-only peer">
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Career Suggestion Preferences -->
+    <div class="setting-group mb-6">
+      <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+        <i class="fas fa-briefcase text-blue-500 mr-2 text-sm"></i> Career Preferences
+      </h4>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Preferred Fields</label>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag active">Tech</span>
+            <span class="tag active">Business</span>
+            <span class="tag">Medicine</span>
+            <span class="tag">Art</span>
+            <span class="tag">Engineering</span>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Career Goal</label>
+          <input type="text" value="Become a Frontend Developer" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+        </div>
+        
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Skill Level</label>
+          <div class="flex space-x-2">
+            <button class="skill-level-btn active">Beginner</button>
+            <button class="skill-level-btn">Intermediate</button>
+            <button class="skill-level-btn">Expert</button>
           </div>
         </div>
       </div>
-    </header>
+    </div>
+
+    <!-- 5. Notification Settings -->
+    <div class="setting-group mb-6">
+      <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+        <i class="fas fa-bell text-blue-500 mr-2 text-sm"></i> Notifications
+      </h4>
+      
+      <div class="space-y-3">
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="text-sm text-gray-600">Email Notifications</span>
+            <p class="text-xs text-gray-400">Receive updates via email</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" checked class="sr-only peer">
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+        
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Progress Reminders</label>
+          <div class="flex space-x-2">
+            <button class="reminder-btn">Off</button>
+            <button class="reminder-btn active">Daily</button>
+            <button class="reminder-btn">Weekly</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Account Privacy -->
+    <div class="setting-group mb-6">
+      <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+        <i class="fas fa-lock text-blue-500 mr-2 text-sm"></i> Privacy
+      </h4>
+      
+      <div class="space-y-3">
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="text-sm text-gray-600">Public Profile</span>
+            <p class="text-xs text-gray-400">Show progress publicly</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" class="sr-only peer">
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+        
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="text-sm text-gray-600">Discoverable</span>
+            <p class="text-xs text-gray-400">Allow profile discovery</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" checked class="sr-only peer">
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Data Export -->
+    <div class="setting-group mb-6">
+      <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+        <i class="fas fa-download text-blue-500 mr-2 text-sm"></i> Data Export
+      </h4>
+      
+      <div class="space-y-2">
+        <button class="w-full flex justify-between items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all">
+          <span class="text-sm font-medium">Download Quiz Results</span>
+          <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+        </button>
+        
+        <button class="w-full flex justify-between items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all">
+          <span class="text-sm font-medium">Export Career Roadmap</span>
+          <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 8. Reset Options -->
+    <div class="setting-group mb-6">
+      <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+        <i class="fas fa-undo text-blue-500 mr-2 text-sm"></i> Reset Options
+      </h4>
+      
+      <div class="space-y-2">
+        <button class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all text-sm font-medium">
+          Reset Quiz Answers
+        </button>
+        
+        <button class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-all text-sm font-medium text-red-500">
+          Reset All Settings to Default
+        </button>
+      </div>
+    </div>
+
+    <!-- 9. Accessibility -->
+    <div class="setting-group">
+      <h4 class="font-medium text-gray-700 mb-3 flex items-center">
+        <i class="fas fa-universal-access text-blue-500 mr-2 text-sm"></i> Accessibility
+      </h4>
+      
+      <div class="space-y-3">
+        <div class="flex justify-between items-center">
+          <span class="text-sm text-gray-600">Sound Effects</span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" class="sr-only peer">
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+        
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Text Size</label>
+          <div class="flex space-x-2">
+            <button class="text-size-btn active">S</button>
+            <button class="text-size-btn">M</button>
+            <button class="text-size-btn">L</button>
+          </div>
+        </div>
+        
+        <div class="flex justify-between items-center">
+          <span class="text-sm text-gray-600">Keyboard Navigation</span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" checked class="sr-only peer">
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Settings Footer -->
+  <div class="bg-gray-50 p-3 border-t border-gray-200 flex justify-between items-center">
+    <span class="text-xs text-gray-500">v2.4.1</span>
+    <button class="text-sm font-medium text-blue-600 hover:text-blue-800">Save Preferences</button>
+  </div>
+</div>
+    </div>
+  </div>
+</header>
+
 
     <div class="container mx-auto px-6 py-8">
       <div class="flex flex-col lg:flex-row gap-8">
@@ -426,5 +734,135 @@
       </div>
     </div>
   </section>
+
+<script>
+// At the top of your dashboard.js
+document.addEventListener('DOMContentLoaded', function() {
+  // Check for quiz results
+  const quizResults = JSON.parse(localStorage.getItem('careerQuizResults'));
+  
+  if (!quizResults) {
+    // If no quiz results, redirect to quiz
+    window.location.href = "career-quiz.html";
+    return;
+  }
+  
+  // Personalize dashboard based on results
+  personalizeDashboard(quizResults);
+});
+
+function personalizeDashboard(results) {
+  // Determine top career field
+  const topField = Object.keys(results).reduce((a, b) => results[a] > results[b] ? a : b);
+  
+  // Example personalization
+  const welcomeMessage = document.querySelector('.welcome-banner h2');
+  if (welcomeMessage) {
+    welcomeMessage.textContent += ` - Explore ${getFieldName(topField)} Careers`;
+  }
+  
+  // You can customize more elements based on the results
+  // For example, show relevant career matches, courses, etc.
+}
+
+function getFieldName(fieldKey) {
+  const fieldNames = {
+    'science_technology': 'Science & Technology',
+    'arts_design': 'Arts & Design',
+    'healthcare': 'Healthcare',
+    'business_finance': 'Business & Finance',
+    'engineering': 'Engineering',
+    'education': 'Education',
+    'humanities': 'Humanities',
+    'social_sciences': 'Social Sciences'
+  };
+  
+  return fieldNames[fieldKey] || 'your';
+}
+// Enhanced toggle settings card
+document.getElementById('settings-icon').addEventListener('click', function(e) {
+  e.stopPropagation();
+  const card = document.getElementById('settings-card');
+  card.classList.toggle('hidden');
+});
+
+document.getElementById('close-settings').addEventListener('click', function(e) {
+  e.stopPropagation();
+  document.getElementById('settings-card').classList.add('hidden');
+});
+
+// Close settings when clicking outside
+document.addEventListener('click', function(e) {
+  const settingsCard = document.getElementById('settings-card');
+  const settingsIcon = document.getElementById('settings-icon');
+  
+  if (!settingsCard.contains(e.target) && e.target !== settingsIcon) {
+    settingsCard.classList.add('hidden');
+  }
+});
+
+  // Theme selection
+  const themeButtons = document.querySelectorAll('.theme-btn');
+  themeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      themeButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      
+      const selectedTheme = this.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', selectedTheme);
+      // In a real app, you would save this preference
+    });
+  });
+
+  // Quiz preference buttons
+  const quizPrefButtons = document.querySelectorAll('.quiz-pref-btn');
+  quizPrefButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      quizPrefButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Skill level buttons
+  const skillLevelButtons = document.querySelectorAll('.skill-level-btn');
+  skillLevelButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      skillLevelButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Reminder buttons
+  const reminderButtons = document.querySelectorAll('.reminder-btn');
+  reminderButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      reminderButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Text size buttons
+  const textSizeButtons = document.querySelectorAll('.text-size-btn');
+  textSizeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      textSizeButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Apply text size change
+      const sizes = { 'S': 'small', 'M': 'medium', 'L': 'large' };
+      document.documentElement.style.fontSize = 
+        sizes[this.textContent] === 'medium' ? '' : sizes[this.textContent];
+    });
+  });
+
+  // Tag selection
+  const tags = document.querySelectorAll('.tag');
+  tags.forEach(tag => {
+    tag.addEventListener('click', function() {
+      this.classList.toggle('active');
+    });
+  });
+</script>
 </body>
+
 </html>
