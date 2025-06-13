@@ -160,6 +160,15 @@
           <a href="#how" class="nav-link text-secondary-700 font-medium hover:text-primary-600">How It Works</a>
           <a href="#testimonials" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Testimonials</a>
           <a href="#quiz" class="btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-medium">Start Quiz</a>
+        <div class="theme-switcher">
+  <label for="theme-select" class="gradient-text font-semibold mr-2">Theme:</label>
+  <select id="theme-select" class="rounded px-3 py-1 border focus:outline-none">
+    <option value="auto">Auto</option>
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+  </select>
+</div>
+
         </div>
         
         <!-- Mobile Menu Button -->
@@ -834,12 +843,39 @@
 
 
 
+<script>
+  // Toggle settings card
+  document.getElementById('settings-icon').addEventListener('click', function () {
+    const card = document.getElementById('settings-card');
+    card.classList.toggle('hidden');
+  });
+
+  // Theme button logic
+  const themeButtons = document.querySelectorAll('.theme-btn');
+  themeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const selectedTheme = button.getAttribute('data-theme');
+      // Apply the theme (you can replace this with your actual logic)
+      document.documentElement.setAttribute('data-theme', selectedTheme);
+      alert('Theme set to ' + selectedTheme);
+    });
+  });
+
+  // Close settings card if clicked outside
+  window.addEventListener('click', function (e) {
+    const settingsCard = document.getElementById('settings-card');
+    const settingsIcon = document.getElementById('settings-icon');
+    if (!settingsCard.contains(e.target) && !settingsIcon.contains(e.target)) {
+      settingsCard.classList.add('hidden');
+    }
+  });
+</script>
+
 
 <script src="script.js">
 </script>
 
 </body>
 </html>
-
 
 
