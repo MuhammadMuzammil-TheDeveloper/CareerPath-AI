@@ -522,5 +522,9 @@ userForm.addEventListener('submit', (e) => {
   quizForm.classList.add('hidden');
   document.body.classList.remove('overflow-hidden');
   // Redirect to dashboard
-  window.location.href = 'Dashboard.html';
+  window.location.href = 'career-quiz.html';
 });
+
+
+
+
