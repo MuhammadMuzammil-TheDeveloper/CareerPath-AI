@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Discovery Quiz | CareerPath AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --secondary: #10b981;
+      --accent: #f59e0b;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    }
+    
+    .quiz-container {
+      perspective: 1000px;
+    }
+    
+    .quiz-card {
+      transform-style: preserve-3d;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .question-text {
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .option-card {
+      transition: all 0.3s ease;
+      transform-origin: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .option-card:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .option-card.selected {
+      border-color: var(--primary);
+      background-color: rgba(79, 70, 229, 0.05);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px rgba(79, 70, 229, 0.2);
+    }
+    
+    .progress-track {
+      background: linear-gradient(90deg, #e0e7ff 0%, #c7d2fe 100%);
+    }
+    
+    .progress-thumb {
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+    
+    .option-icon {
+      transition: all 0.3s ease;
+    }
+    
+    .option-card:hover .option-icon {
+      transform: scale(1.1);
+    }
+    
+    .selected .option-icon {
+      color: var(--primary);
+    }
+    
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 md:p-8">
+  <!-- Main Quiz Container -->
+  <div class="quiz-container w-full max-w-4xl">
+    <div class="quiz-card bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+      <!-- Quiz Header -->
+      <div class="relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-10"></div>
+        <div class="relative z-10 p-6 md:p-8">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="flex items-center mb-2">
+                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-3">
+                  <i class="fas fa-brain"></i>
+                </div>
+                <span class="text-sm font-semibold text-indigo-600">CAREERPATH AI</span>
+              </div>
+              <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Career Discovery Quiz</h1>
+              <p class="text-gray-600">Let's uncover your perfect career path</p>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-medium text-gray-500 mb-1">QUESTION <span id="current-question">1</span>/<span id="total-questions">10</span></div>
+              <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div id="quiz-progress" class="h-full progress-thumb" style="width: 10%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quiz Content -->
+      <div class="p-6 md:p-8">
+        <div id="question-container" class="mb-8 animate-fade-in">
+          <!-- Questions will be dynamically inserted here -->
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-100">
+          <button id="prev-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-all transform hover:-translate-x-1">
+            <i class="fas fa-arrow-left mr-2"></i> Previous
+          </button>
+          
+          <div class="flex items-center text-sm text-gray-500">
+            <i class="fas fa-lightbulb mr-2 text-yellow-500"></i>
+            <span id="quiz-tip">Select all options that apply to you</span>
+          </div>
+          
+          <button id="next-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all transform hover:translate-x-1">
+            Next Question <i class="fas fa-arrow-right ml-2"></i>
+          </button>
+          
+          <button id="submit-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center bg-gradient-to-r from-green-600 to-teal-500 text-white rounded-xl font-medium hover:shadow-lg transition-all hidden pulse-animation">
+            Get My Results <i class="fas fa-chart-line ml-2"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Enhanced Quiz Questions with Icons
+    const quizQuestions = [
+      {
+        question: "Which of these activities energizes you the most?",
+        options: [
+          { text: "Solving complex puzzles or coding challenges", field: "technology", icon: "fa-code" },
+          { text: "Creating art, music, or designing visuals", field: "arts", icon: "fa-palette" },
+          { text: "Helping others through counseling or care", field: "healthcare", icon: "fa-heartbeat" },
+          { text: "Analyzing data and market trends", field: "business", icon: "fa-chart-line" },
+          { text: "Building or repairing physical objects", field: "engineering", icon: "fa-tools" }
+        ],
+        type: "single",
+        tip: "Choose the activity you'd naturally gravitate toward"
+      },
+      {
+        question: "Select subjects you excel at or enjoy:",
+        options: [
+          { text: "Mathematics & Computer Science", field: "technology", icon: "fa-square-root-alt" },
+          { text: "Literature & Creative Writing", field: "humanities", icon: "fa-book-open" },
+          { text: "Biology & Chemistry", field: "healthcare", icon: "fa-flask" },
+          { text: "Economics & Business Studies", field: "business", icon: "fa-coins" },
+          { text: "Visual Arts & Design", field: "arts", icon: "fa-paint-brush" },
+          { text: "History & Social Sciences", field: "social_sciences", icon: "fa-globe-americas" }
+        ],
+        type: "multiple",
+        tip: "Select all that apply - don't overthink it!"
+      },
+      {
+        question: "Which work environment excites you?",
+        options: [
+          { text: "Tech startup with innovative projects", field: "technology", icon: "fa-laptop-code" },
+          { text: "Hospital or healthcare facility", field: "healthcare", icon: "fa-hospital" },
+          { text: "Creative studio or agency", field: "arts", icon: "fa-photo-video" },
+          { text: "Corporate office with team collaboration", field: "business", icon: "fa-building" },
+          { text: "Construction site or engineering lab", field: "engineering", icon: "fa-hard-hat" },
+          { text: "Classroom or academic setting", field: "education", icon: "fa-chalkboard-teacher" }
+        ],
+        type: "single",
+        tip: "Imagine your ideal workplace atmosphere"
+      },
+      {
+        question: "What skills come most naturally to you?",
+        options: [
+          { text: "Logical problem-solving", field: "technology", icon: "fa-brain" },
+          { text: "Creative thinking", field: "arts", icon: "fa-lightbulb" },
+          { text: "Empathy & communication", field: "healthcare", icon: "fa-comments" },
+          { text: "Leadership & strategy", field: "business", icon: "fa-chess" },
+          { text: "Technical & mechanical", field: "engineering", icon: "fa-cogs" }
+        ],
+        type: "multiple",
+        tip: "These are skills you enjoy using, not just ones you're good at"
+      },
+      {
+        question: "Which of these future careers excites you?",
+        options: [
+          { text: "AI Engineer or Data Scientist", field: "technology", icon: "fa-robot" },
+          { text: "Graphic Designer or Art Director", field: "arts", icon: "fa-pen-fancy" },
+          { text: "Doctor or Medical Researcher", field: "healthcare", icon: "fa-user-md" },
+          { text: "Financial Analyst or Entrepreneur", field: "business", icon: "fa-briefcase" },
+          { text: "Civil Engineer or Architect", field: "engineering", icon: "fa-ruler-combined" },
+          { text: "Professor or Education Specialist", field: "education", icon: "fa-user-graduate" }
+        ],
+        type: "single",
+        tip: "Don't worry about qualifications - just what appeals to you"
+      }
+    ];
+
+    // Quiz State
+    let currentQuestion = 0;
+    let answers = [];
+    const totalQuestions = quizQuestions.length;
+
+    // DOM Elements
+    const questionContainer = document.getElementById('question-container');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const currentQuestionEl = document.getElementById('current-question');
+    const totalQuestionsEl = document.getElementById('total-questions');
+    const quizProgress = document.getElementById('quiz-progress');
+    const quizTip = document.getElementById('quiz-tip');
+
+    // Initialize Quiz
+    function initQuiz() {
+      totalQuestionsEl.textContent = totalQuestions;
+      showQuestion();
+      updateProgress();
+    }
+
+    // Show current question with animations
+    function showQuestion() {
+      const question = quizQuestions[currentQuestion];
+      currentQuestionEl.textContent = currentQuestion + 1;
+      quizTip.textContent = question.tip;
+      
+      let optionsHtml = '';
+      question.options.forEach((option, index) => {
+        const isSelected = answers[currentQuestion] && 
+                         (answers[currentQuestion].includes(index) || 
+                          answers[currentQuestion] === index);
+        
+        optionsHtml += `
+          <div class="option-card mb-4 p-5 border-2 border-gray-100 rounded-xl cursor-pointer flex items-start ${isSelected ? 'selected' : ''}"
+               data-index="${index}"
+               onclick="selectOption(${index})">
+            <div class="option-icon w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 mr-4 mt-0.5 flex-shrink-0">
+              <i class="fas ${option.icon}"></i>
+            </div>
+            <div>
+              <h3 class="font-medium text-gray-800">${option.text}</h3>
+              <div class="mt-2 flex items-center">
+                <span class="text-xs px-2 py-1 rounded-full ${isSelected ? 'bg-indigo-100 text-indigo-800' : 'bg-gray-100 text-gray-600'}">
+                  ${option.field.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                </span>
+              </div>
+            </div>
+            <div class="ml-auto pl-4 flex items-center">
+              <div class="w-5 h-5 rounded-full border-2 ${isSelected ? 'bg-indigo-500 border-indigo-500' : 'border-gray-300'} flex items-center justify-center">
+                ${question.type === 'multiple' ? 
+                  (isSelected ? '<i class="fas fa-check text-white text-xs"></i>' : '') : 
+                  (isSelected ? '<div class="w-2 h-2 rounded-full bg-indigo-500"></div>' : '')}
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      questionContainer.innerHTML = `
+        <h2 class="question-text text-2xl font-bold mb-6 leading-tight">${question.question}</h2>
+        <div class="options-container">
+          ${optionsHtml}
+        </div>
+      `;
+
+      // Update button visibility
+      prevBtn.classList.toggle('hidden', currentQuestion === 0);
+      nextBtn.classList.toggle('hidden', currentQuestion === totalQuestions - 1);
+      submitBtn.classList.toggle('hidden', currentQuestion !== totalQuestions - 1);
+      
+      // Add animation to options
+      const options = document.querySelectorAll('.option-card');
+      options.forEach((option, i) => {
+        option.style.animationDelay = `${i * 0.1}s`;
+        option.classList.add('animate-fade-in');
+      });
+    }
+
+    // Select an option with visual feedback
+    function selectOption(index) {
+      const question = quizQuestions[currentQuestion];
+      const optionCard = document.querySelector(`.option-card[data-index="${index}"]`);
+      
+      // Add visual feedback
+      optionCard.classList.add('transform', 'scale-95');
+      setTimeout(() => {
+        optionCard.classList.remove('transform', 'scale-95');
+      }, 150);
+      
+      if (question.type === 'multiple') {
+        if (!answers[currentQuestion]) {
+          answers[currentQuestion] = [];
+        }
+        const optionIndex = answers[currentQuestion].indexOf(index);
+        if (optionIndex === -1) {
+          answers[currentQuestion].push(index);
+        } else {
+          answers[currentQuestion].splice(optionIndex, 1);
+        }
+      } else {
+        // For single select, first deselect all
+        document.querySelectorAll('.option-card').forEach(card => {
+          card.classList.remove('selected');
+        });
+        answers[currentQuestion] = index;
+        optionCard.classList.add('selected');
+      }
+      
+      showQuestion();
+    }
+
+    // Update progress bar
+    function updateProgress() {
+      const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+      quizProgress.style.width = `${progress}%`;
+    }
+
+    // Navigation functions with animations
+    function nextQuestion() {
+      if (currentQuestion < totalQuestions - 1) {
+        // Add transition effect
+        document.querySelector('.quiz-card').style.transform = 'rotateY(10deg) translateX(20px)';
+        setTimeout(() => {
+          currentQuestion++;
+          showQuestion();
+          updateProgress();
+          document.querySelector('.quiz-card').style.transform = '';
+        }, 300);
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        document.querySelector('.quiz-card').style.transform = 'rotateY(-10deg) translateX(-20px)';
+        setTimeout(() => {
+          currentQuestion--;
+          showQuestion();
+          updateProgress();
+          document.querySelector('.quiz-card').style.transform = '';
+        }, 300);
+      }
+    }
+
+    function submitQuiz() {
+      // Calculate results with weights
+      const fieldScores = {};
+      const fieldWeights = {
+        'technology': 1.2,   // Slightly more weight to tech fields
+        'healthcare': 1.1,   // Healthcare gets a small boost
+        'business': 1.0,
+        'arts': 1.0,
+        'engineering': 1.0,
+        'education': 1.0,
+        'humanities': 1.0,
+        'social_sciences': 1.0
+      };
+      
+      answers.forEach((answer, questionIndex) => {
+        const question = quizQuestions[questionIndex];
+        
+        if (question.type === 'multiple') {
+          answer.forEach(optionIndex => {
+            const field = question.options[optionIndex].field;
+            const weight = fieldWeights[field] || 1.0;
+            fieldScores[field] = (fieldScores[field] || 0) + (1 * weight);
+          });
+        } else {
+          const field = question.options[answer].field;
+          const weight = fieldWeights[field] || 1.0;
+          fieldScores[field] = (fieldScores[field] || 0) + (2 * weight); // Single select gets more weight
+        }
+      });
+      
+      // Store results
+      localStorage.setItem('careerQuizResults', JSON.stringify({
+        scores: fieldScores,
+        topField: Object.keys(fieldScores).reduce((a, b) => fieldScores[a] > fieldScores[b] ? a : b),
+        completedAt: new Date().toISOString()
+      }));
+      
+      // Show loading animation before redirect
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Analyzing your results...';
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 1500);
+    }
+
+    // Event Listeners with animations
+    prevBtn.addEventListener('click', () => {
+      prevBtn.classList.add('transform', 'scale-95');
+      setTimeout(() => prevBtn.classList.remove('transform', 'scale-95'), 150);
+      prevQuestion();
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      nextBtn.classList.add('transform', 'scale-95');
+      setTimeout(() => nextBtn.classList.remove('transform', 'scale-95'), 150);
+      nextQuestion();
+    });
+    
+    submitBtn.addEventListener('click', () => {
+      submitBtn.classList.add('transform', 'scale-95');
+      setTimeout(() => submitBtn.classList.remove('transform', 'scale-95'), 150);
+      submitQuiz();
+    });
+
+    // Make functions available globally
+    window.selectOption = selectOption;
+
+    // Initialize the quiz
+    document.addEventListener('DOMContentLoaded', initQuiz);
+  </script>
+</body>
+</html>
