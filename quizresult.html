@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Discovery Results | CareerPath AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --secondary: #10b981;
+      --accent: #f59e0b;
+      --deep-blue: #1e3a8a;
+      --dark-teal: #115e59;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+    
+    .result-header {
+      background: linear-gradient(135deg, var(--primary), var(--deep-blue));
+    }
+    
+    .match-badge {
+      background: linear-gradient(135deg, var(--secondary), var(--dark-teal));
+    }
+    
+    .roadmap-step {
+      position: relative;
+      padding-left: 2.5rem;
+    }
+    
+    .roadmap-step:before {
+      content: '';
+      position: absolute;
+      left: 0.75rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+    
+    .roadmap-step:first-child:before {
+      top: 1.5rem;
+    }
+    
+    .roadmap-step:last-child:before {
+      bottom: calc(100% - 1.5rem);
+    }
+    
+    .roadmap-step-number {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary), var(--deep-blue));
+      color: white;
+      font-weight: bold;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+    
+    .university-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .tech-card { border-left: 4px solid #4f46e5; }
+    .health-card { border-left: 4px solid #10b981; }
+    .creative-card { border-left: 4px solid #f59e0b; }
+    .business-card { border-left: 4px solid #3b82f6; }
+    .engineering-card { border-left: 4px solid #ef4444; }
+    .education-card { border-left: 4px solid #8b5cf6; }
+    .science-card { border-left: 4px solid #ec4899; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <!-- Results Header -->
+  <div class="result-header text-white py-12 px-4 md:px-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end">
+        <div class="mb-6 md:mb-0">
+          <div class="flex items-center mb-4">
+            <div class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-white mr-3">
+              <i class="fas fa-user-astronaut"></i>
+            </div>
+            <span class="text-sm font-semibold text-white text-opacity-90">CAREERPATH AI</span>
+          </div>
+          <h1 class="text-3xl md:text-4xl font-bold mb-2">Your Career Discovery Results</h1>
+          <p class="text-lg text-white text-opacity-90">Based on your unique strengths and preferences</p>
+        </div>
+        <div class="bg-white bg-opacity-10 rounded-xl px-6 py-4 backdrop-blur-sm">
+          <div class="text-sm font-medium text-white text-opacity-80 mb-1">YOUR BEST MATCH</div>
+          <div class="flex items-center">
+            <div id="primary-career-icon" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-indigo-600 mr-3">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            <div>
+              <h2 id="primary-career-title" class="text-xl font-bold">Technology & Engineering</h2>
+              <div class="flex items-center mt-1">
+                <div class="text-sm font-medium mr-2">Match Score:</div>
+                <div class="match-badge px-2 py-1 rounded-full text-xs font-bold">95%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Results Content -->
+  <div class="max-w-6xl mx-auto px-4 md:px-8 py-8">
+    <!-- Primary Career Recommendation -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8 animate-fade-in" style="animation-delay: 0.2s">
+      <div class="p-6 md:p-8">
+        <div class="flex flex-col md:flex-row">
+          <div class="md:w-2/3 md:pr-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Your Ideal Career Path</h2>
+            <div id="primary-career-description" class="prose prose-indigo max-w-none mb-6">
+              <p>You thrive in technical environments and enjoy solving complex problems through logic and innovation. Your analytical mindset and systematic approach to challenges make you particularly well-suited for careers in technology and engineering fields.</p>
+              <p>You likely excel at breaking down complex systems into manageable components and enjoy creating efficient solutions. The rapid pace of technological advancement will keep you engaged and challenged throughout your career.</p>
+            </div>
+            
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Why This Fits You:</h3>
+            <ul id="primary-career-reasoning" class="prose prose-indigo max-w-none mb-6 list-disc pl-5">
+              <li>Your answers showed strong preference for logical problem-solving and analytical thinking</li>
+              <li>You expressed interest in working with systems and creating efficient solutions</li>
+              <li>Your learning style aligns well with technical skill acquisition</li>
+              <li>You're motivated by seeing tangible results from your work</li>
+              <li>Future technological trends excite you more than other industry developments</li>
+            </ul>
+          </div>
+          
+          <div class="md:w-1/3">
+            <div class="bg-gray-50 rounded-lg p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Career Matches</h3>
+              <div id="primary-career-options" class="space-y-4">
+                <div class="tech-card bg-white p-4 rounded-lg shadow-sm transition-all duration-300">
+                  <div class="flex items-start">
+                    <div class="bg-indigo-100 text-indigo-600 rounded-lg p-2 mr-3">
+                      <i class="fas fa-code"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-gray-900">Software Engineer</h4>
+                      <p class="text-sm text-gray-600 mt-1">Develop innovative software solutions and systems</p>
+                      <div class="mt-2 flex items-center">
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                          <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 95%"></div>
+                        </div>
+                        <span class="text-xs font-bold ml-2 text-indigo-600">95%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="tech-card bg-white p-4 rounded-lg shadow-sm transition-all duration-300">
+                  <div class="flex items-start">
+                    <div class="bg-indigo-100 text-indigo-600 rounded-lg p-2 mr-3">
+                      <i class="fas fa-database"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-gray-900">Data Scientist</h4>
+                      <p class="text-sm text-gray-600 mt-1">Extract insights from complex datasets</p>
+                      <div class="mt-2 flex items-center">
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                          <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 90%"></div>
+                        </div>
+                        <span class="text-xs font-bold ml-2 text-indigo-600">90%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="tech-card bg-white p-4 rounded-lg shadow-sm transition-all duration-300">
+                  <div class="flex items-start">
+                    <div class="bg-indigo-100 text-indigo-600 rounded-lg p-2 mr-3">
+                      <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-gray-900">AI Engineer</h4>
+                      <p class="text-sm text-gray-600 mt-1">Develop intelligent systems and algorithms</p>
+                      <div class="mt-2 flex items-center">
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                          <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 88%"></div>
+                        </div>
+                        <span class="text-xs font-bold ml-2 text-indigo-600">88%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secondary Career Recommendation -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8 animate-fade-in" style="animation-delay: 0.4s">
+      <div class="p-6 md:p-8">
+        <div class="flex flex-col md:flex-row">
+          <div class="md:w-2/3 md:pr-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Alternative Career Path</h2>
+            <div id="secondary-career-description" class="prose prose-indigo max-w-none mb-6">
+              <p>Your profile also shows strong alignment with business and entrepreneurial fields. Your strategic thinking and ability to see the big picture could make you successful in roles that require analysis, decision-making, and leadership.</p>
+              <p>This path might appeal if you want to apply your analytical skills in a more people-oriented context or if you're interested in the commercial aspects of technology.</p>
+            </div>
+            
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">Potential Transition Points:</h3>
+            <ul id="secondary-career-reasoning" class="prose prose-indigo max-w-none mb-6 list-disc pl-5">
+              <li>Your problem-solving skills translate well to business strategy</li>
+              <li>You showed interest in organizational success and leadership</li>
+              <li>Several of your preferred work environments align with business settings</li>
+              <li>You may enjoy the challenge of balancing technical and business considerations</li>
+            </ul>
+          </div>
+          
+          <div class="md:w-1/3">
+            <div class="bg-gray-50 rounded-lg p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Alternative Options</h3>
+              <div id="secondary-career-options" class="space-y-4">
+                <div class="business-card bg-white p-4 rounded-lg shadow-sm transition-all duration-300">
+                  <div class="flex items-start">
+                    <div class="bg-blue-100 text-blue-600 rounded-lg p-2 mr-3">
+                      <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-gray-900">Management Consultant</h4>
+                      <p class="text-sm text-gray-600 mt-1">Solve complex business problems</p>
+                      <div class="mt-2 flex items-center">
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                          <div class="bg-blue-500 h-1.5 rounded-full" style="width: 85%"></div>
+                        </div>
+                        <span class="text-xs font-bold ml-2 text-blue-500">85%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="business-card bg-white p-4 rounded-lg shadow-sm transition-all duration-300">
+                  <div class="flex items-start">
+                    <div class="bg-blue-100 text-blue-600 rounded-lg p-2 mr-3">
+                      <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-gray-900">Product Manager</h4>
+                      <p class="text-sm text-gray-600 mt-1">Lead tech product development</p>
+                      <div class="mt-2 flex items-center">
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                          <div class="bg-blue-500 h-1.5 rounded-full" style="width: 82%"></div>
+                        </div>
+                        <span class="text-xs font-bold ml-2 text-blue-500">82%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="business-card bg-white p-4 rounded-lg shadow-sm transition-all duration-300">
+                  <div class="flex items-start">
+                    <div class="bg-blue-100 text-blue-600 rounded-lg p-2 mr-3">
+                      <i class="fas fa-coins"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-bold text-gray-900">Financial Analyst</h4>
+                      <p class="text-sm text-gray-600 mt-1">Analyze financial data and trends</p>
+                      <div class="mt-2 flex items-center">
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                          <div class="bg-blue-500 h-1.5 rounded-full" style="width: 80%"></div>
+                        </div>
+                        <span class="text-xs font-bold ml-2 text-blue-500">80%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Universities Section -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8 animate-fade-in" style="animation-delay: 0.6s">
+      <div class="p-6 md:p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Top Universities for Your Career Path</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="university-card bg-white border border-gray-200 rounded-xl p-6 transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 mr-4">
+                <i class="fas fa-university text-xl"></i>
+              </div>
+              <h3 class="font-bold text-lg text-gray-900">Massachusetts Institute of Technology</h3>
+            </div>
+            <div class="flex items-center text-sm text-gray-600 mb-3">
+              <i class="fas fa-map-marker-alt mr-2"></i>
+              <span>Cambridge, MA, USA</span>
+            </div>
+            <p class="text-gray-700 mb-4">World leader in technology and engineering education with cutting-edge research facilities.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full">#1 in Engineering</span>
+              <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full">#1 in Computer Science</span>
+            </div>
+          </div>
+          
+          <div class="university-card bg-white border border-gray-200 rounded-xl p-6 transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 mr-4">
+                <i class="fas fa-university text-xl"></i>
+              </div>
+              <h3 class="font-bold text-lg text-gray-900">Stanford University</h3>
+            </div>
+            <div class="flex items-center text-sm text-gray-600 mb-3">
+              <i class="fas fa-map-marker-alt mr-2"></i>
+              <span>Stanford, CA, USA</span>
+            </div>
+            <p class="text-gray-700 mb-4">Silicon Valley proximity provides unparalleled tech industry connections and opportunities.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full">#2 in Engineering</span>
+              <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full">#2 in Computer Science</span>
+            </div>
+          </div>
+          
+          <div class="university-card bg-white border border-gray-200 rounded-xl p-6 transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 mr-4">
+                <i class="fas fa-university text-xl"></i>
+              </div>
+              <h3 class="font-bold text-lg text-gray-900">ETH Zurich</h3>
+            </div>
+            <div class="flex items-center text-sm text-gray-600 mb-3">
+              <i class="fas fa-map-marker-alt mr-2"></i>
+              <span>Zurich, Switzerland</span>
+            </div>
+            <p class="text-gray-700 mb-4">European powerhouse with strong focus on technology, engineering, and natural sciences.</p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full">#6 in Engineering</span>
+              <span class="px-2 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full">#9 in Computer Science</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Career Roadmap Section -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8 animate-fade-in" style="animation-delay: 0.8s">
+      <div class="p-6 md:p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">5-Year Career Roadmap</h2>
+        
+        <div class="space-y-8">
+          <div class="roadmap-step">
+            <div class="roadmap-step-number">1</div>
+            <div class="pl-6">
+              <h3 class="font-bold text-lg text-gray-900 mb-2">Year 1: Foundation Building</h3>
+              <ul class="prose prose-indigo max-w-none list-disc pl-5 space-y-1">
+                <li>Complete core computer science courses (data structures, algorithms)</li>
+                <li>Learn Python and JavaScript through online courses</li>
+                <li>Build 2-3 portfolio projects demonstrating problem-solving skills</li>
+                <li>Attend tech meetups and networking events</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="roadmap-step">
+            <div class="roadmap-step-number">2</div>
+            <div class="pl-6">
+              <h3 class="font-bold text-lg text-gray-900 mb-2">Year 2: Specialization</h3>
+              <ul class="prose prose-indigo max-w-none list-disc pl-5 space-y-1">
+                <li>Choose a specialization (AI, Web Dev, Data Science, etc.)</li>
+                <li>Complete advanced coursework in chosen area</li>
+                <li>Secure summer internship at tech company</li>
+                <li>Contribute to open source projects</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="roadmap-step">
+            <div class="roadmap-step-number">3</div>
+            <div class="pl-6">
+              <h3 class="font-bold text-lg text-gray-900 mb-2">Year 3: Professional Experience</h3>
+              <ul class="prose prose-indigo max-w-none list-disc pl-5 space-y-1">
+                <li>Land entry-level developer position or apprenticeship</li>
+                <li>Develop expertise in specific technologies/frameworks</li>
+                <li>Build professional network through industry events</li>
+                <li>Consider professional certifications (AWS, Google Cloud, etc.)</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="roadmap-step">
+            <div class="roadmap-step-number">4</div>
+            <div class="pl-6">
+              <h3 class="font-bold text-lg text-gray-900 mb-2">Year 4: Advancement</h3>
+              <ul class="prose prose-indigo max-w-none list-disc pl-5 space-y-1">
+                <li>Take on more complex projects at work</li>
+                <li>Develop leadership skills through mentoring junior developers</li>
+                <li>Consider graduate studies if pursuing research roles</li>
+                <li>Begin building personal brand (tech blog, conference talks)</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="roadmap-step">
+            <div class="roadmap-step-number">5</div>
+            <div class="pl-6">
+              <h3 class="font-bold text-lg text-gray-900 mb-2">Year 5: Establishing Expertise</h3>
+              <ul class="prose prose-indigo max-w-none list-disc pl-5 space-y-1">
+                <li>Move into mid-level or senior developer position</li>
+                <li>Specialize further or transition to architecture/leadership</li>
+                <li>Consider entrepreneurial ventures if interested</li>
+                <li>Begin giving back through teaching/mentoring</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Development Section -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8 animate-fade-in" style="animation-delay: 1s">
+      <div class="p-6 md:p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Essential Skills Development</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-gray-50 rounded-lg p-6">
+            <h3 class="font-semibold text-lg text-gray-900 mb-4">Technical Skills</h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium text-gray-700">Programming (Python/Java)</span>
+                  <span class="text-sm font-medium text-gray-500">Priority: High</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-indigo-600 h-2 rounded-full" style="width: 95%"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium text-gray-700">Data Structures & Algorithms</span>
+                  <span class="text-sm font-medium text-gray-500">Priority: High</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-indigo-600 h-2 rounded-full" style="width: 90%"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium text-gray-700">Database Management</span>
+                  <span class="text-sm font-medium text-gray-500">Priority: Medium</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-indigo-600 h-2 rounded-full" style="width: 80%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-lg p-6">
+            <h3 class="font-semibold text-lg text-gray-900 mb-4">Professional Skills</h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium text-gray-700">Problem Solving</span>
+                  <span class="text-sm font-medium text-gray-500">Priority: High</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-green-500 h-2 rounded-full" style="width: 90%"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium text-gray-700">Team Collaboration</span>
+                  <span class="text-sm font-medium text-gray-500">Priority: Medium</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-green-500 h-2 rounded-full" style="width: 75%"></div>
+                </div>
+              </div>
+              
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium text-gray-700">Technical Communication</span>
+                  <span class="text-sm font-medium text-gray-500">Priority: Medium</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-green-500 h-2 rounded-full" style="width: 70%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8 animate-fade-in" style="animation-delay: 1.2s">
+      <div class="p-6 md:p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Next Steps</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="border border-gray-200 rounded-lg p-6 hover:border-indigo-300 transition-colors">
+            <div class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4">
+              <i class="fas fa-book-open text-xl"></i>
+            </div>
+            <h3 class="font-semibold text-lg text-gray-900 mb-2">Learning Resources</h3>
+            <p class="text-gray-600 mb-4">Access curated courses, books, and tutorials tailored to your career path.</p>
+            <a href="#" class="text-indigo-600 font-medium inline-flex items-center">
+              Explore Resources <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+          
+          <div class="border border-gray-200 rounded-lg p-6 hover:border-indigo-300 transition-colors">
+            <div class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4">
+              <i class="fas fa-briefcase text-xl"></i>
+            </div>
+            <h3 class="font-semibold text-lg text-gray-900 mb-2">Internship Opportunities</h3>
+            <p class="text-gray-600 mb-4">Find internships and entry-level positions matching your profile.</p>
+            <a href="#" class="text-indigo-600 font-medium inline-flex items-center">
+              View Opportunities <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+          
+          <div class="border border-gray-200 rounded-lg p-6 hover:border-indigo-300 transition-colors">
+            <div class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4">
+              <i class="fas fa-user-friends text-xl"></i>
+            </div>
+            <h3 class="font-semibold text-lg text-gray-900 mb-2">Mentorship Program</h3>
+            <p class="text-gray-600 mb-4">Connect with experienced professionals in your target field.</p>
+            <a href="#" class="text-indigo-600 font-medium inline-flex items-center">
+              Find a Mentor <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Button -->
+    <div class="text-center mb-12 animate-fade-in" style="animation-delay: 1.4s">
+      <a href="dashboard.html" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg transition-all">
+        Go to Your Personalized Dashboard
+        <i class="fas fa-arrow-right ml-3"></i>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Load quiz results from localStorage
+    const quizResults = JSON.parse(localStorage.getItem('careerQuizResults'));
+    
+    // Set primary career details
+    if (quizResults) {
+      const primary = quizResults.primaryMatch;
+      const secondary = quizResults.secondaryMatch;
+      
+      // Primary Career
+      document.getElementById('primary-career-title').textContent = primary.details.title;
+      document.getElementById('primary-career-icon').innerHTML = `<i class="fas ${primary.details.icon}"></i>`;
+      document.getElementById('primary-career-icon').className = `w-10 h-10 rounded-full bg-white flex items-center justify-center ${primary.details.color} mr-3`;
+      document.querySelector('.match-badge').textContent = `${primary.score}%`;
+      
+      // Secondary Career
+      document.getElementById('secondary-career-description').innerHTML = `
+        <p>Your profile also shows strong alignment with ${secondary.details.title.toLowerCase()} fields. ${secondary.details.description}</p>
+        <p>${secondary.field === 'business' ? 'This path might appeal if you want to apply your analytical skills in a more people-oriented context or if you\'re interested in the commercial aspects of technology.' : 'This could be an excellent alternative if you want to explore different applications of your skills.'}</p>
+      `;
+      
+      // Update roadmap based on career field
+      if (primary.field === 'technology') {
+        // Technology roadmap is already shown by default
+      } else if (primary.field === 'healthcare') {
+        // Update roadmap for healthcare
+        document.querySelector('.roadmap-step:nth-child(1) ul').innerHTML = `
+          <li>Complete pre-med or health science prerequisites</li>
+          <li>Volunteer at healthcare facilities</li>
+          <li>Shadow professionals in your field of interest</li>
+          <li>Begin preparing for standardized tests (MCAT, etc.)</li>
+        `;
+        // ... and so on for other steps
+      }
+      // Add similar conditionals for other career fields
+    } else {
+      // Fallback if no results found (shouldn't happen normally)
+      window.location.href = "quiz.html";
+    }
+  </script>
+</body>
+</html>
