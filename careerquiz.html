@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Career Discovery Quiz | CareerPath AI</title>
+  <title>Advanced Career Discovery | CareerPath AI</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,11 +12,13 @@
       --primary: #4f46e5;
       --secondary: #10b981;
       --accent: #f59e0b;
+      --deep-blue: #1e3a8a;
+      --dark-teal: #115e59;
     }
     
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     }
     
     .quiz-container {
@@ -29,7 +31,7 @@
     }
     
     .question-text {
-      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      background: linear-gradient(90deg, var(--deep-blue), var(--primary));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -39,18 +41,19 @@
       transition: all 0.3s ease;
       transform-origin: center;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
     }
     
     .option-card:hover {
       transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
     
     .option-card.selected {
       border-color: var(--primary);
-      background-color: rgba(79, 70, 229, 0.05);
+      background-color: rgba(79, 70, 229, 0.03);
       transform: translateY(-3px);
-      box-shadow: 0 10px 15px rgba(79, 70, 229, 0.2);
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.15);
     }
     
     .progress-track {
@@ -58,7 +61,7 @@
     }
     
     .progress-thumb {
-      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      background: linear-gradient(90deg, var(--deep-blue), var(--primary));
       transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
     }
     
@@ -92,6 +95,34 @@
       70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
       100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
     }
+    
+    .career-match-badge {
+      background: linear-gradient(135deg, var(--primary), var(--deep-blue));
+      color: white;
+    }
+    
+    .strength-indicator {
+      height: 4px;
+      background: linear-gradient(90deg, var(--secondary), var(--dark-teal));
+    }
+    
+    .result-card {
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+    
+    .result-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .tech-card { border-left-color: #4f46e5; }
+    .health-card { border-left-color: #10b981; }
+    .creative-card { border-left-color: #f59e0b; }
+    .business-card { border-left-color: #3b82f6; }
+    .engineering-card { border-left-color: #ef4444; }
+    .education-card { border-left-color: #8b5cf6; }
+    .science-card { border-left-color: #ec4899; }
   </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 md:p-8">
@@ -106,17 +137,17 @@
             <div>
               <div class="flex items-center mb-2">
                 <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-3">
-                  <i class="fas fa-brain"></i>
+                  <i class="fas fa-user-astronaut"></i>
                 </div>
                 <span class="text-sm font-semibold text-indigo-600">CAREERPATH AI</span>
               </div>
-              <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Career Discovery Quiz</h1>
-              <p class="text-gray-600">Let's uncover your perfect career path</p>
+              <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Advanced Career Discovery</h1>
+              <p class="text-gray-600">Uncover your true professional potential</p>
             </div>
             <div class="text-right">
-              <div class="text-xs font-medium text-gray-500 mb-1">QUESTION <span id="current-question">1</span>/<span id="total-questions">10</span></div>
+              <div class="text-xs font-medium text-gray-500 mb-1">QUESTION <span id="current-question">1</span>/<span id="total-questions">12</span></div>
               <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div id="quiz-progress" class="h-full progress-thumb" style="width: 10%"></div>
+                <div id="quiz-progress" class="h-full progress-thumb" style="width: 8.33%"></div>
               </div>
             </div>
           </div>
@@ -137,7 +168,7 @@
           
           <div class="flex items-center text-sm text-gray-500">
             <i class="fas fa-lightbulb mr-2 text-yellow-500"></i>
-            <span id="quiz-tip">Select all options that apply to you</span>
+            <span id="quiz-tip">Select all options that resonate with you</span>
           </div>
           
           <button id="next-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all transform hover:translate-x-1">
@@ -145,7 +176,7 @@
           </button>
           
           <button id="submit-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center bg-gradient-to-r from-green-600 to-teal-500 text-white rounded-xl font-medium hover:shadow-lg transition-all hidden pulse-animation">
-            Get My Results <i class="fas fa-chart-line ml-2"></i>
+            Discover My Career <i class="fas fa-chart-line ml-2"></i>
           </button>
         </div>
       </div>
@@ -153,72 +184,267 @@
   </div>
 
   <script>
-    // Enhanced Quiz Questions with Icons
+    // Comprehensive Career Quiz Questions with Logical Sequence
     const quizQuestions = [
       {
-        question: "Which of these activities energizes you the most?",
+        question: "When facing a complex problem, your first instinct is to:",
         options: [
-          { text: "Solving complex puzzles or coding challenges", field: "technology", icon: "fa-code" },
-          { text: "Creating art, music, or designing visuals", field: "arts", icon: "fa-palette" },
-          { text: "Helping others through counseling or care", field: "healthcare", icon: "fa-heartbeat" },
-          { text: "Analyzing data and market trends", field: "business", icon: "fa-chart-line" },
-          { text: "Building or repairing physical objects", field: "engineering", icon: "fa-tools" }
+          { text: "Break it down into logical components and analyze systematically", field: "analytical", icon: "fa-sitemap", weight: 1.2 },
+          { text: "Brainstorm creative solutions that haven't been tried before", field: "creative", icon: "fa-lightbulb", weight: 1.1 },
+          { text: "Research how others have solved similar problems", field: "research", icon: "fa-search", weight: 1.0 },
+          { text: "Consult with colleagues or mentors for diverse perspectives", field: "social", icon: "fa-users", weight: 0.9 },
+          { text: "Develop a practical, step-by-step plan to address it", field: "practical", icon: "fa-tasks", weight: 1.0 }
         ],
         type: "single",
-        tip: "Choose the activity you'd naturally gravitate toward"
+        tip: "Choose your natural approach, not what you think is 'correct'",
+        category: "problem_solving"
       },
       {
-        question: "Select subjects you excel at or enjoy:",
+        question: "Which of these work environments would help you do your best work?",
         options: [
-          { text: "Mathematics & Computer Science", field: "technology", icon: "fa-square-root-alt" },
-          { text: "Literature & Creative Writing", field: "humanities", icon: "fa-book-open" },
-          { text: "Biology & Chemistry", field: "healthcare", icon: "fa-flask" },
-          { text: "Economics & Business Studies", field: "business", icon: "fa-coins" },
-          { text: "Visual Arts & Design", field: "arts", icon: "fa-paint-brush" },
-          { text: "History & Social Sciences", field: "social_sciences", icon: "fa-globe-americas" }
+          { text: "Fast-paced, dynamic setting with new challenges regularly", field: "dynamic", icon: "fa-bolt", weight: 1.1 },
+          { text: "Structured environment with clear processes and expectations", field: "structured", icon: "fa-project-diagram", weight: 1.0 },
+          { text: "Collaborative space with frequent team interactions", field: "team", icon: "fa-user-friends", weight: 1.0 },
+          { text: "Independent setting where I control my schedule and approach", field: "autonomous", icon: "fa-user-clock", weight: 1.2 },
+          { text: "Creative atmosphere with freedom to experiment", field: "experimental", icon: "fa-flask", weight: 1.1 }
         ],
         type: "multiple",
-        tip: "Select all that apply - don't overthink it!"
+        tip: "Select all environments where you thrive",
+        category: "work_preference"
       },
       {
-        question: "Which work environment excites you?",
+        question: "What type of tasks give you the greatest sense of accomplishment?",
         options: [
-          { text: "Tech startup with innovative projects", field: "technology", icon: "fa-laptop-code" },
-          { text: "Hospital or healthcare facility", field: "healthcare", icon: "fa-hospital" },
-          { text: "Creative studio or agency", field: "arts", icon: "fa-photo-video" },
-          { text: "Corporate office with team collaboration", field: "business", icon: "fa-building" },
-          { text: "Construction site or engineering lab", field: "engineering", icon: "fa-hard-hat" },
-          { text: "Classroom or academic setting", field: "education", icon: "fa-chalkboard-teacher" }
-        ],
-        type: "single",
-        tip: "Imagine your ideal workplace atmosphere"
-      },
-      {
-        question: "What skills come most naturally to you?",
-        options: [
-          { text: "Logical problem-solving", field: "technology", icon: "fa-brain" },
-          { text: "Creative thinking", field: "arts", icon: "fa-lightbulb" },
-          { text: "Empathy & communication", field: "healthcare", icon: "fa-comments" },
-          { text: "Leadership & strategy", field: "business", icon: "fa-chess" },
-          { text: "Technical & mechanical", field: "engineering", icon: "fa-cogs" }
+          { text: "Solving difficult technical or mathematical problems", field: "technical", icon: "fa-calculator", weight: 1.2 },
+          { text: "Creating something original (art, writing, design, etc.)", field: "creative", icon: "fa-paint-brush", weight: 1.1 },
+          { text: "Helping others achieve their goals or overcome challenges", field: "helping", icon: "fa-hands-helping", weight: 1.0 },
+          { text: "Leading a team to accomplish significant objectives", field: "leadership", icon: "fa-flag", weight: 1.1 },
+          { text: "Building or fixing tangible things with my hands", field: "tangible", icon: "fa-tools", weight: 1.0 },
+          { text: "Discovering new information through research", field: "discovery", icon: "fa-microscope", weight: 1.1 }
         ],
         type: "multiple",
-        tip: "These are skills you enjoy using, not just ones you're good at"
+        tip: "Choose tasks that genuinely fulfill you",
+        category: "motivation"
       },
       {
-        question: "Which of these future careers excites you?",
+        question: "How do you prefer to learn new skills or information?",
         options: [
-          { text: "AI Engineer or Data Scientist", field: "technology", icon: "fa-robot" },
-          { text: "Graphic Designer or Art Director", field: "arts", icon: "fa-pen-fancy" },
-          { text: "Doctor or Medical Researcher", field: "healthcare", icon: "fa-user-md" },
-          { text: "Financial Analyst or Entrepreneur", field: "business", icon: "fa-briefcase" },
-          { text: "Civil Engineer or Architect", field: "engineering", icon: "fa-ruler-combined" },
-          { text: "Professor or Education Specialist", field: "education", icon: "fa-user-graduate" }
+          { text: "Through hands-on practice and experimentation", field: "kinesthetic", icon: "fa-hand-paper", weight: 1.0 },
+          { text: "By reading books, manuals, or detailed instructions", field: "reading", icon: "fa-book", weight: 1.0 },
+          { text: "Through visual demonstrations and diagrams", field: "visual", icon: "fa-eye", weight: 1.0 },
+          { text: "In a classroom or lecture setting with an expert", field: "lecture", icon: "fa-chalkboard-teacher", weight: 1.0 },
+          { text: "Through collaborative learning with peers", field: "collaborative", icon: "fa-comments", weight: 1.0 },
+          { text: "By immediately applying knowledge to real projects", field: "applied", icon: "fa-rocket", weight: 1.2 }
         ],
         type: "single",
-        tip: "Don't worry about qualifications - just what appeals to you"
+        tip: "Select your most effective learning method",
+        category: "learning_style"
+      },
+      {
+        question: "Which of these future trends excites you the most?",
+        options: [
+          { text: "Artificial intelligence and machine learning advancements", field: "technology", icon: "fa-robot", weight: 1.2 },
+          { text: "Breakthroughs in medicine and healthcare", field: "healthcare", icon: "fa-heartbeat", weight: 1.1 },
+          { text: "Sustainable energy and environmental solutions", field: "environment", icon: "fa-leaf", weight: 1.1 },
+          { text: "New frontiers in space exploration", field: "space", icon: "fa-meteor", weight: 1.0 },
+          { text: "Evolution of creative industries and digital media", field: "creative", icon: "fa-photo-video", weight: 1.0 },
+          { text: "Global economic development and financial innovation", field: "business", icon: "fa-chart-network", weight: 1.0 }
+        ],
+        type: "single",
+        tip: "Choose the trend you'd most want to contribute to",
+        category: "future_vision"
+      },
+      {
+        question: "What skills would you most like to develop further?",
+        options: [
+          { text: "Advanced technical or scientific expertise", field: "technical", icon: "fa-atom", weight: 1.2 },
+          { text: "Creative expression and artistic abilities", field: "artistic", icon: "fa-magic", weight: 1.1 },
+          { text: "Interpersonal communication and emotional intelligence", field: "emotional", icon: "fa-brain", weight: 1.0 },
+          { text: "Business strategy and entrepreneurial skills", field: "business", icon: "fa-chess", weight: 1.1 },
+          { text: "Physical or hands-on technical skills", field: "physical", icon: "fa-hammer", weight: 1.0 },
+          { text: "Research and analytical capabilities", field: "research", icon: "fa-search-plus", weight: 1.1 }
+        ],
+        type: "multiple",
+        tip: "Select skills you're genuinely motivated to improve",
+        category: "skill_development"
+      },
+      {
+        question: "When working on a project, you're most concerned with:",
+        options: [
+          { text: "Achieving perfect functionality and efficiency", field: "functional", icon: "fa-cogs", weight: 1.0 },
+          { text: "Creating an aesthetically pleasing result", field: "aesthetic", icon: "fa-eye", weight: 1.0 },
+          { text: "Ensuring it meets people's real needs", field: "human", icon: "fa-user", weight: 1.1 },
+          { text: "Delivering it on time and within budget", field: "practical", icon: "fa-clock", weight: 1.0 },
+          { text: "Innovating beyond existing solutions", field: "innovative", icon: "fa-star", weight: 1.2 }
+        ],
+        type: "single",
+        tip: "Choose your primary focus when creating something",
+        category: "work_priority"
+      },
+      {
+        question: "Which of these professional values resonates most with you?",
+        options: [
+          { text: "Innovation - creating new solutions to old problems", field: "innovation", icon: "fa-lightbulb", weight: 1.1 },
+          { text: "Precision - getting every detail exactly right", field: "precision", icon: "fa-crosshairs", weight: 1.0 },
+          { text: "Service - making a positive impact on others' lives", field: "service", icon: "fa-hands-helping", weight: 1.1 },
+          { text: "Growth - continuously developing new skills", field: "growth", icon: "fa-seedling", weight: 1.0 },
+          { text: "Leadership - guiding teams to success", field: "leadership", icon: "fa-flag", weight: 1.1 },
+          { text: "Autonomy - having control over my work", field: "autonomy", icon: "fa-user-astronaut", weight: 1.2 }
+        ],
+        type: "single",
+        tip: "Select the value that most defines your ideal work",
+        category: "values"
+      },
+      {
+        question: "How do you handle stress or high-pressure situations?",
+        options: [
+          { text: "Focus intensely on solving the problem methodically", field: "analytical", icon: "fa-brain", weight: 1.0 },
+          { text: "Step back to find creative or unconventional solutions", field: "creative", icon: "fa-lightbulb", weight: 1.0 },
+          { text: "Collaborate with others to share the burden", field: "collaborative", icon: "fa-users", weight: 1.1 },
+          { text: "Prioritize tasks and work efficiently through them", field: "organized", icon: "fa-tasks", weight: 1.0 },
+          { text: "Remain calm and maintain perspective", field: "resilient", icon: "fa-mountain", weight: 1.1 }
+        ],
+        type: "single",
+        tip: "Choose your most natural response to pressure",
+        category: "stress_response"
+      },
+      {
+        question: "What kind of impact do you want your work to have?",
+        options: [
+          { text: "Technological advancement that changes how we live", field: "tech_impact", icon: "fa-microchip", weight: 1.2 },
+          { text: "Directly improving individual lives", field: "personal_impact", icon: "fa-heart", weight: 1.1 },
+          { text: "Contributing to scientific or academic knowledge", field: "knowledge_impact", icon: "fa-book-open", weight: 1.1 },
+          { text: "Creating beautiful or thought-provoking art", field: "artistic_impact", icon: "fa-palette", weight: 1.0 },
+          { text: "Building successful organizations or businesses", field: "business_impact", icon: "fa-building", weight: 1.0 },
+          { text: "Solving environmental or global challenges", field: "global_impact", icon: "fa-globe", weight: 1.2 }
+        ],
+        type: "multiple",
+        tip: "Select all types of impact that motivate you",
+        category: "desired_impact"
+      },
+      {
+        question: "Which of these describes your ideal work-life balance?",
+        options: [
+          { text: "Fully immersed in my work with long, intense hours", field: "immersed", icon: "fa-fire", weight: 1.0 },
+          { text: "Clear separation between work and personal time", field: "separated", icon: "fa-balance-scale", weight: 1.1 },
+          { text: "Flexible integration where work and life blend", field: "integrated", icon: "fa-blender", weight: 1.2 },
+          { text: "Seasonal intensity with periods of rest", field: "seasonal", icon: "fa-calendar-alt", weight: 1.0 },
+          { text: "Variable based on my current projects", field: "variable", icon: "fa-sliders-h", weight: 1.0 }
+        ],
+        type: "single",
+        tip: "Choose the balance that would make you happiest long-term",
+        category: "work_life"
+      },
+      {
+        question: "Imagine your ideal professional legacy. What stands out?",
+        options: [
+          { text: "Revolutionary inventions or discoveries", field: "inventor", icon: "fa-cogs", weight: 1.2 },
+          { text: "Profound positive impact on people's lives", field: "helper", icon: "fa-hands", weight: 1.1 },
+          { text: "Beautiful or influential creative works", field: "artist", icon: "fa-paint-brush", weight: 1.1 },
+          { text: "Successful organizations I've built", field: "builder", icon: "fa-city", weight: 1.0 },
+          { text: "Knowledge I've shared through teaching", field: "teacher", icon: "fa-chalkboard", weight: 1.0 },
+          { text: "Solutions to major global problems", field: "solver", icon: "fa-puzzle-piece", weight: 1.2 }
+        ],
+        type: "single",
+        tip: "Select the legacy that resonates most deeply",
+        category: "legacy"
       }
     ];
+
+    // Career Matching Database
+    const careerDatabase = {
+      technology: {
+        title: "Technology & Engineering",
+        description: "You thrive in technical environments and enjoy solving complex problems through logic and innovation.",
+        careers: [
+          { name: "Software Engineer", match: 95, description: "Develop innovative software solutions and systems." },
+          { name: "Data Scientist", match: 90, description: "Extract insights from complex datasets to drive decisions." },
+          { name: "AI Specialist", match: 88, description: "Develop intelligent systems that learn and adapt." },
+          { name: "Cybersecurity Analyst", match: 85, description: "Protect systems and networks from digital threats." }
+        ],
+        reasoning: "Your analytical mindset, problem-solving skills, and interest in technical challenges make technology fields an excellent fit. You likely enjoy working with systems, patterns, and creating efficient solutions to complex problems. The rapid evolution in tech will keep you engaged and challenged throughout your career.",
+        icon: "fa-laptop-code",
+        color: "text-indigo-600"
+      },
+      healthcare: {
+        title: "Healthcare & Life Sciences",
+        description: "You're drawn to helping others and have an interest in biological systems and human health.",
+        careers: [
+          { name: "Physician", match: 92, description: "Diagnose and treat medical conditions to improve lives." },
+          { name: "Medical Researcher", match: 90, description: "Conduct studies to advance medical knowledge." },
+          { name: "Genetic Counselor", match: 87, description: "Help patients understand genetic risks and options." },
+          { name: "Public Health Specialist", match: 85, description: "Develop programs to improve community health." }
+        ],
+        reasoning: "Your combination of analytical skills, desire to help others, and interest in biological systems makes healthcare an ideal field. You likely enjoy continuous learning and find fulfillment in making a tangible difference in people's lives. The healthcare field offers both intellectual challenges and deep personal satisfaction.",
+        icon: "fa-heartbeat",
+        color: "text-emerald-600"
+      },
+      creative: {
+        title: "Creative & Design",
+        description: "You excel at original thinking and expressing ideas through visual, written, or experiential mediums.",
+        careers: [
+          { name: "Graphic Designer", match: 93, description: "Create visual concepts to communicate ideas." },
+          { name: "Creative Director", match: 90, description: "Lead the vision for creative projects and campaigns." },
+          { name: "UX/UI Designer", match: 88, description: "Design intuitive and engaging user experiences." },
+          { name: "Content Strategist", match: 85, description: "Develop compelling narratives across platforms." }
+        ],
+        reasoning: "Your creative thinking, aesthetic sensibility, and ability to communicate through visual or written mediums make creative fields a natural fit. You likely thrive when given freedom to innovate and express original ideas. The creative industry offers endless opportunities to bring unique visions to life while solving real-world problems through design.",
+        icon: "fa-paint-brush",
+        color: "text-amber-500"
+      },
+      business: {
+        title: "Business & Entrepreneurship",
+        description: "You're strategic, results-oriented, and enjoy building organizations or solving business challenges.",
+        careers: [
+          { name: "Management Consultant", match: 94, description: "Help organizations solve complex business problems." },
+          { name: "Financial Analyst", match: 91, description: "Guide investment decisions through financial research." },
+          { name: "Marketing Director", match: 89, description: "Develop strategies to promote products/services." },
+          { name: "Entrepreneur", match: 87, description: "Build and grow your own business venture." }
+        ],
+        reasoning: "Your strategic thinking, leadership potential, and interest in organizational success make business fields an excellent match. You likely enjoy analyzing systems, identifying opportunities, and driving results. The business world offers diverse challenges where you can apply your problem-solving skills to real-world economic and organizational issues.",
+        icon: "fa-briefcase",
+        color: "text-blue-500"
+      },
+      engineering: {
+        title: "Engineering & Applied Sciences",
+        description: "You enjoy applying scientific principles to build practical solutions to real-world problems.",
+        careers: [
+          { name: "Mechanical Engineer", match: 95, description: "Design and improve mechanical systems." },
+          { name: "Civil Engineer", match: 92, description: "Plan and oversee infrastructure projects." },
+          { name: "Environmental Engineer", match: 90, description: "Develop solutions to environmental challenges." },
+          { name: "Robotics Engineer", match: 88, description: "Design and build robotic systems." }
+        ],
+        reasoning: "Your combination of analytical skills, practical problem-solving, and interest in tangible results makes engineering an ideal field. You likely enjoy seeing theoretical concepts applied to create real-world solutions. Engineering offers the perfect blend of intellectual challenge and hands-on implementation that matches your strengths.",
+        icon: "fa-cogs",
+        color: "text-red-500"
+      },
+      education: {
+        title: "Education & Research",
+        description: "You're passionate about sharing knowledge and advancing understanding in your field of interest.",
+        careers: [
+          { name: "University Professor", match: 93, description: "Teach specialized subjects and conduct research." },
+          { name: "Educational Psychologist", match: 91, description: "Study how people learn and develop educational methods." },
+          { name: "Curriculum Developer", match: 89, description: "Design educational programs and materials." },
+          { name: "Research Scientist", match: 87, description: "Conduct experiments to expand scientific knowledge." }
+        ],
+        reasoning: "Your love of learning, ability to explain complex concepts, and desire to contribute to knowledge make education and research fields a perfect fit. You likely find fulfillment in helping others understand important ideas and pushing the boundaries of what's known. These fields allow you to continuously grow while making a lasting impact through education.",
+        icon: "fa-chalkboard-teacher",
+        color: "text-purple-500"
+      },
+      science: {
+        title: "Scientific Research",
+        description: "You're driven by curiosity and the desire to uncover new knowledge about the natural world.",
+        careers: [
+          { name: "Biomedical Researcher", match: 95, description: "Investigate diseases and develop treatments." },
+          { name: "Environmental Scientist", match: 92, description: "Study ecosystems and environmental problems." },
+          { name: "Astrophysicist", match: 90, description: "Research celestial phenomena and the universe." },
+          { name: "Materials Scientist", match: 88, description: "Develop new materials with specialized properties." }
+        ],
+        reasoning: "Your analytical mind, curiosity about how things work, and patience for systematic investigation make scientific research an excellent match. You likely enjoy the process of discovery and have the persistence needed for rigorous study. A research career will allow you to contribute to humanity's understanding of the world while working on challenging, meaningful problems.",
+        icon: "fa-microscope",
+        color: "text-pink-500"
+      }
+    };
 
     // Quiz State
     let currentQuestion = 0;
@@ -255,10 +481,10 @@
                           answers[currentQuestion] === index);
         
         optionsHtml += `
-          <div class="option-card mb-4 p-5 border-2 border-gray-100 rounded-xl cursor-pointer flex items-start ${isSelected ? 'selected' : ''}"
+          <div class="option-card mb-4 p-5 rounded-xl cursor-pointer flex items-start ${isSelected ? 'selected' : ''}"
                data-index="${index}"
                onclick="selectOption(${index})">
-            <div class="option-icon w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400 mr-4 mt-0.5 flex-shrink-0">
+            <div class="option-icon w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center ${isSelected ? 'text-indigo-600' : 'text-gray-400'} mr-4 mt-0.5 flex-shrink-0">
               <i class="fas ${option.icon}"></i>
             </div>
             <div>
@@ -365,48 +591,119 @@
       }
     }
 
-    function submitQuiz() {
-      // Calculate results with weights
+    // Calculate career matches based on answers
+    function calculateCareerMatches() {
       const fieldScores = {};
-      const fieldWeights = {
-        'technology': 1.2,   // Slightly more weight to tech fields
-        'healthcare': 1.1,   // Healthcare gets a small boost
-        'business': 1.0,
-        'arts': 1.0,
-        'engineering': 1.0,
-        'education': 1.0,
-        'humanities': 1.0,
-        'social_sciences': 1.0
-      };
+      const categoryScores = {};
       
+      // First pass: Calculate raw scores
       answers.forEach((answer, questionIndex) => {
         const question = quizQuestions[questionIndex];
+        const options = question.options;
         
         if (question.type === 'multiple') {
           answer.forEach(optionIndex => {
-            const field = question.options[optionIndex].field;
-            const weight = fieldWeights[field] || 1.0;
+            const field = options[optionIndex].field;
+            const weight = options[optionIndex].weight || 1.0;
             fieldScores[field] = (fieldScores[field] || 0) + (1 * weight);
+            
+            // Track category scores
+            categoryScores[question.category] = (categoryScores[question.category] || 0) + (1 * weight);
           });
         } else {
-          const field = question.options[answer].field;
-          const weight = fieldWeights[field] || 1.0;
+          const field = options[answer].field;
+          const weight = options[answer].weight || 1.0;
           fieldScores[field] = (fieldScores[field] || 0) + (2 * weight); // Single select gets more weight
+          
+          // Track category scores
+          categoryScores[question.category] = (categoryScores[question.category] || 0) + (2 * weight);
         }
       });
       
-      // Store results
+      // Second pass: Map to career fields with additional logic
+      const careerFieldScores = {
+        technology: (fieldScores.analytical || 0) * 1.5 + 
+                   (fieldScores.technical || 0) * 1.3 +
+                   (fieldScores.functional || 0) * 1.1 +
+                   (fieldScores.tech_impact || 0) * 1.2,
+                   
+        healthcare: (fieldScores.helping || 0) * 1.6 +
+                   (fieldScores.service || 0) * 1.4 +
+                   (fieldScores.personal_impact || 0) * 1.3 +
+                   (fieldScores.research || 0) * 1.1,
+                   
+        creative: (fieldScores.creative || 0) * 1.7 +
+                 (fieldScores.artistic || 0) * 1.5 +
+                 (fieldScores.aesthetic || 0) * 1.3 +
+                 (fieldScores.artistic_impact || 0) * 1.2,
+                 
+        business: (fieldScores.business || 0) * 1.5 +
+                 (fieldScores.leadership || 0) * 1.4 +
+                 (fieldScores.strategy || 0) * 1.3 +
+                 (fieldScores.business_impact || 0) * 1.2,
+                 
+        engineering: (fieldScores.technical || 0) * 1.5 +
+                    (fieldScores.practical || 0) * 1.4 +
+                    (fieldScores.tangible || 0) * 1.3 +
+                    (fieldScores.global_impact || 0) * 1.1,
+                    
+        education: (fieldScores.helping || 0) * 1.5 +
+                  (fieldScores.knowledge_impact || 0) * 1.4 +
+                  (fieldScores.teacher || 0) * 1.3 +
+                  (fieldScores.collaborative || 0) * 1.2,
+                  
+        science: (fieldScores.research || 0) * 1.7 +
+                (fieldScores.discovery || 0) * 1.5 +
+                (fieldScores.analytical || 0) * 1.3 +
+                (fieldScores.knowledge_impact || 0) * 1.2
+      };
+      
+      // Normalize scores to 0-100 range
+      const maxScore = Math.max(...Object.values(careerFieldScores));
+      const normalizedScores = {};
+      Object.keys(careerFieldScores).forEach(field => {
+        normalizedScores[field] = Math.round((careerFieldScores[field] / maxScore) * 100);
+      });
+      
+      // Sort fields by score
+      const sortedFields = Object.keys(normalizedScores).sort((a, b) => normalizedScores[b] - normalizedScores[a]);
+      
+      return {
+        scores: normalizedScores,
+        topField: sortedFields[0],
+        secondaryField: sortedFields[1],
+        categoryScores: categoryScores
+      };
+    }
+
+    function submitQuiz() {
+      // Calculate results
+      const results = calculateCareerMatches();
+      const topCareer = careerDatabase[results.topField];
+      const secondaryCareer = careerDatabase[results.secondaryField];
+      
+      // Store comprehensive results
       localStorage.setItem('careerQuizResults', JSON.stringify({
-        scores: fieldScores,
-        topField: Object.keys(fieldScores).reduce((a, b) => fieldScores[a] > fieldScores[b] ? a : b),
+        primaryMatch: {
+          field: results.topField,
+          score: results.scores[results.topField],
+          details: topCareer
+        },
+        secondaryMatch: {
+          field: results.secondaryField,
+          score: results.scores[results.secondaryField],
+          details: secondaryCareer
+        },
+        allScores: results.scores,
+        categoryScores: results.categoryScores,
         completedAt: new Date().toISOString()
       }));
       
       // Show loading animation before redirect
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Analyzing your results...';
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Analyzing your unique profile...';
       setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 1500);
+        window.location.href = "quizresult.html";
+      }, 2000);
     }
 
     // Event Listeners with animations
