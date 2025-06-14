@@ -512,7 +512,7 @@ loginFormElement.addEventListener('submit', (e) => {
   loginForm.classList.add('hidden');
   document.body.classList.remove('overflow-hidden');
   // Redirect to dashboard
-  window.location.href = 'Dashboard.html';
+  window.location.href = 'dashboard.html';
 });
 
 // Update the existing userForm submit handler to redirect to dashboard
