@@ -52,6 +52,7 @@
       }
     }
   </script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     
@@ -160,14 +161,7 @@
         <a href="#how" class="nav-link text-secondary-700 font-medium hover:text-primary-600">How It Works</a>
         <a href="#testimonials" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Testimonials</a>
         <a href="#quiz" class="btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-medium">Start Quiz</a>
-        <div class="theme-switcher">
-          <label for="theme-select" class="gradient-text font-semibold mr-2">Theme:</label>
-          <select id="theme-select" class="rounded px-3 py-1 border focus:outline-none">
-            <option value="auto">Auto</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
+        
       </div>
       
 
@@ -743,66 +737,81 @@
   </section>
 
   <!-- FAQ Section -->
-  <section class="py-20 bg-white">
-    <div class="container mx-auto px-6">
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Frequently Asked <span class="gradient-text">Questions</span></h2>
-        <p class="text-secondary-600">
-          Everything you need to know about the CareerPath AI assessment.
-        </p>
-      </div>
-      
-      <div class="max-w-3xl mx-auto">
-        <div class="mb-6 border-b border-gray-200 pb-6">
-          <button class="flex justify-between items-center w-full text-left font-medium text-lg text-secondary-800 hover:text-primary-600 focus:outline-none">
-            <span>How accurate is the career assessment?</span>
-            <i class="fas fa-chevron-down text-primary-500 transition-transform duration-300"></i>
-          </button>
-          <div class="mt-4 text-secondary-600 hidden">
-            <p>
-              Our AI assessment has an 87% accuracy rate based on follow-up surveys with users. The accuracy improves as you provide more detailed answers. We combine multiple psychological models with real-world career data to provide the most accurate recommendations possible.
-            </p>
-          </div>
-        </div>
-        
-        <div class="mb-6 border-b border-gray-200 pb-6">
-          <button class="flex justify-between items-center w-full text-left font-medium text-lg text-secondary-800 hover:text-primary-600 focus:outline-none">
-            <span>Is there a cost to use CareerPath AI?</span>
-            <i class="fas fa-chevron-down text-primary-500 transition-transform duration-300"></i>
-          </button>
-          <div class="mt-4 text-secondary-600 hidden">
-            <p>
-              The basic career assessment is completely free. We offer premium features like detailed career roadmaps and one-on-one career coaching for those who want more in-depth guidance, but the core AI recommendations are available at no cost.
-            </p>
-          </div>
-        </div>
-        
-        <div class="mb-6 border-b border-gray-200 pb-6">
-          <button class="flex justify-between items-center w-full text-left font-medium text-lg text-secondary-800 hover:text-primary-600 focus:outline-none">
-            <span>How long does the assessment take?</span>
-            <i class="fas fa-chevron-down text-primary-500 transition-transform duration-300"></i>
-          </button>
-          <div class="mt-4 text-secondary-600 hidden">
-            <p>
-              Most users complete the assessment in 5-7 minutes. There are 25 multiple-choice questions designed to quickly but thoroughly evaluate your skills, interests, and work preferences. You can save your progress and return later if needed.
-            </p>
-          </div>
-        </div>
-        
-        <div class="mb-6 border-b border-gray-200 pb-6">
-          <button class="flex justify-between items-center w-full text-left font-medium text-lg text-secondary-800 hover:text-primary-600 focus:outline-none">
-            <span>Can I retake the assessment later?</span>
-            <i class="fas fa-chevron-down text-primary-500 transition-transform duration-300"></i>
-          </button>
-          <div class="mt-4 text-secondary-600 hidden">
-            <p>
-              Yes! We encourage users to retake the assessment every 6-12 months or after significant life changes. Your interests and skills evolve over time, and so might your ideal career path. We store your previous results so you can track how your career preferences change.
-            </p>
-          </div>
-        </div>
-      </div>
+
+
+<!-- FAQ Section -->
+<section class="py-20 bg-white faq-section">
+  <div class="container mx-auto px-6">
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">Frequently Asked <span class="gradient-text">Questions</span></h2>
+      <p class="text-secondary-600">Everything you need to know about the CareerPath AI assessment.</p>
+      <!-- FAQ Search -->
+      <input type="text" placeholder="Search FAQ..." id="faqSearch" class="faq-search mt-6 px-4 py-2 border rounded-md w-full" />
     </div>
-  </section>
+
+    <!-- FAQ Accordion -->
+    <div class="max-w-3xl mx-auto" id="faqAccordion">
+
+      <!-- FAQ Items -->
+      <div class="faq-item mb-6 border border-gray-200 rounded-lg overflow-hidden transition-all duration-500">
+        <button class="faq-btn group flex justify-between items-center w-full text-left font-medium text-lg px-4 py-4 bg-white hover:text-primary-600 focus:outline-none transition-colors duration-300">
+          <span class="question-text transition-colors duration-300">How accurate is the career assessment?</span>
+          <i class="fas fa-chevron-down text-primary-500 transform transition-transform duration-300"></i>
+        </button>
+        <div class="faq-content mt-0 px-4 pb-4 text-secondary-600 max-h-0 opacity-0 overflow-hidden transition-all duration-500">
+          <p>
+            Our AI assessment has an 87% accuracy rate based on follow-up surveys with users. The accuracy improves as you provide more detailed answers.
+          </p>
+          <p class="text-sm mt-4">Was this helpful? <button class="text-green-500 ml-2">Yes</button> <button class="text-red-500 ml-2">No</button></p>
+          <button onclick="speak(this)" class="text-blue-500 text-sm mt-2">🔊 Listen</button>
+        </div>
+      </div>
+         <div class="faq-item mb-6 border border-gray-200 rounded-lg overflow-hidden transition-all duration-500">
+        <button class="faq-btn group flex justify-between items-center w-full text-left font-medium text-lg px-4 py-4 bg-white hover:text-primary-600 focus:outline-none transition-colors duration-300">
+          <span class="question-text transition-colors duration-300">Is there a cost to use CareerPath AI?</span>
+          <i class="fas fa-chevron-down text-primary-500 transform transition-transform duration-300"></i>
+        </button>
+        <div class="faq-content mt-0 px-4 pb-4 text-secondary-600 max-h-0 opacity-0 overflow-hidden transition-all duration-500">
+          <p>
+            The basic career assessment is completely free. We offer premium features like detailed career roadmaps and one-on-one career coaching for those who want more in-depth guidance, but the core AI recommendations are available at no cost.
+          </p>
+          <p class="text-sm mt-4">Was this helpful? <button class="text-green-500 ml-2">Yes</button> <button class="text-red-500 ml-2">No</button></p>
+          <button onclick="speak(this)" class="text-blue-500 text-sm mt-2">🔊 Listen</button>
+        </div>
+      </div>
+         <div class="faq-item mb-6 border border-gray-200 rounded-lg overflow-hidden transition-all duration-500">
+        <button class="faq-btn group flex justify-between items-center w-full text-left font-medium text-lg px-4 py-4 bg-white hover:text-primary-600 focus:outline-none transition-colors duration-300">
+          <span class="question-text transition-colors duration-300">How long does the assessment take?</span>
+          <i class="fas fa-chevron-down text-primary-500 transform transition-transform duration-300"></i>
+        </button>
+        <div class="faq-content mt-0 px-4 pb-4 text-secondary-600 max-h-0 opacity-0 overflow-hidden transition-all duration-500">
+          <p>
+            Most users complete the assessment in 5-7 minutes. There are 25 multiple-choice questions designed to quickly but thoroughly evaluate your skills, interests, and work preferences. You can save your progress and return later if needed.
+          </p>
+          <p class="text-sm mt-4">Was this helpful? <button class="text-green-500 ml-2">Yes</button> <button class="text-red-500 ml-2">No</button></p>
+          <button onclick="speak(this)" class="text-blue-500 text-sm mt-2">🔊 Listen</button>
+        </div>
+      </div>
+         <div class="faq-item mb-6 border border-gray-200 rounded-lg overflow-hidden transition-all duration-500">
+        <button class="faq-btn group flex justify-between items-center w-full text-left font-medium text-lg px-4 py-4 bg-white hover:text-primary-600 focus:outline-none transition-colors duration-300">
+          <span class="question-text transition-colors duration-300">Can I retake the assessment later?</span>
+          <i class="fas fa-chevron-down text-primary-500 transform transition-transform duration-300"></i>
+        </button>
+        <div class="faq-content mt-0 px-4 pb-4 text-secondary-600 max-h-0 opacity-0 overflow-hidden transition-all duration-500">
+          <p>
+            Yes! We encourage users to retake the assessment every 6-12 months or after significant life changes. Your interests and skills evolve over time, and so might your ideal career path. We store your previous results so you can track how your career preferences change.
+          </p>
+          <p class="text-sm mt-4">Was this helpful? <button class="text-green-500 ml-2">Yes</button> <button class="text-red-500 ml-2">No</button></p>
+          <button onclick="speak(this)" class="text-blue-500 text-sm mt-2">🔊 Listen</button>
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+</section>
+
 
   <!-- Footer -->
   <footer class="bg-secondary-900 text-white py-12">
@@ -878,9 +887,6 @@
     </div>
   </footer>
 
-
-
-
 <script>
   // Toggle settings card
   document.getElementById('settings-icon').addEventListener('click', function () {
@@ -908,7 +914,68 @@
     }
   });
 </script>
+
 <script src="script.js">
 </script>
+
+<!-- FOR FAQ SECTION  -->
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const faqButtons = document.querySelectorAll('.faq-btn');
+    const searchInput = document.getElementById('faqSearch');
+
+    faqButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('i');
+        const text = button.querySelector('.question-text');
+        const isOpen = content.classList.contains('max-h-[500px]');
+
+        document.querySelectorAll('.faq-content').forEach(item => {
+          item.classList.remove('max-h-[500px]', 'opacity-100');
+          item.classList.add('max-h-0', 'opacity-0', 'overflow-hidden');
+        });
+
+        document.querySelectorAll('.faq-btn i').forEach(iconEl => {
+          iconEl.classList.remove('rotate-180');
+        });
+
+        document.querySelectorAll('.question-text').forEach(span => {
+          span.classList.remove('text-primary-500');
+        });
+
+        if (!isOpen) {
+          content.classList.remove('max-h-0', 'opacity-0');
+          content.classList.add('max-h-[500px]', 'opacity-100', 'overflow-hidden');
+          icon.classList.add('rotate-180');
+          text.classList.add('text-primary-500');
+          content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // FAQ Search Filter
+    searchInput.addEventListener('input', function () {
+      const searchTerm = this.value.toLowerCase();
+      document.querySelectorAll('.faq-item').forEach(item => {
+        const question = item.querySelector('.question-text').textContent.toLowerCase();
+        item.style.display = question.includes(searchTerm) ? 'block' : 'none';
+      });
+    });
+  });
+
+  // Text to speech
+  function speak(btn) {
+    const text = btn.closest('.faq-item').querySelector('.faq-content').textContent;
+    const utterance = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(utterance);
+  }
+</script>
+
+
+
 </body>
 </html>
+
+
