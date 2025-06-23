@@ -436,30 +436,62 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Mobile menu toggle - updated to not affect body overflow
-  document.getElementById('mobile-menu-button')?.addEventListener('click', function() {
-    const menu = document.getElementById('mobile-menu');
-    const icon = this.querySelector('i');
-    menu.classList.toggle('hidden');
-    if (icon) {
-      icon.classList.toggle('fa-bars');
-      icon.classList.toggle('fa-times');
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenuCard = document.getElementById('mobile-menu-card');
+  const menuIcon = mobileMenuButton.querySelector('i');
+  const card = mobileMenuCard.querySelector('.rounded-xl');
+
+  mobileMenuCard.setAttribute('data-state', 'closed');
+
+  mobileMenuButton.addEventListener('click', function (e) {
+    e.stopPropagation();
+    const isOpen = mobileMenuCard.getAttribute('data-state') === 'open';
+
+    if (isOpen) {
+      mobileMenuCard.setAttribute('data-state', 'closed');
+      mobileMenuCard.classList.add('hidden');
+      card.classList.remove('scale-y-100', 'opacity-100');
+      card.classList.add('scale-y-0', 'opacity-0');
+      menuIcon.classList.remove('fa-times');
+      menuIcon.classList.add('fa-bars');
+      document.body.classList.remove('overflow-hidden');
+    } else {
+      mobileMenuCard.classList.remove('hidden');
+      mobileMenuCard.setAttribute('data-state', 'open');
+      menuIcon.classList.remove('fa-bars');
+      menuIcon.classList.add('fa-times');
+      document.body.classList.add('overflow-hidden');
+
+      // Allow time for hidden class to be removed before animating
+      setTimeout(() => {
+        card.classList.remove('scale-y-0', 'opacity-0');
+        card.classList.add('scale-y-100', 'opacity-100');
+      }, 10);
     }
   });
 
-  // Close mobile menu when clicking links
-  document.querySelectorAll('#mobile-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-      document.getElementById('mobile-menu').classList.add('hidden');
-      const menuButton = document.getElementById('mobile-menu-button');
-      const icon = menuButton?.querySelector('i');
-      if (icon) {
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-      }
-    });
+  // Click outside to close
+  document.addEventListener('click', function (e) {
+    if (
+      mobileMenuCard.getAttribute('data-state') === 'open' &&
+      !mobileMenuCard.contains(e.target) &&
+      !mobileMenuButton.contains(e.target)
+    ) {
+      mobileMenuCard.setAttribute('data-state', 'closed');
+      mobileMenuCard.classList.add('hidden');
+      card.classList.remove('scale-y-100', 'opacity-100');
+      card.classList.add('scale-y-0', 'opacity-0');
+      menuIcon.classList.remove('fa-times');
+      menuIcon.classList.add('fa-bars');
+      document.body.classList.remove('overflow-hidden');
+    }
   });
+});
 
+  
   // FAQ accordion toggle
   document.querySelectorAll('.faq button').forEach(button => {
     button.addEventListener('click', () => {
@@ -528,3 +560,72 @@ userForm.addEventListener('submit', (e) => {
 
 
 
+  // Faster counter animation with improved timing
+  function animateCounter(element, target, duration = 800) {
+    const start = 0;
+    const startTime = performance.now();
+    const counter = element;
+    
+    function updateCounter(currentTime) {
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+      const current = Math.floor(progress * target);
+      
+      if (element.textContent.includes('+')) {
+        counter.textContent = current + "+";
+      } else if (element.textContent.includes('%')) {
+        counter.textContent = current + "%";
+      } else if (element.textContent.includes('min')) {
+        // For the minutes counter, we'll show it immediately
+        counter.textContent = target + " min";
+        return;
+      } else {
+        counter.textContent = current;
+      }
+      
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      }
+    }
+    
+    requestAnimationFrame(updateCounter);
+  }
+
+  // Intersection Observer for better performance
+  function setupCounters() {
+    const counters = document.querySelectorAll('.counter-value');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+          entry.target.classList.add('animated');
+          const target = parseInt(entry.target.getAttribute('data-target'));
+          animateCounter(entry.target, target);
+        }
+      });
+    }, { threshold: 0.5 }); // Trigger when 50% of element is visible
+    
+    counters.forEach(counter => {
+      const target = counter.textContent;
+      
+      if (target.includes('+')) {
+        counter.setAttribute('data-target', target.replace('+', ''));
+      } else if (target.includes('%')) {
+        counter.setAttribute('data-target', target.replace('%', ''));
+      } else if (target.includes('min')) {
+        counter.setAttribute('data-target', target.replace(' min', ''));
+      } else {
+        counter.setAttribute('data-target', target);
+      }
+      
+      counter.textContent = "0";
+      if (target.includes('+')) counter.textContent += "+";
+      if (target.includes('%')) counter.textContent += "%";
+      if (target.includes('min')) counter.textContent += " min";
+      
+      observer.observe(counter);
+    });
+  }
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', setupCounters);
