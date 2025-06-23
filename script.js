@@ -491,19 +491,21 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-  
-  // FAQ accordion toggle
-  document.querySelectorAll('.faq button').forEach(button => {
-    button.addEventListener('click', () => {
-      const content = button.nextElementSibling;
-      const icon = button.querySelector('i');
-      if (content) content.classList.toggle('hidden');
-      if (icon) {
-        icon.classList.toggle('fa-chevron-down');
-        icon.classList.toggle('fa-chevron-up');
-      }
-    });
-  });
+ // FAQ accordion toggle
+// document.querySelectorAll('.faq-section button').forEach(button => {
+//   button.addEventListener('click', () => {
+//     const content = button.nextElementSibling;
+//     const icon = button.querySelector('i');
+
+//     if (content) content.classList.toggle('hidden');
+
+//     if (icon) {
+//       icon.classList.toggle('fa-chevron-down');
+//       icon.classList.toggle('fa-chevron-up');
+//     }
+//   });
+// });
+
 
   // Smooth scrolling for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -558,74 +560,66 @@ userForm.addEventListener('submit', (e) => {
 });
 
 
+function animateCounter(element, target, suffix = "", duration = 800) {
+  const startTime = performance.now();
 
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const currentValue = Math.floor(progress * target);
 
-  // Faster counter animation with improved timing
-  function animateCounter(element, target, duration = 800) {
-    const start = 0;
-    const startTime = performance.now();
-    const counter = element;
-    
-    function updateCounter(currentTime) {
-      const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1);
-      const current = Math.floor(progress * target);
-      
-      if (element.textContent.includes('+')) {
-        counter.textContent = current + "+";
-      } else if (element.textContent.includes('%')) {
-        counter.textContent = current + "%";
-      } else if (element.textContent.includes('min')) {
-        // For the minutes counter, we'll show it immediately
-        counter.textContent = target + " min";
-        return;
-      } else {
-        counter.textContent = current;
-      }
-      
-      if (progress < 1) {
-        requestAnimationFrame(updateCounter);
-      }
+    if (suffix === "min") {
+      element.textContent = `${target} min`;
+      return;
+    } else {
+      element.textContent = currentValue.toLocaleString() + suffix;
     }
-    
-    requestAnimationFrame(updateCounter);
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
   }
 
-  // Intersection Observer for better performance
-  function setupCounters() {
-    const counters = document.querySelectorAll('.counter-value');
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-          entry.target.classList.add('animated');
-          const target = parseInt(entry.target.getAttribute('data-target'));
-          animateCounter(entry.target, target);
-        }
-      });
-    }, { threshold: 0.5 }); // Trigger when 50% of element is visible
-    
-    counters.forEach(counter => {
-      const target = counter.textContent;
-      
-      if (target.includes('+')) {
-        counter.setAttribute('data-target', target.replace('+', ''));
-      } else if (target.includes('%')) {
-        counter.setAttribute('data-target', target.replace('%', ''));
-      } else if (target.includes('min')) {
-        counter.setAttribute('data-target', target.replace(' min', ''));
-      } else {
-        counter.setAttribute('data-target', target);
+  requestAnimationFrame(update);
+}
+
+function setupCounters() {
+  const counters = document.querySelectorAll('.counter-value');
+
+  // Prepare each counter for animation
+  counters.forEach(counter => {
+    const target = parseInt(counter.getAttribute('data-target'));
+    const text = counter.textContent.trim();
+
+    let suffix = "";
+    if (text.includes('+')) suffix = "+";
+    else if (text.includes('%')) suffix = "%";
+    else if (text.includes('min')) suffix = "min";
+
+    counter.setAttribute('data-suffix', suffix);
+    counter.textContent = suffix === "min" ? `0 min` : `0${suffix}`;
+  });
+
+  // Watch the entire section
+  const section = document.querySelector('.py-16.bg-white'); // or use an ID if you assign one
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        counters.forEach(counter => {
+          if (!counter.classList.contains('animated')) {
+            counter.classList.add('animated');
+            const target = parseInt(counter.getAttribute('data-target'));
+            const suffix = counter.getAttribute('data-suffix');
+            animateCounter(counter, target, suffix);
+          }
+        });
+        obs.unobserve(entry.target); // Run once only
       }
-      
-      counter.textContent = "0";
-      if (target.includes('+')) counter.textContent += "+";
-      if (target.includes('%')) counter.textContent += "%";
-      if (target.includes('min')) counter.textContent += " min";
-      
-      observer.observe(counter);
     });
-  }
+  }, { threshold: 1.0 });
 
-  // Initialize when DOM is loaded
-  document.addEventListener('DOMContentLoaded', setupCounters);
+  observer.observe(section);
+}
+
+document.addEventListener('DOMContentLoaded', setupCounters);
