@@ -142,53 +142,90 @@
 
   
 
-  <!-- Navbar -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 shadow-sm">
-    <nav class="container mx-auto px-6 py-3">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center space-x-2">
-          <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center">
-            <i class="fas fa-brain text-white text-xl"></i>
-          </div>
-          <a href="#" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600">CareerPath AI</a>
+<!-- Navbar -->
+<header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 shadow-sm">
+  <nav class="container mx-auto px-6 py-3">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center">
+          <i class="fas fa-brain text-white text-xl"></i>
         </div>
-        
-        <!-- Desktop Menu -->
-        <div class="hidden md:flex items-center space-x-8">
-          <a href="#home" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Home</a>
-          <a href="#features" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Features</a>
-          <a href="#how" class="nav-link text-secondary-700 font-medium hover:text-primary-600">How It Works</a>
-          <a href="#testimonials" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Testimonials</a>
-          <a href="#quiz" class="btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-medium">Start Quiz</a>
+        <a href="#" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600">CareerPath AI</a>
+      </div>
+      
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#home" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Home</a>
+        <a href="#features" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Features</a>
+        <a href="#how" class="nav-link text-secondary-700 font-medium hover:text-primary-600">How It Works</a>
+        <a href="#testimonials" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Testimonials</a>
+        <a href="#quiz" class="btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-medium">Start Quiz</a>
         <div class="theme-switcher">
-  <label for="theme-select" class="gradient-text font-semibold mr-2">Theme:</label>
-  <select id="theme-select" class="rounded px-3 py-1 border focus:outline-none">
-    <option value="auto">Auto</option>
-    <option value="light">Light</option>
-    <option value="dark">Dark</option>
-  </select>
+          <label for="theme-select" class="gradient-text font-semibold mr-2">Theme:</label>
+          <select id="theme-select" class="rounded px-3 py-1 border focus:outline-none">
+            <option value="auto">Auto</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </div>
+      </div>
+      
+
+<!-- Mobile Menu Button -->
+<button id="mobile-menu-button" class="md:hidden text-secondary-700 focus:outline-none relative z-50">
+  <i class="fas fa-bars text-2xl transition-transform duration-300"></i>
+</button>
+
+<!-- Mobile Menu Card -->
+<div id="mobile-menu-card" class="fixed inset-0 z-40 hidden">
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
+  
+  <!-- Menu Card Container -->
+  <div class="absolute right-4 top-16 w-64 origin-top">
+    <!-- Card with advanced styling -->
+     <div class="bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300 scale-y-0 opacity-0 origin-top">
+      <!-- Card Header -->
+      <div class="gradient-bg p-4 flex items-center">
+        <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center mr-3">
+          <i class="fas fa-brain text-white text-lg"></i>
+        </div>
+        <h3 class="text-white font-bold">Menu</h3>
+      </div>
+      
+      <!-- Menu Items -->
+      <div class="p-2 space-y-1">
+        <a href="#home" class="flex items-center px-4 py-3 rounded-lg hover:bg-primary-50 transition-colors duration-200">
+          <i class="fas fa-home text-primary-600 w-6 mr-3"></i>
+          <span class="text-secondary-700 font-medium">Home</span>
+        </a>
+        <a href="#features" class="flex items-center px-4 py-3 rounded-lg hover:bg-primary-50 transition-colors duration-200">
+          <i class="fas fa-star text-primary-600 w-6 mr-3"></i>
+          <span class="text-secondary-700 font-medium">Features</span>
+        </a>
+        <a href="#how" class="flex items-center px-4 py-3 rounded-lg hover:bg-primary-50 transition-colors duration-200">
+          <i class="fas fa-cogs text-primary-600 w-6 mr-3"></i>
+          <span class="text-secondary-700 font-medium">How It Works</span>
+        </a>
+        <a href="#testimonials" class="flex items-center px-4 py-3 rounded-lg hover:bg-primary-50 transition-colors duration-200">
+          <i class="fas fa-comment text-primary-600 w-6 mr-3"></i>
+          <span class="text-secondary-700 font-medium">Testimonials</span>
+        </a>
+      </div>
+      
+      <!-- CTA Button -->
+      <div class="p-4 border-t border-gray-100">
+        <a href="#quiz" class="btn-primary block text-center bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-4 py-2.5 rounded-lg font-medium shadow-md hover:shadow-lg transition-all">
+          Start Quiz
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
-        </div>
-        
-        <!-- Mobile Menu Button -->
-        <button id="mobile-menu-button" class="md:hidden text-secondary-700 focus:outline-none">
-          <i class="fas fa-bars text-2xl"></i>
-        </button>
-      </div>
+  </nav>
+</header>
 
-      <!-- Mobile Menu -->
-      <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
-        <div class="flex flex-col space-y-4">
-          <a href="#home" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Home</a>
-          <a href="#features" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Features</a>
-          <a href="#how" class="nav-link text-secondary-700 font-medium hover:text-primary-600">How It Works</a>
-          <a href="#testimonials" class="nav-link text-secondary-700 font-medium hover:text-primary-600">Testimonials</a>
-          <a href="#quiz" class="btn-primary bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-medium text-center">Start Quiz</a>
-        </div>
-      </div>
-    </nav>
-  </header>
 
   <!-- Quiz Form -->
 <section id="quiz-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
@@ -360,28 +397,29 @@
   </section>
 
   <!-- Stats Section -->
-  <section class="py-16 bg-white">
-    <div class="container mx-auto px-6">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-        <div class="p-6">
-          <div class="text-4xl font-bold text-primary-600 mb-2">10,000+</div>
-          <div class="text-secondary-500">Users Helped</div>
-        </div>
-        <div class="p-6">
-          <div class="text-4xl font-bold text-primary-600 mb-2">95%</div>
-          <div class="text-secondary-500">Satisfaction Rate</div>
-        </div>
-        <div class="p-6">
-          <div class="text-4xl font-bold text-primary-600 mb-2">50+</div>
-          <div class="text-secondary-500">Career Paths</div>
-        </div>
-        <div class="p-6">
-          <div class="text-4xl font-bold text-primary-600 mb-2">5 min</div>
-          <div class="text-secondary-500">Average Assessment</div>
-        </div>
+ <!-- Stats Section -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="p-6">
+        <div class="text-4xl font-bold text-primary-600 mb-2 counter-value" data-target="10000">10,000+</div>
+        <div class="text-secondary-500">Users Helped</div>
+      </div>
+      <div class="p-6">
+        <div class="text-4xl font-bold text-primary-600 mb-2 counter-value" data-target="95">95%</div>
+        <div class="text-secondary-500">Satisfaction Rate</div>
+      </div>
+      <div class="p-6">
+        <div class="text-4xl font-bold text-primary-600 mb-2 counter-value" data-target="50">50+</div>
+        <div class="text-secondary-500">Career Paths</div>
+      </div>
+      <div class="p-6">
+        <div class="text-4xl font-bold text-primary-600 mb-2 counter-value" data-target="5">5 min</div>
+        <div class="text-secondary-500">Average Assessment</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Features Section -->
   <section id="features" class="py-20 bg-gradient-to-br from-primary-50 to-white">
