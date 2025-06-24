@@ -624,11 +624,8 @@ function setupCounters() {
 
 document.addEventListener('DOMContentLoaded', setupCounters);
 
-
-
-
 // How Its works section
- document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function () {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -639,4 +636,11 @@ document.addEventListener('DOMContentLoaded', setupCounters);
     }, { threshold: 0.3 });
 
     document.querySelectorAll('[data-step]').forEach(step => observer.observe(step));
+
+    VanillaTilt.init(document.querySelectorAll(".tilt"), {
+      max: 10,
+      speed: 400,
+      glare: true,
+      "max-glare": 0.3
+    });
   });
