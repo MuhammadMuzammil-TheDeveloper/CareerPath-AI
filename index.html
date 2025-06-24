@@ -693,85 +693,192 @@
   </div>
 </section>
   
-  <!-- Testimonials Section -->
-  <section id="testimonials" class="py-20 bg-primary-50">
-    <div class="container mx-auto px-6">
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Success <span class="gradient-text">Stories</span></h2>
-        <p class="text-secondary-600">
-          Hear from people who discovered their ideal career path with our AI assessment.
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-          <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mr-4">
-              <i class="fas fa-user text-xl"></i>
-            </div>
-            <div>
-              <h4 class="font-bold">Sarah Johnson</h4>
-              <p class="text-sm text-secondary-500">Data Analyst</p>
-            </div>
-          </div>
-          <p class="text-secondary-600 italic">
-            "After years of feeling stuck in marketing, CareerPath AI suggested data analysis. I took some courses and now I'm in a career I love that pays 30% more!"
-          </p>
-          <div class="mt-4 text-primary-500">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-          </div>
-        </div>
-        
-        <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-          <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mr-4">
-              <i class="fas fa-user text-xl"></i>
-            </div>
-            <div>
-              <h4 class="font-bold">Michael Chen</h4>
-              <p class="text-sm text-secondary-500">UX Designer</p>
-            </div>
-          </div>
-          <p class="text-secondary-600 italic">
-            "I never would have considered UX design without this tool. The AI picked up on my creative problem-solving skills that I didn't even value in myself."
-          </p>
-          <div class="mt-4 text-primary-500">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star-half-alt"></i>
-          </div>
-        </div>
-        
-        <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
-          <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mr-4">
-              <i class="fas fa-user text-xl"></i>
-            </div>
-            <div>
-              <h4 class="font-bold">David Martinez</h4>
-              <p class="text-sm text-secondary-500">Cybersecurity Specialist</p>
-            </div>
-          </div>
-          <p class="text-secondary-600 italic">
-            "The assessment suggested cybersecurity when I was considering generic IT roles. The detailed roadmap helped me get certified and land my dream job in 6 months."
-          </p>
-          <div class="mt-4 text-primary-500">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-          </div>
-        </div>
-      </div>
+<!-- Success Stories Section -->
+<!-- Completely Redesigned Success Stories Section with Enhanced Feedback UX -->
+<section id="testimonials" class="py-24 bg-gradient-to-br from-white to-primary-50 relative">
+  <div class="container mx-auto px-4">
+    <!-- Heading -->
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <h2 class="text-4xl md:text-5xl font-extrabold mb-4 text-gray-900 animate-fade-in-on-scroll">What Our <span class="text-primary-600">Users Say</span></h2>
+      <p class="text-lg text-gray-600">Authentic stories of transformation powered by CareerPath AI.</p>
     </div>
-  </section>
+
+    <!-- Dynamic Testimonial Cards Container -->
+    <div id="testimonialCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"></div>
+
+    <!-- Toggle Form Button -->
+    <div class="fixed bottom-6 right-6 z-50">
+      <button id="toggleFormBtn" class="w-14 h-14 rounded-full bg-primary-600 text-white flex items-center justify-center text-2xl shadow-lg hover:bg-primary-700 transition duration-300">
+        <i id="formIcon" class="fas fa-plus"></i>
+      </button>
+    </div>
+
+    <!-- Add Your Story Form -->
+    <div id="feedbackFormContainer" class="fixed bottom-24 right-6 bg-white border border-gray-200 shadow-2xl rounded-xl p-4 w-80 z-50 hidden animate-pop-up">
+      <div class="flex justify-end">
+        <button id="closeForm" class="text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
+      </div>
+      <h3 class="text-lg font-semibold text-primary-700 mb-4 text-center">Share Your Feedback</h3>
+      <form id="feedbackForm" class="space-y-3">
+        <input type="text" id="name" placeholder="Your Name" required class="w-full p-2.5 border border-primary-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+        <input type="text" id="role" placeholder="Your Profession" required class="w-full p-2.5 border border-primary-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+        <input type="file" id="avatarFile" accept="image/*" class="w-full p-2 border border-primary-200 rounded-md bg-white text-gray-600">
+        <textarea id="story" rows="3" placeholder="Share your story..." required class="w-full p-2.5 border border-primary-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"></textarea>
+        <select id="rating" required class="w-full p-2.5 border border-primary-200 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+          <option value="">Rating</option>
+          <option value="5">★★★★★</option>
+          <option value="4.5">★★★★½</option>
+          <option value="4">★★★★</option>
+        </select>
+        <div class="text-center">
+          <button type="submit" class="mt-2 px-5 py-2 bg-primary-600 text-white font-semibold rounded-md hover:bg-primary-700 transition duration-300">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .animate-fade-in-on-scroll { opacity: 0; transform: translateY(20px); transition: all 1s ease-in-out; }
+  .animate-fade-in-on-scroll.visible { opacity: 1; transform: translateY(0); }
+  .animate-pop-up { animation: popup 0.4s ease-out; }
+  @keyframes popup {
+    0% { transform: scale(0.5) translateY(20px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+</style>
+
+<script>
+  const heading = document.querySelector('.animate-fade-in-on-scroll');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.5 });
+  if (heading) observer.observe(heading);
+
+  const testimonialCards = document.getElementById("testimonialCards");
+  const feedbackFormContainer = document.getElementById("feedbackFormContainer");
+  const toggleFormBtn = document.getElementById("toggleFormBtn");
+  const formIcon = document.getElementById("formIcon");
+  const closeForm = document.getElementById("closeForm");
+
+  const initialTestimonials = [
+    {
+      name: "Ayesha Malik",
+      role: "Software Engineer",
+      avatar: "https://i.pravatar.cc/100?img=34",
+      story: "CareerPath AI helped me break into tech with confidence. The roadmap gave me clarity I never had before.",
+      rating: 5
+    },
+    {
+      name: "Bilal Raza",
+      role: "UX Designer",
+      avatar: "https://i.pravatar.cc/100?img=41",
+      story: "I found a new direction in life thanks to CareerPath AI. The personalized guidance made all the difference.",
+      rating: 4.5
+    },
+    {
+      name: "Fatima Noor",
+      role: "Cybersecurity Analyst",
+      avatar: "https://i.pravatar.cc/100?img=23",
+      story: "From doubt to determination — CareerPath AI made my transition into cybersecurity seamless.",
+      rating: 5
+    }
+  ];
+
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 >= 0.5;
+    let html = '';
+    for (let i = 0; i < fullStars; i++) html += '<i class="fas fa-star"></i>';
+    if (halfStar) html += '<i class="fas fa-star-half-alt"></i>';
+    return html;
+  };
+
+  const renderCard = ({ name, role, avatar, story, rating }) => `
+    <div class="bg-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition group overflow-hidden">
+      <div class="flex items-center gap-4 mb-4">
+        <img src="${avatar}" alt="${name}" class="w-16 h-16 rounded-full border-2 border-primary-300">
+        <div>
+          <h4 class="text-lg font-bold text-primary-700">${name}</h4>
+          <p class="text-sm text-gray-500">${role}</p>
+        </div>
+      </div>
+      <p class="text-gray-600 mb-4 italic group-hover:text-primary-700 transition">“${story}”</p>
+      <div class="text-yellow-400 flex gap-1">${renderStars(rating)}</div>
+    </div>
+  `;
+
+  initialTestimonials.forEach(data => {
+    testimonialCards.innerHTML += renderCard(data);
+  });
+
+  document.getElementById("feedbackForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const role = document.getElementById("role").value;
+    const fileInput = document.getElementById("avatarFile");
+    const story = document.getElementById("story").value;
+    const rating = parseFloat(document.getElementById("rating").value);
+
+    let avatar = "https://i.pravatar.cc/100?img=10";
+    if (fileInput.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        avatar = e.target.result;
+        testimonialCards.innerHTML = renderCard({ name, role, avatar, story, rating }) + testimonialCards.innerHTML;
+        showThankYou(name);
+      };
+      reader.readAsDataURL(fileInput.files[0]);
+    } else {
+      testimonialCards.innerHTML = renderCard({ name, role, avatar, story, rating }) + testimonialCards.innerHTML;
+      showThankYou(name);
+    }
+
+    this.reset();
+    feedbackFormContainer.classList.add("hidden");
+    formIcon.classList.replace("fa-minus", "fa-plus");
+  });
+
+  toggleFormBtn.addEventListener("click", function () {
+    feedbackFormContainer.classList.toggle("hidden");
+    formIcon.classList.toggle("fa-plus");
+    formIcon.classList.toggle("fa-minus");
+  });
+
+  closeForm.addEventListener("click", function () {
+    feedbackFormContainer.classList.add("hidden");
+    formIcon.classList.replace("fa-minus", "fa-plus");
+  });
+
+  function showThankYou(name) {
+    const thankYouMsg = document.createElement("div");
+    thankYouMsg.className = "fixed bottom-24 right-6 bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-lg shadow-xl z-50 animate-pop-up";
+    thankYouMsg.innerHTML = `<strong>Thank you, ${name}!</strong> 🎉 Your story was added.`;
+    document.body.appendChild(thankYouMsg);
+    setTimeout(() => thankYouMsg.remove(), 3000);
+  }
+
+  // Show/hide feedback icon only when testimonials section is visible
+  const testimonialsSection = document.getElementById("testimonials");
+  const toggleFormBtnWrapper = toggleFormBtn.closest('div');
+
+  const iconObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        toggleFormBtnWrapper.classList.remove("hidden");
+      } else {
+        toggleFormBtnWrapper.classList.add("hidden");
+      }
+    });
+  }, { threshold: 0.3 });
+
+  iconObserver.observe(testimonialsSection);
+</script>
+
+
+
 
   <!-- CTA Section -->
   <section id="quiz" class="py-20 gradient-bg">
