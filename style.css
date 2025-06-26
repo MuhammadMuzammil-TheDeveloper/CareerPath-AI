@@ -352,3 +352,34 @@ body {
       opacity: 1;
       transform: translateY(0);
     }
+
+   /* Update or add these styles in your CSS */
+#quiz-form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+#quiz-form:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
+}
+
+#quiz-form > div {
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+#quiz-form:not(.hidden) > div {
+  transform: translateY(0);
+}
