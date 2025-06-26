@@ -388,32 +388,52 @@
              alt="Career assessment dashboard" class="w-full h-auto object-cover">
       </div>
     </div>
-  </section>
-
- <!-- Stats Section -->
-<section class="py-16 bg-white">
-  <div class="container mx-auto px-6">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-      <div class="p-6">
-        <div class="text-4xl font-bold text-primary-600 mb-2 counter-value" data-target="10000">10,000+</div>
-        <div class="text-secondary-500">Users Helped</div>
+    <!-- Welcome Popup with Animated Robot -->
+  <div id="welcomeMessage" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/40 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-8 flex items-center space-x-6 welcome-popup">
+      <!-- Robot Animation (Lottie or GIF) -->
+      <div class="w-48 h-48 flex-shrink-0">
+        <lottie-player id="robotAnimation" src="https://assets10.lottiefiles.com/packages/lf20_kkflmtur.json" background="transparent" speed="1" loop autoplay></lottie-player>
       </div>
-      <div class="p-6">
-        <div class="text-4xl font-bold text-primary-600 mb-2 counter-value" data-target="95">95%</div>
-        <div class="text-secondary-500">Satisfaction Rate</div>
-      </div>
-      <div class="p-6">
-        <div class="text-4xl font-bold text-primary-600 mb-2 counter-value" data-target="50">50+</div>
-        <div class="text-secondary-500">Career Paths</div>
-      </div>
-      <div class="p-6">
-        <div class="text-4xl font-bold text-primary-600 mb-2 counter-value" data-target="5">5 min</div>
-        <div class="text-secondary-500">Average Assessment</div>
+      
+      <!-- Text Area -->
+      <div class="flex-1">
+        <h2 class="text-3xl font-bold text-indigo-700 mb-4">Welcome to CareerPath AI</h2>
+        <p class="text-gray-700 text-lg leading-relaxed mb-6" id="robotText"></p>
+        <button onclick="closeWelcome()" class="bg-indigo-600 text-white px-6 py-3 rounded-full font-medium hover:bg-indigo-700 transition">Let's Go!</button>
       </div>
     </div>
   </div>
-</section>
+  </section>
 
+ <!-- Stats Section -->
+<section id="stats" class="py-16">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+
+      <div class="p-6 counter-card bg-gray-100 rounded-lg fade-in">
+        <div class="text-4xl font-bold text-blue-600 mb-2 counter-value" data-target="10000">0</div>
+        <div class="text-gray-600">Users Helped</div>
+      </div>
+
+      <div class="p-6 counter-card bg-gray-100 rounded-lg fade-in">
+        <div class="text-4xl font-bold text-green-600 mb-2 counter-value" data-target="95">0</div>
+        <div class="text-gray-600">Satisfaction Rate</div>
+      </div>
+
+      <div class="p-6 counter-card bg-gray-100 rounded-lg fade-in">
+        <div class="text-4xl font-bold text-purple-600 mb-2 counter-value" data-target="50">0</div>
+        <div class="text-gray-600">Career Paths</div>
+      </div>
+
+      <div class="p-6 counter-card bg-gray-100 rounded-lg fade-in">
+        <div class="text-4xl font-bold text-red-600 mb-2 counter-value" data-target="5">0</div>
+        <div class="text-gray-600">Average Assessment</div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 <!-- Features Section -->
 <section id="features" class="py-20 bg-gray-50">
@@ -694,7 +714,6 @@
 </section>
   
 <!-- Success Stories Section -->
-<!-- Completely Redesigned Success Stories Section with Enhanced Feedback UX -->
 <section id="testimonials" class="py-24 bg-gradient-to-br from-white to-primary-50 relative">
   <div class="container mx-auto px-4">
     <!-- Heading -->
@@ -876,9 +895,6 @@
 
   iconObserver.observe(testimonialsSection);
 </script>
-
-
-
 
   <!-- CTA Section -->
   <section id="quiz" class="py-20 gradient-bg">
@@ -1141,8 +1157,127 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    function animateCounter(element, target, suffix = "", duration = 2000) {
+      const startTime = performance.now();
 
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const currentValue = Math.floor(progress * target);
+
+        if (suffix === "min") {
+          element.textContent = `${target} min`;
+          return;
+        } else {
+          element.textContent = currentValue.toLocaleString() + (suffix || "");
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    const statsSection = document.getElementById('stats');
+    if (!statsSection) return;
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.counter-value').forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            const suffix = counter.textContent.includes('%') ? '%' :
+                          counter.textContent.includes('+') ? '+' :
+                          counter.textContent.includes('min') ? 'min' : '';
+            animateCounter(counter, target, suffix);
+          });
+
+          document.querySelectorAll('.fade-in').forEach(el => el.classList.add('appear'));
+
+          obs.disconnect(); // only run once
+        }
+      });
+    }, {
+      threshold: 0.5,
+    });
+
+    observer.observe(statsSection);
+  });
+</script>
+
+<!-- for pop up  -->
+ 
+<!-- Lottie Player CDN -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<script>
+  const robotMessage = "Hi! I'm RoboCareer. Welcome to CareerPath AI! Let's discover your future together.";
+  let speechSynthesis = window.speechSynthesis;
+
+  function closeWelcome() {
+    document.getElementById("welcomeMessage").classList.add("hidden");
+    if (speechSynthesis) {
+      speechSynthesis.cancel();
+    }
+  }
+
+  function initializeWelcome() {
+    const welcome = document.getElementById("welcomeMessage");
+    
+    // First show the popup immediately
+    welcome.classList.remove("hidden");
+    
+    // Then start the animation and speech
+    typeAndSpeak(robotMessage, "robotText");
+  }
+
+  async function typeAndSpeak(text, elementId) {
+    const element = document.getElementById(elementId);
+    element.textContent = "";
+    
+    // Start speaking
+    if (speechSynthesis) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.pitch = 1.1;
+      utterance.rate = 0.9;
+      
+      // Try to find a good voice
+      const voices = speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        const preferredVoices = ['Microsoft David', 'Google US English', 'English'];
+        for (const voiceName of preferredVoices) {
+          const voice = voices.find(v => v.name.includes(voiceName));
+          if (voice) {
+            utterance.voice = voice;
+            break;
+          }
+        }
+      }
+      
+      speechSynthesis.speak(utterance);
+    }
+    
+    // Type the text
+    for (let i = 0; i < text.length; i++) {
+      element.textContent += text.charAt(i);
+      await new Promise(resolve => setTimeout(resolve, 50 + Math.random() * 30));
+    }
+  }
+
+  // Initialize when page loads
+  window.addEventListener("load", () => {
+    // Wait for 1 second after page load
+    setTimeout(initializeWelcome, 1000);
+    
+    // Alternative: Show on click if needed
+    document.body.addEventListener('click', function firstClick() {
+      initializeWelcome();
+      document.body.removeEventListener('click', firstClick);
+    });
+  });
+</script>
 </body>
 </html>
-
-
