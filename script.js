@@ -438,41 +438,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
-  const mobileMenuButton = document.getElementById('mobile-menu-button');
-  const mobileMenuCard = document.getElementById('mobile-menu-card');
-  const menuIcon = mobileMenuButton.querySelector('i');
-  const card = mobileMenuCard.querySelector('.rounded-xl');
-
-  mobileMenuCard.setAttribute('data-state', 'closed');
-
-  mobileMenuButton.addEventListener('click', function (e) {
-    e.stopPropagation();
-    const isOpen = mobileMenuCard.getAttribute('data-state') === 'open';
-
-    if (isOpen) {
-      mobileMenuCard.setAttribute('data-state', 'closed');
-      mobileMenuCard.classList.add('hidden');
-      card.classList.remove('scale-y-100', 'opacity-100');
-      card.classList.add('scale-y-0', 'opacity-0');
-      menuIcon.classList.remove('fa-times');
-      menuIcon.classList.add('fa-bars');
-      document.body.classList.remove('overflow-hidden');
-    } else {
-      mobileMenuCard.classList.remove('hidden');
-      mobileMenuCard.setAttribute('data-state', 'open');
-      menuIcon.classList.remove('fa-bars');
-      menuIcon.classList.add('fa-times');
-      document.body.classList.add('overflow-hidden');
-
-      // Allow time for hidden class to be removed before animating
-      setTimeout(() => {
-        card.classList.remove('scale-y-0', 'opacity-0');
-        card.classList.add('scale-y-100', 'opacity-100');
-      }, 10);
-    }
-  });
-
   // Click outside to close
   document.addEventListener('click', function (e) {
     if (
@@ -522,8 +487,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     });
-  });
-});// Add these variables at the top with other DOM elements
+  });// Add these variables at the top with other DOM elements
 const showLogin = document.getElementById('showLogin');
 const loginForm = document.getElementById('login-form');
 const closeLogin = document.getElementById('closeLogin');
@@ -624,8 +588,11 @@ function setupCounters() {
 
 document.addEventListener('DOMContentLoaded', setupCounters);
 
+
+
+
 // How Its works section
-  document.addEventListener("DOMContentLoaded", function () {
+ document.addEventListener("DOMContentLoaded", function () {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -636,11 +603,4 @@ document.addEventListener('DOMContentLoaded', setupCounters);
     }, { threshold: 0.3 });
 
     document.querySelectorAll('[data-step]').forEach(step => observer.observe(step));
-
-    VanillaTilt.init(document.querySelectorAll(".tilt"), {
-      max: 10,
-      speed: 400,
-      glare: true,
-      "max-glare": 0.3
-    });
   });
