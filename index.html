@@ -313,8 +313,9 @@
 </section>
 
 <!-- Login Form -->
+<!-- Login Form -->
 <section id="login-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
-  <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300 overflow-y-auto max-h-[90vh]">
+<div id="loginFormContent" class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] p-6 w-full max-w-md mx-4 transform transition-all duration-500 ease-out scale-95 opacity-0">
     <div class="flex flex-col items-center mb-6">
       <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 flex items-center justify-center mb-3 shadow-md">
         <i class="fas fa-brain text-white text-xl"></i>
@@ -327,19 +328,44 @@
       </p>
     </div>
 
-    <form id="loginForm" class="space-y-4">
-      <input type="email" placeholder="Email Address" required
-             class="w-full px-4 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+    <!-- Social Login First -->
+    <div class="flex flex-col gap-3 mb-6">
+      <button class="flex items-center justify-center gap-3 px-4 py-2 bg-white border border-gray-200 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition hover:scale-105">
+        <i class="fab fa-google text-red-500"></i> Continue with Google
+      </button>
 
-      <input type="password" placeholder="Password" required
-             class="w-full px-4 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+      <button class="flex items-center justify-center gap-3 px-4 py-2 bg-white border border-gray-200 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition hover:scale-105">
+        <i class="fab fa-facebook-f text-blue-600"></i> Continue with Facebook
+      </button>
+
+      <button class="flex items-center justify-center gap-3 px-4 py-2 bg-white border border-gray-200 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition hover:scale-105">
+        <i class="fab fa-instagram text-pink-500"></i> Continue with Instagram
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <div class="my-4 border-t border-gray-200"></div>
+    <h4 class="text-center text-sm text-gray-500 mb-3">Or login with Email</h4>
+
+    <form id="loginForm" class="space-y-4">
+      <div class="relative">
+        <input type="email" placeholder="Email Address" required
+               class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+        <i class="fas fa-envelope absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+      </div>
+
+      <div class="relative">
+        <input type="password" placeholder="Password" required
+               class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+        <i class="fas fa-lock absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+      </div>
 
       <div class="flex items-center justify-between">
         <label class="flex items-center text-sm text-gray-700">
           <input id="remember-me" type="checkbox" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
           <span class="ml-2">Remember me</span>
         </label>
-        <a href="#" class="text-sm text-primary-600 hover:text-primary-800">Forgot password?</a>
+        <a href="#" id="showForgotForm" class="text-sm text-primary-600 hover:text-primary-800">Forgot password?</a>
       </div>
 
       <div class="flex flex-col-reverse sm:flex-row justify-between items-center gap-3 mt-6">
@@ -349,29 +375,15 @@
         </button>
         <button type="submit"
                 class="w-full sm:w-auto bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-semibold text-sm md:text-base shadow-md hover:shadow-lg transition">
-          Login
+          <span class="inline-flex items-center gap-2">
+            Login
+            <i class="fas fa-sign-in-alt"></i>
+          </span>
         </button>
       </div>
     </form>
 
-    <!-- Divider -->
-    <div class="my-6 border-t border-gray-200"></div>
-    <h4 class="text-center text-sm text-gray-500 mb-3">Or Login with</h4>
-
-    <!-- Social Buttons -->
-    <div class="flex flex-col gap-3">
-      <button class="flex items-center justify-center gap-3 px-4 py-2 bg-white border border-gray-200 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition">
-        <i class="fab fa-google text-red-500"></i> Continue with Google
-      </button>
-
-      <button class="flex items-center justify-center gap-3 px-4 py-2 bg-white border border-gray-200 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition">
-        <i class="fab fa-facebook-f text-blue-600"></i> Continue with Facebook
-      </button>
-
-      <button class="flex items-center justify-center gap-3 px-4 py-2 bg-white border border-gray-200 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition">
-        <i class="fab fa-instagram text-pink-500"></i> Continue with Instagram
-      </button>
-    </div>
+    <p class="text-xs text-center text-gray-400 mt-4">Your information is safe and encrypted.</p>
   </div>
 </section>
 
@@ -1324,9 +1336,9 @@
     const quizFormContent = document.getElementById('quizFormContent');
     const closeFormBtn = document.getElementById('closeForm');
     const showLoginBtn = document.getElementById('showLogin');
-
-    const loginFormSection = document.getElementById('login-form');
-    const closeLoginBtn = document.getElementById('closeLogin');
+const loginFormSection = document.getElementById('login-form');
+const loginFormContent = document.getElementById('loginFormContent');
+const closeLoginBtn = document.getElementById('closeLogin');
 
     // SHOW quiz form
     startQuizBtn.addEventListener('click', function (e) {
@@ -1348,15 +1360,24 @@
     });
 
     // Show login form and hide quiz form
-    showLoginBtn.addEventListener('click', function () {
-      quizFormSection.classList.add('hidden');
-      loginFormSection.classList.remove('hidden');
-    });
 
-    // Close login form
-    closeLoginBtn.addEventListener('click', function () {
-      loginFormSection.classList.add('hidden');
-    });
+showLoginBtn.addEventListener('click', function () {
+  quizFormSection.classList.add('hidden');
+  loginFormSection.classList.remove('hidden');
+
+  requestAnimationFrame(() => {
+    loginFormContent.classList.remove('translate-y-4', 'opacity-0');
+    loginFormContent.classList.add('translate-y-0', 'opacity-100');
+  });
+});
+
+closeLoginBtn.addEventListener('click', function () {
+  loginFormContent.classList.remove('translate-y-0', 'opacity-100');
+  loginFormContent.classList.add('translate-y-4', 'opacity-0');
+  setTimeout(() => {
+    loginFormSection.classList.add('hidden');
+  }, 300);
+});
 
     // Redirect on quiz form submission
     const userForm = document.getElementById('userForm');
@@ -1377,7 +1398,7 @@
 
 // If the Password its forgetten
   document.addEventListener('DOMContentLoaded', function () {
-    const forgotLink = document.getElementById('forgotPasswordLink');
+    const forgotLink = document.getElementById('showForgotForm');
     const forgotFormSection = document.getElementById('forgot-password-form');
     const cancelForgotBtn = document.getElementById('cancelForgot');
     const forgotForm = document.getElementById('forgotForm');
