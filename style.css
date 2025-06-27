@@ -383,3 +383,323 @@ body {
 #quiz-form:not(.hidden) > div {
   transform: translateY(0);
 }
+
+
+/* For Floating button */
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #f9fafb;
+      font-family: Arial, sans-serif;
+    }
+
+    .floating-menu {
+      position: fixed;
+      top: 50%;
+      left: 5px;
+      transform: translateY(-50%);
+      z-index: 1000;
+    }
+
+    /* Minimal Main Button */
+    .main-btn {
+      width: 50px;
+      height: 50px;
+      background: transparent;
+      color: #4f46e5;
+      font-size: 28px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+
+    .main-btn:hover {
+      transform: scale(1.15);
+    }
+
+    .main-btn.active {
+      transform: rotate(90deg);
+    }
+
+    .circle-options {
+      position: absolute;
+      top: 0;
+      left: 60px;
+      width: 200px;
+      height: 200px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .circle-options.active {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    .circle-options button {
+      position: absolute;
+      width: 45px;
+      height: 45px;
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .circle-options button:nth-child(1) {
+      background-color: #3b82f6; /* Theme */
+    }
+
+    .circle-options button:nth-child(2) {
+      background-color: #ec4899; /* Profile */
+    }
+
+    .circle-options button:nth-child(3) {
+      background-color: #f59e0b; /* Help */
+    }
+
+    .circle-options button:nth-child(4) {
+      background-color: #10b981; /* Career Quiz */
+    }
+
+    /* ==================== */
+/* DARK THEME - COMPLETE */
+/* ==================== */
+
+body.theme-dark {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Typography */
+body.theme-dark {
+  color: #e0e0e0;
+}
+
+body.theme-dark h1,
+body.theme-dark h2,
+body.theme-dark h3,
+body.theme-dark h4,
+body.theme-dark h5,
+body.theme-dark h6 {
+  color: #ffffff;
+}
+
+body.theme-dark .gradient-text {
+  background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Backgrounds */
+body.theme-dark .gradient-bg {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+}
+
+body.theme-dark .bg-white,
+body.theme-dark .bg-gray-50,
+body.theme-dark .bg-primary-50,
+body.theme-dark .bg-gradient-to-br.from-primary-50.to-white {
+  background-color: #1e1e1e !important;
+  background-image: none !important;
+}
+
+/* Cards & Containers */
+body.theme-dark .card-hover,
+body.theme-dark .feature-card,
+body.theme-dark .counter-card,
+body.theme-dark .step-item,
+body.theme-dark .faq-item,
+body.theme-dark .bg-white {
+  background-color: #2d2d2d !important;
+  border-color: #3a3a3a !important;
+  color: #e0e0e0;
+}
+
+/* Quiz Dashboard */
+body.theme-dark #quiz-dashboard {
+  background-color: #121212;
+}
+
+body.theme-dark #quiz-container {
+  background-color: #2d2d2d;
+}
+
+/* Hero Section */
+body.theme-dark #home {
+  background: linear-gradient(to bottom right, #121212, #1e1e1e);
+}
+
+/* Stats Section */
+body.theme-dark #stats {
+  background-color: #121212;
+}
+
+/* Features Section */
+body.theme-dark #features {
+  background-color: #1e1e1e;
+}
+
+/* How It Works Section */
+body.theme-dark #how {
+  background-color: #121212;
+}
+
+body.theme-dark .how-it-works-step:not(:last-child):after {
+  background: #3a3a3a;
+}
+
+/* Testimonials */
+body.theme-dark #testimonials {
+  background: linear-gradient(to bottom right, #1a1a1a, #121212);
+}
+
+/* CTA Section */
+body.theme-dark #quiz {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e) !important;
+}
+
+/* FAQ Section */
+body.theme-dark .faq-section {
+  background-color: #121212 !important;
+}
+
+/* Footer */
+body.theme-dark footer {
+  background: linear-gradient(to bottom right, #1a1a1a, #121212) !important;
+}
+
+/* Modals */
+body.theme-dark #results-modal .bg-white,
+body.theme-dark #quiz-form .bg-white,
+body.theme-dark #login-form .bg-white,
+body.theme-dark #forgot-password-form .bg-white {
+  background-color: #2d2d2d !important;
+}
+
+/* Form Elements */
+body.theme-dark input,
+body.theme-dark select,
+body.theme-dark textarea {
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+  border-color: #3a3a3a;
+}
+
+body.theme-dark input::placeholder,
+body.theme-dark textarea::placeholder {
+  color: #9e9e9e;
+}
+
+/* Buttons */
+body.theme-dark .btn-primary {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+  color: white;
+}
+
+body.theme-dark .btn-primary:hover {
+  background: linear-gradient(135deg, #e05555, #e07b7b);
+}
+
+/* Navigation */
+body.theme-dark .nav-link:after {
+  background-color: #ff6b6b;
+}
+
+body.theme-dark .sticky.top-0 {
+  background-color: rgba(30, 30, 30, 0.8) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Mobile Menu */
+body.theme-dark #mobile-menu-card .gradient-bg {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+}
+
+body.theme-dark #mobile-menu-card a {
+  color: #e0e0e0;
+}
+
+/* Quiz Components */
+body.theme-dark #quiz-container label {
+  background-color: #2d2d2d;
+  border-color: #3a3a3a;
+  color: #e0e0e0;
+}
+
+body.theme-dark #quiz-container label:hover {
+  background-color: #3a3a3a;
+}
+
+body.theme-dark #quiz-container input[type="radio"] {
+  border-color: #3a3a3a;
+}
+
+body.theme-dark #quiz-container input[type="radio"]:checked {
+  border-color: #ff6b6b;
+  background-color: #ff6b6b;
+}
+
+/* Floating Menu */
+body.theme-dark .floating-menu .main-btn {
+  color: #ff6b6b;
+}
+
+body.theme-dark .circle-options button:nth-child(1) {
+  background-color: #ff6b6b;
+}
+
+/* Text Colors */
+body.theme-dark .text-secondary-600,
+body.theme-dark .text-secondary-700,
+body.theme-dark .text-secondary-800,
+body.theme-dark .text-secondary-900 {
+  color: #e0e0e0 !important;
+}
+
+body.theme-dark .text-primary-600 {
+  color: #ff6b6b !important;
+}
+
+/* Shadows */
+body.theme-dark .shadow-md,
+body.theme-dark .shadow-lg,
+body.theme-dark .shadow-xl {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4),
+              0 2px 4px -1px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Specific Overrides */
+body.theme-dark .bg-primary-100 {
+  background-color: #3a3a3a !important;
+}
+
+body.theme-dark .text-primary-500 {
+  color: #ff6b6b !important;
+}
+
+body.theme-dark .border-primary-200 {
+  border-color: #ff8e8e !important;
+}
+
+body.theme-dark .bg-primary-50 {
+  background-color: #2d2d2d !important;
+}
+
+/* Ensure all transitions work */
+body.theme-dark .card-hover,
+body.theme-dark .feature-card,
+body.theme-dark .btn-primary,
+body.theme-dark #quiz-container label {
+  transition: all 0.3s ease;
+}
