@@ -7,6 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
 
   <script>
     tailwind.config = {
@@ -447,7 +451,6 @@
     </p>
   </div>
 </section>
-
 
 
   <!-- Hero Section -->
@@ -1098,6 +1101,22 @@
   </div>
 </section>
 
+<!-- Floating Radial Action Button -->
+<div class="floating-menu">
+  <!-- Main Arrow Button (Minimal Style) -->
+  <button id="mainButton" class="main-btn">
+    &gt;
+  </button>
+
+  <!-- Colored Circular Options -->
+  <div class="circle-options" id="optionsMenu">
+    <button title="Toggle Theme"><i class="fas fa-moon"></i></button>
+    <button title="Profile"><i class="fas fa-user"></i></button>
+    <button title="Help"><i class="fas fa-question-circle"></i></button>
+    <button title="Career Quiz"><i class="fas fa-brain"></i></button>
+  </div>
+</div>
+
 
   <!-- Footer -->
  <footer class="bg-gradient-to-br from-secondary-900 to-secondary-800 text-white py-12">
@@ -1478,6 +1497,106 @@
   });
 </script>
 <!-- f;loating buttomn -->
+ 
+<script>
+  // Add this code to your script.js file
+document.addEventListener('DOMContentLoaded', function() {
+  // Floating Menu Functionality
+  const mainButton = document.getElementById('mainButton');
+  const optionsMenu = document.getElementById('optionsMenu');
+  const buttons = optionsMenu.querySelectorAll('button');
+  const body = document.body;
+  
+  // Toggle menu visibility
+  mainButton.addEventListener('click', () => {
+    optionsMenu.classList.toggle('active');
+    mainButton.classList.toggle('active');
+    
+    if (optionsMenu.classList.contains('active')) {
+      // Calculate positions for each button in a semi-circle
+      const radius = 90;
+      const startAngle = -90; // Start from left
+      const endAngle = 90;    // End at right
+      const total = buttons.length;
+      
+      buttons.forEach((btn, i) => {
+        const angleDeg = startAngle + (i * (180 / (total - 1)));
+        const angleRad = angleDeg * (Math.PI / 180);
+        const x = Math.cos(angleRad) * radius;
+        const y = Math.sin(angleRad) * radius;
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    } else {
+      // Reset button positions
+      buttons.forEach(btn => {
+        btn.style.transform = 'translate(0, 0)';
+      });
+    }
+  });
+  
+  // Button click handlers
+  buttons[0].addEventListener('click', toggleTheme); // Theme toggle
+  buttons[1].addEventListener('click', showProfile); // Profile
+  buttons[2].addEventListener('click', showHelp);    // Help
+  buttons[3].addEventListener('click', startQuiz);   // Career Quiz
+  
+  // Theme toggle function
+  function toggleTheme() {
+    body.classList.toggle('theme-dark');
+    localStorage.setItem('theme', body.classList.contains('theme-dark') ? 'dark' : 'light');
+    closeMenu();
+  }
+  
+  // Profile function
+  function showProfile() {
+    alert('Profile feature coming soon!');
+    closeMenu();
+  }
+  
+  // Help function
+  function showHelp() {
+    // Scroll to FAQ section
+    const faqSection = document.getElementById('faq');
+    if (faqSection) {
+      faqSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    closeMenu();
+  }
+  
+  // Start quiz function
+  function startQuiz() {
+    // Trigger the quiz form
+    const quizForm = document.getElementById('quiz-form');
+    if (quizForm) {
+      quizForm.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+    closeMenu();
+  }
+  
+  // Close menu function
+  function closeMenu() {
+    optionsMenu.classList.remove('active');
+    mainButton.classList.remove('active');
+    buttons.forEach(btn => {
+      btn.style.transform = 'translate(0, 0)';
+    });
+  }
+  
+  // Check for saved theme preference
+  if (localStorage.getItem('theme') === 'dark') {
+    body.classList.add('theme-dark');
+  }
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.floating-menu') && optionsMenu.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+});
+</script>
+
 </div>
 </body>
 </html>
