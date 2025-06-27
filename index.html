@@ -1499,63 +1499,76 @@
 <!-- f;loating buttomn -->
  
 <script>
-  // Add this code to your script.js file
+  // Update your existing JavaScript with this code
 document.addEventListener('DOMContentLoaded', function() {
   // Floating Menu Functionality
   const mainButton = document.getElementById('mainButton');
   const optionsMenu = document.getElementById('optionsMenu');
   const buttons = optionsMenu.querySelectorAll('button');
   const body = document.body;
+  const quizForm = document.getElementById('quiz-form');
+  const quizFormContent = document.getElementById('quizFormContent');
   
   // Toggle menu visibility
-  mainButton.addEventListener('click', () => {
+  mainButton.addEventListener('click', (e) => {
+    e.stopPropagation();
     optionsMenu.classList.toggle('active');
     mainButton.classList.toggle('active');
     
     if (optionsMenu.classList.contains('active')) {
-      // Calculate positions for each button in a semi-circle
-      const radius = 90;
-      const startAngle = -90; // Start from left
-      const endAngle = 90;    // End at right
-      const total = buttons.length;
-      
-      buttons.forEach((btn, i) => {
-        const angleDeg = startAngle + (i * (180 / (total - 1)));
-        const angleRad = angleDeg * (Math.PI / 180);
-        const x = Math.cos(angleRad) * radius;
-        const y = Math.sin(angleRad) * radius;
-        btn.style.transform = `translate(${x}px, ${y}px)`;
-      });
+      positionMenuButtons();
     } else {
-      // Reset button positions
-      buttons.forEach(btn => {
-        btn.style.transform = 'translate(0, 0)';
-      });
+      resetMenuButtons();
     }
   });
   
   // Button click handlers
-  buttons[0].addEventListener('click', toggleTheme); // Theme toggle
-  buttons[1].addEventListener('click', showProfile); // Profile
-  buttons[2].addEventListener('click', showHelp);    // Help
-  buttons[3].addEventListener('click', startQuiz);   // Career Quiz
+  buttons[0].addEventListener('click', toggleTheme);
+  buttons[1].addEventListener('click', showProfile);
+  buttons[2].addEventListener('click', showHelp);
+  buttons[3].addEventListener('click', startQuiz);
+  
+  // Position menu buttons in semi-circle
+  function positionMenuButtons() {
+    const radius = 90;
+    const startAngle = -90;
+    const endAngle = 90;
+    const total = buttons.length;
+    
+    buttons.forEach((btn, i) => {
+      const angleDeg = startAngle + (i * (180 / (total - 1)));
+      const angleRad = angleDeg * (Math.PI / 180);
+      const x = Math.cos(angleRad) * radius;
+      const y = Math.sin(angleRad) * radius;
+      btn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+  }
+  
+  // Reset menu buttons position
+  function resetMenuButtons() {
+    buttons.forEach(btn => {
+      btn.style.transform = 'translate(0, 0)';
+    });
+  }
   
   // Theme toggle function
-  function toggleTheme() {
+  function toggleTheme(e) {
+    e.stopPropagation();
     body.classList.toggle('theme-dark');
     localStorage.setItem('theme', body.classList.contains('theme-dark') ? 'dark' : 'light');
     closeMenu();
   }
   
   // Profile function
-  function showProfile() {
+  function showProfile(e) {
+    e.stopPropagation();
     alert('Profile feature coming soon!');
     closeMenu();
   }
   
   // Help function
-  function showHelp() {
-    // Scroll to FAQ section
+  function showHelp(e) {
+    e.stopPropagation();
     const faqSection = document.getElementById('faq');
     if (faqSection) {
       faqSection.scrollIntoView({ behavior: 'smooth' });
@@ -1563,14 +1576,28 @@ document.addEventListener('DOMContentLoaded', function() {
     closeMenu();
   }
   
-  // Start quiz function
-  function startQuiz() {
-    // Trigger the quiz form
-    const quizForm = document.getElementById('quiz-form');
+  // Start quiz function - Modified to properly show registration form
+  function startQuiz(e) {
+    e.stopPropagation();
+    
     if (quizForm) {
+      // Show the form
       quizForm.classList.remove('hidden');
       document.body.classList.add('overflow-hidden');
+      
+      // Trigger the animation
+      setTimeout(() => {
+        quizFormContent.classList.remove('scale-95', 'opacity-0');
+        quizFormContent.classList.add('scale-100', 'opacity-100');
+      }, 10);
+      
+      // Focus on first input field
+      const firstInput = quizForm.querySelector('input');
+      if (firstInput) {
+        setTimeout(() => firstInput.focus(), 300);
+      }
     }
+    
     closeMenu();
   }
   
@@ -1578,15 +1605,35 @@ document.addEventListener('DOMContentLoaded', function() {
   function closeMenu() {
     optionsMenu.classList.remove('active');
     mainButton.classList.remove('active');
-    buttons.forEach(btn => {
-      btn.style.transform = 'translate(0, 0)';
+    resetMenuButtons();
+  }
+  
+  // Close form handler
+  const closeForm = document.getElementById('closeForm');
+  if (closeForm) {
+    closeForm.addEventListener('click', () => {
+      quizFormContent.classList.remove('scale-100', 'opacity-100');
+      quizFormContent.classList.add('scale-95', 'opacity-0');
+      
+      setTimeout(() => {
+        quizForm.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }, 300);
     });
   }
   
-  // Check for saved theme preference
-  if (localStorage.getItem('theme') === 'dark') {
-    body.classList.add('theme-dark');
-  }
+  // Close when clicking outside form
+  quizForm.addEventListener('click', (e) => {
+    if (e.target === quizForm) {
+      quizFormContent.classList.remove('scale-100', 'opacity-100');
+      quizFormContent.classList.add('scale-95', 'opacity-0');
+      
+      setTimeout(() => {
+        quizForm.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }, 300);
+    }
+  });
   
   // Close menu when clicking outside
   document.addEventListener('click', function(e) {
@@ -1594,6 +1641,16 @@ document.addEventListener('DOMContentLoaded', function() {
       closeMenu();
     }
   });
+  
+  // Prevent clicks inside menu from closing it
+  optionsMenu.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+  
+  // Check for saved theme preference
+  if (localStorage.getItem('theme') === 'dark') {
+    body.classList.add('theme-dark');
+  }
 });
 </script>
 
