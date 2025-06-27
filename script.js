@@ -186,9 +186,6 @@ const careerResults = {
     ]
   }
 };
-
-
-
 // Quiz Variables
 let currentQuestion = 0;
 let userAnswers = [];
@@ -197,7 +194,7 @@ let userAnswers = [];
 const quizForm = document.getElementById('quiz-form');
 const closeForm = document.getElementById('closeForm');
 const userForm = document.getElementById('userForm');
-const assessmentButtons = document.querySelectorAll('.btn-primary[href="#quiz"]');
+const assessmentButtons = document.querySelectorAll('.start-quiz-btn, .btn-primary[href="#quiz"]');
 const quizDashboard = document.getElementById('quiz-dashboard');
 const dashboardBack = document.getElementById('dashboard-back');
 const quizContainer = document.getElementById('quiz-container');
@@ -214,7 +211,6 @@ function initQuiz() {
   currentQuestion = 0;
   userAnswers = [];
   renderQuestion();
-  // Hide main content and show dashboard
   document.body.classList.add('overflow-hidden');
   quizDashboard.classList.remove('hidden');
   window.scrollTo(0, 0);
@@ -324,20 +320,34 @@ function showResults() {
   resultsModal.classList.remove('hidden');
   document.body.classList.remove('overflow-hidden');
 }
-
-// Event Listeners
+// Quiz Form Handling
 document.addEventListener('DOMContentLoaded', () => {
-  // Quiz navigation
-  nextButton.addEventListener('click', () => {
-    if (saveAnswer()) {
-      if (currentQuestion < quizQuestions.length - 1) {
-        currentQuestion++;
-        renderQuestion();
-      }
-    } else {
-      alert('Please select an answer before proceeding.');
-    }
+  // Get the quiz form element
+  const quizForm = document.getElementById('quiz-form');
+  
+  // Ensure the form is hidden initially
+  quizForm.classList.add('hidden');
+  
+  // Handle all quiz start buttons
+  document.querySelectorAll('.start-quiz-btn, a[href="#quiz"]').forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      quizForm.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      window.scrollTo(0, 0);
+    });
   });
+
+  // Close form handler
+  const closeForm = document.getElementById('closeForm');
+  if (closeForm) {
+    closeForm.addEventListener('click', () => {
+      quizForm.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    });
+  }
+
+
 
   prevButton.addEventListener('click', () => {
     if (currentQuestion > 0) {
@@ -358,8 +368,8 @@ document.addEventListener('DOMContentLoaded', () => {
     resultsModal.classList.add('hidden');
   });
 
-  // Form handling
-  assessmentButtons.forEach(button => {
+  // Form handling - This is the main fix
+  document.querySelectorAll('.start-quiz-btn, a[href="#quiz"]').forEach(button => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       quizForm.classList.remove('hidden');
@@ -372,22 +382,22 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('overflow-hidden');
   });
 
- userForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  // Validate form
-  const requiredFields = ['fullName', 'email', 'age', 'gender', 'education', 'country'];
-  let isValid = true;
-  
-  requiredFields.forEach(field => {
-    const element = document.getElementById(field);
-    if (!element.value.trim()) {
-      element.classList.add('border-red-500');
-      isValid = false;
-    } else {
-      element.classList.remove('border-red-500');
-    }
-  });
-  
+  userForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    // Validate form
+    const requiredFields = ['fullName', 'email', 'age', 'gender', 'education', 'country'];
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+      const element = document.getElementById(field);
+      if (!element.value.trim()) {
+        element.classList.add('border-red-500');
+        isValid = false;
+      } else {
+        element.classList.remove('border-red-500');
+      }
+    });
+    
   if (isValid) {
     try {
       // Get form data
@@ -456,22 +466,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
- // FAQ accordion toggle
-// document.querySelectorAll('.faq-section button').forEach(button => {
-//   button.addEventListener('click', () => {
-//     const content = button.nextElementSibling;
-//     const icon = button.querySelector('i');
-
-//     if (content) content.classList.toggle('hidden');
-
-//     if (icon) {
-//       icon.classList.toggle('fa-chevron-down');
-//       icon.classList.toggle('fa-chevron-up');
-//     }
-//   });
-// });
-
-
   // Smooth scrolling for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -487,7 +481,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
-  });// Add these variables at the top with other DOM elements
+  });
+
 const showLogin = document.getElementById('showLogin');
 const loginForm = document.getElementById('login-form');
 const closeLogin = document.getElementById('closeLogin');
@@ -588,9 +583,6 @@ function setupCounters() {
 
 document.addEventListener('DOMContentLoaded', setupCounters);
 
-
-
-
 // How Its works section
  document.addEventListener("DOMContentLoaded", function () {
     const observer = new IntersectionObserver(entries => {
@@ -604,3 +596,34 @@ document.addEventListener('DOMContentLoaded', setupCounters);
 
     document.querySelectorAll('[data-step]').forEach(step => observer.observe(step));
   });
+
+  // Add this to your existing theme toggle function
+function toggleTheme(e) {
+  e.stopPropagation();
+  body.classList.toggle('theme-dark');
+  localStorage.setItem('theme', body.classList.contains('theme-dark') ? 'dark' : 'light');
+  
+  // Update form appearances if they're open
+  updateOpenFormsTheme();
+  closeMenu();
+}
+
+function updateOpenFormsTheme() {
+  const forms = [
+    { id: 'login-form', content: 'loginFormContent' },
+    { id: 'forgot-password-form', content: 'forgotFormContent' },
+    { id: 'quiz-form', content: 'quizFormContent' }
+  ];
+  
+  forms.forEach(form => {
+    const formEl = document.getElementById(form.id);
+    const contentEl = document.getElementById(form.content);
+    
+    if (formEl && !formEl.classList.contains('hidden')) {
+      // Force redraw for smooth transition
+      contentEl.style.display = 'none';
+      contentEl.offsetHeight; // Trigger reflow
+      contentEl.style.display = '';
+    }
+  });
+}
