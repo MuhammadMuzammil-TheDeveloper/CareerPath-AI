@@ -141,9 +141,9 @@
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-primary-50 to-white text-secondary-900">
+<body id="pagebody" class="bg-gradient-to-br from-primary-50 to-white text-secondary-900">
 
-  
+  <div class="main-content">
 
 <!-- Navbar -->
 <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 shadow-sm">
@@ -224,9 +224,9 @@
 
 
   <!-- Quiz Form -->
-  <section id="quiz-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4 transition-opacity duration-300 ease-out">
+<section id="quiz-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4 transition-opacity duration-300 ease-out">
   <div id="quizFormContent" class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-4 transform transition-all duration-300 scale-95 opacity-0 overflow-y-auto max-h-[90vh] flex flex-col md:flex-row">
-    
+
     <!-- LEFT: Registration Form -->
     <div class="w-full md:w-1/2 p-6 md:p-8">
       <div class="flex flex-col items-center mb-6">
@@ -242,35 +242,53 @@
       </div>
 
       <form id="userForm" class="space-y-4">
-        <input type="text" id="fullName" placeholder="Full Name" required
-               class="w-full px-4 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+        <div class="relative">
+          <input type="text" id="fullName" placeholder="Full Name" required
+                 class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+          <i class="fas fa-user absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+        </div>
 
-        <input type="email" id="email" placeholder="Email Address" required
-               class="w-full px-4 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+        <div class="relative">
+          <input type="email" id="email" placeholder="Email Address" required
+                 class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+          <i class="fas fa-envelope absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+        </div>
 
-        <input type="number" id="age" placeholder="Age" required
-               class="w-full px-4 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+        <div class="relative">
+          <input type="number" id="age" placeholder="Age" required
+                 class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+          <i class="fas fa-calendar-alt absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+        </div>
 
-        <select id="gender" required
-                class="w-full px-4 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600">
-          <option value="" disabled selected>Select Gender</option>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Other / Prefer not to say</option>
-        </select>
+        <div class="relative">
+          <select id="gender" required
+                  class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600">
+            <option value="" disabled selected>Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other / Prefer not to say</option>
+          </select>
+          <i class="fas fa-venus-mars absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+        </div>
 
-        <select id="education" required
-                class="w-full px-4 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600">
-          <option value="" disabled selected>Education Level</option>
-          <option>High School</option>
-          <option>Intermediate / A-Levels</option>
-          <option>Bachelor's Degree</option>
-          <option>Master's Degree</option>
-          <option>Other</option>
-        </select>
+        <div class="relative">
+          <select id="education" required
+                  class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600">
+            <option value="" disabled selected>Education Level</option>
+            <option>High School</option>
+            <option>Intermediate / A-Levels</option>
+            <option>Bachelor's Degree</option>
+            <option>Master's Degree</option>
+            <option>Other</option>
+          </select>
+          <i class="fas fa-graduation-cap absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+        </div>
 
-        <input type="text" id="country" placeholder="Country" required
-               class="w-full px-4 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+        <div class="relative">
+          <input type="text" id="country" placeholder="Country" required
+                 class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+          <i class="fas fa-globe-asia absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+        </div>
 
         <div class="flex flex-col sm:flex-row justify-between items-center gap-3 mt-6">
           <div class="flex gap-3">
@@ -312,7 +330,6 @@
   </div>
 </section>
 
-<!-- Login Form -->
 <!-- Login Form -->
 <section id="login-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
 <div id="loginFormContent" class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] p-6 w-full max-w-md mx-4 transform transition-all duration-500 ease-out scale-95 opacity-0">
@@ -390,31 +407,47 @@
 
 <!-- Forgot Password Form -->
 <section id="forgot-password-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
-  <div class="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
-    <h2 class="text-xl font-bold text-center mb-4">Reset Your Password</h2>
-    <p class="text-sm text-gray-600 text-center mb-4">
-      Enter your email address and we'll send you a password reset link.
-    </p>
+  <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-500 ease-out translate-y-4 opacity-0">
+    <div class="flex flex-col items-center mb-6">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 flex items-center justify-center mb-3 shadow-md">
+        <i class="fas fa-unlock-alt text-white text-xl"></i>
+      </div>
+      <h2 class="text-xl md:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600 text-center">
+        Reset Your Password
+      </h2>
+      <p class="text-sm text-gray-500 text-center mt-2">
+        Enter your email and we'll send you a password reset link.
+      </p>
+    </div>
+
     <form id="forgotForm" class="space-y-4">
-      <input type="email" required placeholder="your.email@example.com"
-             class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600" />
-      
-      <!-- reCAPTCHA placeholder (real one needs backend + Google API) -->
+      <div class="relative">
+        <input type="email" required placeholder="your.email@example.com"
+               class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+        <i class="fas fa-envelope absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+      </div>
+
+      <!-- reCAPTCHA Placeholder -->
       <div class="text-xs text-gray-400 text-center">[reCAPTCHA box here]</div>
-      
-      <div class="flex justify-between items-center mt-4">
-        <button type="button" id="cancelForgot" class="text-red-500 hover:text-red-700">Cancel</button>
+
+      <div class="flex flex-col-reverse sm:flex-row justify-between items-center gap-3 mt-6">
+        <button type="button" id="cancelForgot"
+                class="w-full sm:w-auto text-red-500 hover:text-red-700 font-medium text-sm transition px-4 py-2">
+          Cancel
+        </button>
         <button type="submit"
-                class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700">
+                class="w-full sm:w-auto bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-semibold text-sm shadow-md hover:shadow-lg transition">
           Send Reset Link
         </button>
       </div>
     </form>
+
     <p id="resetStatus" class="text-green-600 text-center mt-4 hidden">
       ✅ Reset link sent to your email!
     </p>
   </div>
 </section>
+
 
 
   <!-- Hero Section -->
@@ -1067,112 +1100,105 @@
 
 
   <!-- Footer -->
-  <footer class="bg-secondary-900 text-white py-12">
-    <div class="container mx-auto px-6">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <div class="flex items-center space-x-2 mb-4">
-            <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center">
-              <i class="fas fa-brain text-white text-xl"></i>
-            </div>
-            <span class="text-xl font-bold">CareerPath AI</span>
+ <footer class="bg-gradient-to-br from-secondary-900 to-secondary-800 text-white py-12">
+  <div class="container mx-auto px-6">
+    
+    <!-- Newsletter -->
+    <div class="mb-12 text-center max-w-xl mx-auto">
+      <h3 class="text-2xl font-bold mb-2">Subscribe to our Newsletter</h3>
+      <p class="text-secondary-300 mb-4 text-sm">Get career tips, new features, and job insights directly in your inbox.</p>
+      <form class="flex flex-col sm:flex-row justify-center items-center gap-3">
+        <input type="email" placeholder="Your Email" required
+               class="w-full sm:w-auto px-4 py-2 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-primary-600" />
+        <button type="submit"
+                class="bg-gradient-to-r from-primary-600 to-indigo-600 text-white px-6 py-2 rounded-full font-semibold text-sm hover:shadow-lg transition">
+          Subscribe
+        </button>
+      </form>
+    </div>
+
+    <!-- Main Footer Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      
+      <!-- Brand & Socials -->
+      <div>
+        <div class="flex items-center space-x-2 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-r from-primary-600 to-indigo-600 flex items-center justify-center shadow">
+            <i class="fas fa-brain text-white text-xl"></i>
           </div>
-          <p class="text-secondary-300 mb-4">
-            Using AI to help people discover fulfilling careers since 2023.
-          </p>
-          <div class="flex space-x-4">
-            <a href="#" class="text-secondary-300 hover:text-white transition">
-              <i class="fab fa-twitter text-xl"></i>
-            </a>
-            <a href="#" class="text-secondary-300 hover:text-white transition">
-              <i class="fab fa-linkedin text-xl"></i>
-            </a>
-            <a href="#" class="text-secondary-300 hover:text-white transition">
-              <i class="fab fa-facebook text-xl"></i>
-            </a>
-            <a href="#" class="text-secondary-300 hover:text-white transition">
-              <i class="fab fa-instagram text-xl"></i>
-            </a>
-          </div>
+          <span class="text-xl font-bold">CareerPath AI</span>
         </div>
-        
-        <div>
-          <h3 class="text-lg font-semibold mb-4">Product</h3>
-          <ul class="space-y-2">
-            <li><a href="#features" class="text-secondary-300 hover:text-white transition">Features</a></li>
-            <li><a href="#how" class="text-secondary-300 hover:text-white transition">How It Works</a></li>
-            <li><a href="#testimonials" class="text-secondary-300 hover:text-white transition">Testimonials</a></li>
-            <li><a href="#quiz" class="text-secondary-300 hover:text-white transition">Assessment</a></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h3 class="text-lg font-semibold mb-4">Company</h3>
-          <ul class="space-y-2">
-            <li><a href="#" class="text-secondary-300 hover:text-white transition">About Us</a></li>
-            <li><a href="#" class="text-secondary-300 hover:text-white transition">Careers</a></li>
-            <li><a href="#" class="text-secondary-300 hover:text-white transition">Privacy Policy</a></li>
-            <li><a href="#" class="text-secondary-300 hover:text-white transition">Terms of Service</a></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h3 class="text-lg font-semibold mb-4">Resources</h3>
-          <ul class="space-y-2">
-            <li><a href="#" class="text-secondary-300 hover:text-white transition">Blog</a></li>
-            <li><a href="#" class="text-secondary-300 hover:text-white transition">Help Center</a></li>
-            <li><a href="#" class="text-secondary-300 hover:text-white transition">Career Guides</a></li>
-            <li><a href="#" class="text-secondary-300 hover:text-white transition">Contact Us</a></li>
-          </ul>
+        <p class="text-secondary-300 mb-4">
+          Using AI to help people discover fulfilling careers since 2023.
+        </p>
+        <div class="flex space-x-4">
+          <a href="#" class="text-secondary-300 hover:text-white hover:scale-110 transform transition duration-200">
+            <i class="fab fa-twitter text-xl"></i>
+          </a>
+          <a href="#" class="text-secondary-300 hover:text-white hover:scale-110 transform transition duration-200">
+            <i class="fab fa-linkedin text-xl"></i>
+          </a>
+          <a href="#" class="text-secondary-300 hover:text-white hover:scale-110 transform transition duration-200">
+            <i class="fab fa-facebook text-xl"></i>
+          </a>
+          <a href="#" class="text-secondary-300 hover:text-white hover:scale-110 transform transition duration-200">
+            <i class="fab fa-instagram text-xl"></i>
+          </a>
         </div>
       </div>
-      
-      <div class="border-t border-secondary-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-        <p class="text-secondary-400 mb-4 md:mb-0">
-          © 2025 CareerPath AI. All rights reserved.
-        </p>
-        <div class="flex space-x-6">
-          <a href="#" class="text-secondary-400 hover:text-white transition">Privacy Policy</a>
-          <a href="#" class="text-secondary-400 hover:text-white transition">Terms of Service</a>
-          <a href="#" class="text-secondary-400 hover:text-white transition">Cookies</a>
-        </div>
+
+      <!-- Product -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Product</h3>
+        <ul class="space-y-2">
+          <li><a href="#features" class="text-secondary-300 hover:text-white transition">Features</a></li>
+          <li><a href="#how" class="text-secondary-300 hover:text-white transition">How It Works</a></li>
+          <li><a href="#testimonials" class="text-secondary-300 hover:text-white transition">Testimonials</a></li>
+          <li><a href="#quiz" class="text-secondary-300 hover:text-white transition">Assessment</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Company</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-secondary-300 hover:text-white transition">About Us</a></li>
+          <li><a href="#" class="text-secondary-300 hover:text-white transition">Careers</a></li>
+          <li><a href="#" class="text-secondary-300 hover:text-white transition">Privacy Policy</a></li>
+          <li><a href="#" class="text-secondary-300 hover:text-white transition">Terms of Service</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Resources</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-secondary-300 hover:text-white transition">Blog</a></li>
+          <li><a href="#" class="text-secondary-300 hover:text-white transition">Help Center</a></li>
+          <li><a href="#" class="text-secondary-300 hover:text-white transition">Career Guides</a></li>
+          <li><a href="#" class="text-secondary-300 hover:text-white transition">Contact Us</a></li>
+        </ul>
       </div>
     </div>
-  </footer>
 
-<script>
-  // Toggle settings card
-  document.getElementById('settings-icon').addEventListener('click', function () {
-    const card = document.getElementById('settings-card');
-    card.classList.toggle('hidden');
-  });
-
-  // Theme button logic
-  const themeButtons = document.querySelectorAll('.theme-btn');
-  themeButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const selectedTheme = button.getAttribute('data-theme');
-      // Apply the theme (you can replace this with your actual logic)
-      document.documentElement.setAttribute('data-theme', selectedTheme);
-      alert('Theme set to ' + selectedTheme);
-    });
-  });
-
-  // Close settings card if clicked outside
-  window.addEventListener('click', function (e) {
-    const settingsCard = document.getElementById('settings-card');
-    const settingsIcon = document.getElementById('settings-icon');
-    if (!settingsCard.contains(e.target) && !settingsIcon.contains(e.target)) {
-      settingsCard.classList.add('hidden');
-    }
-  });
-</script>
+    <!-- Bottom Footer -->
+    <div class="border-t border-secondary-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-secondary-400 mb-4 md:mb-0">
+        © 2025 CareerPath AI. All rights reserved.
+      </p>
+      <div class="flex space-x-6">
+        <a href="#" class="text-secondary-400 hover:text-white transition">Privacy Policy</a>
+        <a href="#" class="text-secondary-400 hover:text-white transition">Terms of Service</a>
+        <a href="#" class="text-secondary-400 hover:text-white transition">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script src="script.js">
 </script>
 
 <!-- FOR FAQ SECTION  -->
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const faqButtons = document.querySelectorAll('.faq-btn');
@@ -1331,106 +1357,127 @@
 <!-- Form logic submiision  -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    const body = document.body;
+
     const startQuizBtn = document.querySelector('.start-quiz-btn');
     const quizFormSection = document.getElementById('quiz-form');
     const quizFormContent = document.getElementById('quizFormContent');
     const closeFormBtn = document.getElementById('closeForm');
-    const showLoginBtn = document.getElementById('showLogin');
-const loginFormSection = document.getElementById('login-form');
-const loginFormContent = document.getElementById('loginFormContent');
-const closeLoginBtn = document.getElementById('closeLogin');
 
-    // SHOW quiz form
+    const showLoginBtn = document.getElementById('showLogin');
+    const loginFormSection = document.getElementById('login-form');
+    const loginFormContent = document.getElementById('loginFormContent');
+    const closeLoginBtn = document.getElementById('closeLogin');
+
+    const forgotLink = document.getElementById('showForgotForm');
+    const forgotFormSection = document.getElementById('forgot-password-form');
+    const forgotFormContent = forgotFormSection.querySelector('div');
+    const cancelForgotBtn = document.getElementById('cancelForgot');
+    const forgotForm = document.getElementById('forgotForm');
+    const resetStatus = document.getElementById('resetStatus');
+
+    // Disable scroll and interaction
+    function blockBackground() {
+      body.classList.add('overflow-hidden');
+    }
+
+    function unblockBackground() {
+      body.classList.remove('overflow-hidden');
+    }
+
+    // ========== QUIZ FORM ==========
     startQuizBtn.addEventListener('click', function (e) {
       e.preventDefault();
       quizFormSection.classList.remove('hidden');
+      blockBackground();
       requestAnimationFrame(() => {
         quizFormContent.classList.remove('scale-95', 'opacity-0');
         quizFormContent.classList.add('scale-100', 'opacity-100');
       });
     });
 
-    // HIDE quiz form
     closeFormBtn.addEventListener('click', function () {
       quizFormContent.classList.remove('scale-100', 'opacity-100');
       quizFormContent.classList.add('scale-95', 'opacity-0');
       setTimeout(() => {
         quizFormSection.classList.add('hidden');
+        unblockBackground();
       }, 300);
     });
 
-    // Show login form and hide quiz form
-
-showLoginBtn.addEventListener('click', function () {
-  quizFormSection.classList.add('hidden');
-  loginFormSection.classList.remove('hidden');
-
-  requestAnimationFrame(() => {
-    loginFormContent.classList.remove('translate-y-4', 'opacity-0');
-    loginFormContent.classList.add('translate-y-0', 'opacity-100');
-  });
-});
-
-closeLoginBtn.addEventListener('click', function () {
-  loginFormContent.classList.remove('translate-y-0', 'opacity-100');
-  loginFormContent.classList.add('translate-y-4', 'opacity-0');
-  setTimeout(() => {
-    loginFormSection.classList.add('hidden');
-  }, 300);
-});
-
-    // Redirect on quiz form submission
     const userForm = document.getElementById('userForm');
     userForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      // You can add validation or saving logic here
+      unblockBackground();
       window.location.href = 'careerquiz.html';
     });
 
-    // Redirect on login form submission
+    // ========== LOGIN FORM ==========
+    showLoginBtn.addEventListener('click', function () {
+      quizFormSection.classList.add('hidden');
+      loginFormSection.classList.remove('hidden');
+      blockBackground();
+      requestAnimationFrame(() => {
+        loginFormContent.classList.remove('translate-y-4', 'opacity-0');
+        loginFormContent.classList.add('translate-y-0', 'opacity-100');
+      });
+    });
+
+    closeLoginBtn.addEventListener('click', function () {
+      loginFormContent.classList.remove('translate-y-0', 'opacity-100');
+      loginFormContent.classList.add('translate-y-4', 'opacity-0');
+      setTimeout(() => {
+        loginFormSection.classList.add('hidden');
+        unblockBackground();
+      }, 300);
+    });
+
     const loginForm = document.getElementById('loginForm');
     loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      // You can add validation or authentication logic here
+      unblockBackground();
       window.location.href = 'dashboard.html';
     });
-  });
 
-// If the Password its forgetten
-  document.addEventListener('DOMContentLoaded', function () {
-    const forgotLink = document.getElementById('showForgotForm');
-    const forgotFormSection = document.getElementById('forgot-password-form');
-    const cancelForgotBtn = document.getElementById('cancelForgot');
-    const forgotForm = document.getElementById('forgotForm');
-    const resetStatus = document.getElementById('resetStatus');
-
-    // Show Forgot Password form
+    // ========== FORGOT PASSWORD FORM ==========
     forgotLink.addEventListener('click', function (e) {
       e.preventDefault();
+      loginFormSection.classList.add('hidden');
       forgotFormSection.classList.remove('hidden');
+      blockBackground();
+      requestAnimationFrame(() => {
+        forgotFormContent.classList.remove('translate-y-4', 'opacity-0');
+        forgotFormContent.classList.add('translate-y-0', 'opacity-100');
+      });
       resetStatus.classList.add('hidden');
     });
 
-    // Hide Forgot Password form
     cancelForgotBtn.addEventListener('click', function () {
-      forgotFormSection.classList.add('hidden');
-    });
-
-    // Handle form submission
-    forgotForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      // Simulate sending email
-      resetStatus.classList.remove('hidden');
-
-      // Optional: auto-close the form after delay
+      forgotFormContent.classList.remove('translate-y-0', 'opacity-100');
+      forgotFormContent.classList.add('translate-y-4', 'opacity-0');
       setTimeout(() => {
         forgotFormSection.classList.add('hidden');
-        resetStatus.classList.add('hidden');
+        unblockBackground();
+      }, 300);
+    });
+
+    forgotForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      resetStatus.classList.remove('hidden');
+
+      setTimeout(() => {
+        forgotFormContent.classList.remove('translate-y-0', 'opacity-100');
+        forgotFormContent.classList.add('translate-y-4', 'opacity-0');
+        setTimeout(() => {
+          forgotFormSection.classList.add('hidden');
+          resetStatus.classList.add('hidden');
+          unblockBackground();
+        }, 300);
       }, 3000);
     });
   });
-
 </script>
-
+<!-- f;loating buttomn -->
+</div>
 </body>
 </html>
