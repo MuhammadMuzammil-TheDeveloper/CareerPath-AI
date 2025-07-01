@@ -516,7 +516,91 @@
     });
   });
 </script>
+<!-- Stylish Animated Popup -->
+<!-- Stylish Animated Popup -->
+<div id="successPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-[9999] hidden">
+  <div class="bg-white rounded-3xl p-8 text-center shadow-2xl w-[90%] max-w-md animate-popup-in relative overflow-hidden">
+    
+    <!-- Animated Icon -->
+    <div class="text-5xl mb-4 text-green-600 animate-bounce-slow">
+      <i class="fas fa-robot"></i>
+    </div>
 
+    <!-- Typing Text -->
+    <h2 class="text-xl font-bold text-gray-800 mb-2">
+      <span id="typingText"></span><span class="typing-cursor">|</span>
+    </h2>
+
+    <button id="continueBtn" class="mt-4 px-5 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition">
+      Let’s Go to Quiz
+    </button>
+  </div>
+</div>
+
+<style>
+@keyframes popup-in {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1 }
+  50% { opacity: 0 }
+}
+
+.animate-popup-in { animation: popup-in 0.5s ease-out; }
+.animate-bounce-slow { animation: bounce-slow 1.8s infinite; }
+
+.typing-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: #555;
+  animation: blink 0.8s steps(1) infinite;
+}
+</style>
+
+<script>
+  function typeText(element, text, speed = 50) {
+    let index = 0;
+    element.innerHTML = ''; // Clear previous
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        element.innerHTML += text.charAt(index);
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, speed);
+  }
+  
+  function showSuccessPopup(name, isRegistered) {
+    const popup = document.getElementById('successPopup');
+    const typingTarget = document.getElementById('typingText');
+    const continueBtn = document.getElementById('continueBtn');
+  
+    const message = isRegistered 
+      ? `${name}, you are successfully registered. Let’s go to quiz!`
+      : `${name}, welcome back! Let’s go to quiz!`;
+  
+    popup.classList.remove('hidden');
+    typeText(typingTarget, message, 40); // Typing animation
+  
+    // Remove voice and just redirect
+    continueBtn.onclick = () => {
+      popup.classList.add('hidden');
+      window.location.href = 'careerquiz.html';
+    };
+  }
+  // For Google login
+showSuccessPopup(user.displayName, isNewUser);
+showSuccessPopup(user.displayName, false);
+showSuccessPopup(user.displayName, true);
+
+  </script>
+  
 <!-- Forgot Password Form -->
 <section id="forgot-password-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
   <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-500 ease-out translate-y-4 opacity-0">
@@ -559,7 +643,6 @@
     </p>
   </div>
 </section>
-
 
   <!-- Hero Section -->
   <section id="home" class="relative overflow-hidden">
@@ -1483,7 +1566,6 @@
 
 <!-- Add these scripts right before the closing </body> tag -->
 <script type="module">
-  // Import Firebase modules
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { 
     getAuth, 
@@ -1492,10 +1574,11 @@
     sendEmailVerification, 
     sendPasswordResetEmail,
     updateProfile,
-    signOut
+    signOut,
+    GoogleAuthProvider,
+    signInWithPopup
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  // Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyCcFX4LXH-wWpTAPjXRd_7CIL0_PkldyFY",
     authDomain: "newproject-eaafb.firebaseapp.com",
@@ -1505,11 +1588,30 @@
     appId: "1:462532086346:web:f3689678f389eb941534b3"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // Google Sign In Function
+  async function loginWithGoogle() {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    const isNew = result._tokenResponse?.isNewUser ?? false;
+    showSuccessPopup(user.displayName, isNew);
+  } catch (error) {
+    alert('Google login failed: ' + error.message);
+  }
+}
+
 
   document.addEventListener('DOMContentLoaded', function () {
+    // Google Buttons
+    document.querySelectorAll('.fab.fa-google').forEach(googleBtn => {
+      googleBtn.parentElement.addEventListener('click', loginWithGoogle);
+    });
+
     // Form elements
     const startQuizBtn = document.querySelector('.start-quiz-btn');
     const quizFormSection = document.getElementById('quiz-form');
@@ -1779,9 +1881,23 @@
       loginFormFooter.parentNode.insertBefore(resendVerificationBtn, loginFormFooter.nextSibling);
     }
   });
+
+function showToast(message) {
+  const toast = document.getElementById('toastMessage');
+  const text = document.getElementById('toastText');
+  text.textContent = message;
+
+  toast.classList.remove('opacity-0', 'pointer-events-none');
+  toast.classList.add('opacity-100');
+
+  setTimeout(() => {
+    toast.classList.remove('opacity-100');
+    toast.classList.add('opacity-0', 'pointer-events-none');
+  }, 4000); // Hide after 4 seconds
+}
+
 </script>
-<!-- f;loating buttomn -->
- 
+<!-- floating buttomn -->
 <script>
   // Update your existing JavaScript with this code
 document.addEventListener('DOMContentLoaded', function() {
