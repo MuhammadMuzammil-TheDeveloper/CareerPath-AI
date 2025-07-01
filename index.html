@@ -7,10 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <!-- Tailwind CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 
   <script>
     tailwind.config = {
@@ -263,8 +260,7 @@
     </nav>
   </header>
 
-
-  <!-- Quiz Form -->
+<!-- Updated Quiz Form Section -->
 <section id="quiz-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4 transition-opacity duration-300 ease-out">
   <div id="quizFormContent" class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-4 transform transition-all duration-300 scale-95 opacity-0 overflow-y-auto max-h-[90vh] flex flex-col md:flex-row">
 
@@ -293,6 +289,12 @@
           <input type="email" id="email" placeholder="Email Address" required
                  class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
           <i class="fas fa-envelope absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
+        </div>
+
+        <div class="relative">
+          <input type="password" id="password" placeholder="Create Password" required
+                 class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
+          <i class="fas fa-lock absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
         </div>
 
         <div class="relative">
@@ -371,9 +373,10 @@
   </div>
 </section>
 
-<!-- Login Form -->
+<!-- Updated Login Form -->
 <section id="login-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
-<div id="loginFormContent" class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] p-6 w-full max-w-md mx-4 transform transition-all duration-500 ease-out scale-95 opacity-0">
+  <div id="loginFormContent" class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] p-6 w-full max-w-md mx-4 transform transition-all duration-500 ease-out scale-95 opacity-0">
+    
     <div class="flex flex-col items-center mb-6">
       <div class="w-12 h-12 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 flex items-center justify-center mb-3 shadow-md">
         <i class="fas fa-brain text-white text-xl"></i>
@@ -386,16 +389,14 @@
       </p>
     </div>
 
-    <!-- Social Login First -->
+    <!-- Social Login Buttons -->
     <div class="flex flex-col gap-3 mb-6">
       <button class="flex items-center justify-center gap-3 px-4 py-2 bg-white border border-gray-200 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition hover:scale-105">
         <i class="fab fa-google text-red-500"></i> Continue with Google
       </button>
-
       <button class="flex items-center justify-center gap-3 px-4 py-2 bg-white border border-gray-200 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition hover:scale-105">
         <i class="fab fa-facebook-f text-blue-600"></i> Continue with Facebook
       </button>
-
       <button class="flex items-center justify-center gap-3 px-4 py-2 bg-white border border-gray-200 text-gray-800 rounded-xl shadow-sm hover:shadow-md transition hover:scale-105">
         <i class="fab fa-instagram text-pink-500"></i> Continue with Instagram
       </button>
@@ -405,15 +406,16 @@
     <div class="my-4 border-t border-gray-200"></div>
     <h4 class="text-center text-sm text-gray-500 mb-3">Or login with Email</h4>
 
+    <!-- Email Login Form -->
     <form id="loginForm" class="space-y-4">
       <div class="relative">
-        <input type="email" placeholder="Email Address" required
+        <input type="email" id="loginEmail" placeholder="Email Address" required
                class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
         <i class="fas fa-envelope absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
       </div>
 
       <div class="relative">
-        <input type="password" placeholder="Password" required
+        <input type="password" id="loginPassword" placeholder="Password" required
                class="w-full px-10 py-2 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-600" />
         <i class="fas fa-lock absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 text-sm"></i>
       </div>
@@ -442,9 +444,78 @@
     </form>
 
     <p class="text-xs text-center text-gray-400 mt-4">Your information is safe and encrypted.</p>
+    <div class="text-center mt-4">
+      <p class="text-sm text-gray-600">
+        Don't have an account? 
+        <a href="#" id="showRegister" class="text-primary-600 hover:text-primary-800 font-medium">
+          Register here
+        </a>
+      </p>
+    </div>
   </div>
 </section>
 
+<!-- Form Toggle Script (keep existing functionality) -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const body = document.body;
+    const startQuizBtn = document.querySelector('.start-quiz-btn');
+    const quizFormSection = document.getElementById('quiz-form');
+    const quizFormContent = document.getElementById('quizFormContent');
+    const closeFormBtn = document.getElementById('closeForm');
+    const showLoginBtn = document.getElementById('showLogin');
+    const loginFormSection = document.getElementById('login-form');
+    const loginFormContent = document.getElementById('loginFormContent');
+    const closeLoginBtn = document.getElementById('closeLogin');
+
+    // Toggle functions remain the same
+    function blockBackground() {
+      body.classList.add('overflow-hidden');
+    }
+
+    function unblockBackground() {
+      body.classList.remove('overflow-hidden');
+    }
+
+    startQuizBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      quizFormSection.classList.remove('hidden');
+      blockBackground();
+      requestAnimationFrame(() => {
+        quizFormContent.classList.remove('scale-95', 'opacity-0');
+        quizFormContent.classList.add('scale-100', 'opacity-100');
+      });
+    });
+
+    closeFormBtn.addEventListener('click', function () {
+      quizFormContent.classList.remove('scale-100', 'opacity-100');
+      quizFormContent.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        quizFormSection.classList.add('hidden');
+        unblockBackground();
+      }, 300);
+    });
+
+    showLoginBtn.addEventListener('click', function () {
+      quizFormSection.classList.add('hidden');
+      loginFormSection.classList.remove('hidden');
+      blockBackground();
+      requestAnimationFrame(() => {
+        loginFormContent.classList.remove('translate-y-4', 'opacity-0');
+        loginFormContent.classList.add('translate-y-0', 'opacity-100');
+      });
+    });
+
+    closeLoginBtn.addEventListener('click', function () {
+      loginFormContent.classList.remove('translate-y-0', 'opacity-100');
+      loginFormContent.classList.add('translate-y-4', 'opacity-0');
+      setTimeout(() => {
+        loginFormSection.classList.add('hidden');
+        unblockBackground();
+      }, 300);
+    });
+  });
+</script>
 
 <!-- Forgot Password Form -->
 <section id="forgot-password-form" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
@@ -1410,93 +1481,122 @@
   });
 </script>
 
-<!-- Form logic submiision  -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const body = document.body;
+<!-- Add these scripts right before the closing </body> tag -->
+<script type="module">
+  // Import Firebase modules
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    sendEmailVerification, 
+    sendPasswordResetEmail,
+    updateProfile,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCcFX4LXH-wWpTAPjXRd_7CIL0_PkldyFY",
+    authDomain: "newproject-eaafb.firebaseapp.com",
+    projectId: "newproject-eaafb",
+    storageBucket: "newproject-eaafb.appspot.com",
+    messagingSenderId: "462532086346",
+    appId: "1:462532086346:web:f3689678f389eb941534b3"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Form elements
     const startQuizBtn = document.querySelector('.start-quiz-btn');
     const quizFormSection = document.getElementById('quiz-form');
     const quizFormContent = document.getElementById('quizFormContent');
     const closeFormBtn = document.getElementById('closeForm');
-
-    const showLoginBtn = document.getElementById('showLogin');
+    const showRegisterBtn = document.getElementById('showRegister');
     const loginFormSection = document.getElementById('login-form');
     const loginFormContent = document.getElementById('loginFormContent');
     const closeLoginBtn = document.getElementById('closeLogin');
-
+    const showLoginLink = document.getElementById('showLogin');
     const forgotLink = document.getElementById('showForgotForm');
     const forgotFormSection = document.getElementById('forgot-password-form');
     const forgotFormContent = forgotFormSection.querySelector('div');
     const cancelForgotBtn = document.getElementById('cancelForgot');
     const forgotForm = document.getElementById('forgotForm');
     const resetStatus = document.getElementById('resetStatus');
+    const userForm = document.getElementById('userForm');
+    const loginForm = document.getElementById('loginForm');
 
-    // Disable scroll and interaction
+    // UI helpers
     function blockBackground() {
-      body.classList.add('overflow-hidden');
+      document.body.classList.add('overflow-hidden');
     }
 
     function unblockBackground() {
-      body.classList.remove('overflow-hidden');
+      document.body.classList.remove('overflow-hidden');
     }
 
-    // ========== QUIZ FORM ==========
-    startQuizBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      quizFormSection.classList.remove('hidden');
+    function setButtonLoading(button, isLoading) {
+      if (isLoading) {
+        button.dataset.originalText = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+      } else {
+        button.disabled = false;
+        button.innerHTML = button.dataset.originalText;
+      }
+    }
+
+    // Form toggle logic
+    startQuizBtn.addEventListener('click', showLoginForm);
+    showRegisterBtn.addEventListener('click', showRegistrationForm);
+    showLoginLink.addEventListener('click', showLoginForm);
+    closeFormBtn.addEventListener('click', closeRegistrationForm);
+    closeLoginBtn.addEventListener('click', closeLoginForm);
+    forgotLink.addEventListener('click', showForgotPasswordForm);
+    cancelForgotBtn.addEventListener('click', closeForgotPasswordForm);
+
+    function showLoginForm(e) {
+      if (e) e.preventDefault();
+      loginFormSection.classList.remove('hidden');
       blockBackground();
+      requestAnimationFrame(() => {
+        loginFormContent.classList.remove('scale-95', 'opacity-0');
+        loginFormContent.classList.add('scale-100', 'opacity-100');
+      });
+    }
+
+    function showRegistrationForm(e) {
+      if (e) e.preventDefault();
+      loginFormSection.classList.add('hidden');
+      quizFormSection.classList.remove('hidden');
       requestAnimationFrame(() => {
         quizFormContent.classList.remove('scale-95', 'opacity-0');
         quizFormContent.classList.add('scale-100', 'opacity-100');
       });
-    });
+    }
 
-    closeFormBtn.addEventListener('click', function () {
+    function closeRegistrationForm() {
       quizFormContent.classList.remove('scale-100', 'opacity-100');
       quizFormContent.classList.add('scale-95', 'opacity-0');
       setTimeout(() => {
         quizFormSection.classList.add('hidden');
         unblockBackground();
       }, 300);
-    });
+    }
 
-    const userForm = document.getElementById('userForm');
-    userForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      unblockBackground();
-      window.location.href = 'careerquiz.html';
-    });
-
-    // ========== LOGIN FORM ==========
-    showLoginBtn.addEventListener('click', function () {
-      quizFormSection.classList.add('hidden');
-      loginFormSection.classList.remove('hidden');
-      blockBackground();
-      requestAnimationFrame(() => {
-        loginFormContent.classList.remove('translate-y-4', 'opacity-0');
-        loginFormContent.classList.add('translate-y-0', 'opacity-100');
-      });
-    });
-
-    closeLoginBtn.addEventListener('click', function () {
-      loginFormContent.classList.remove('translate-y-0', 'opacity-100');
-      loginFormContent.classList.add('translate-y-4', 'opacity-0');
+    function closeLoginForm() {
+      loginFormContent.classList.remove('scale-100', 'opacity-100');
+      loginFormContent.classList.add('scale-95', 'opacity-0');
       setTimeout(() => {
         loginFormSection.classList.add('hidden');
         unblockBackground();
       }, 300);
-    });
+    }
 
-    const loginForm = document.getElementById('loginForm');
-    loginForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      unblockBackground();
-      window.location.href = 'dashboard.html';
-    });
-
-    // ========== FORGOT PASSWORD FORM ==========
-    forgotLink.addEventListener('click', function (e) {
+    function showForgotPasswordForm(e) {
       e.preventDefault();
       loginFormSection.classList.add('hidden');
       forgotFormSection.classList.remove('hidden');
@@ -1506,31 +1606,178 @@
         forgotFormContent.classList.add('translate-y-0', 'opacity-100');
       });
       resetStatus.classList.add('hidden');
-    });
+    }
 
-    cancelForgotBtn.addEventListener('click', function () {
+    function closeForgotPasswordForm() {
       forgotFormContent.classList.remove('translate-y-0', 'opacity-100');
       forgotFormContent.classList.add('translate-y-4', 'opacity-0');
       setTimeout(() => {
         forgotFormSection.classList.add('hidden');
         unblockBackground();
       }, 300);
-    });
+    }
 
-    forgotForm.addEventListener('submit', function (e) {
+    // Registration form
+    userForm.addEventListener('submit', async function (e) {
       e.preventDefault();
-      resetStatus.classList.remove('hidden');
-
-      setTimeout(() => {
-        forgotFormContent.classList.remove('translate-y-0', 'opacity-100');
-        forgotFormContent.classList.add('translate-y-4', 'opacity-0');
-        setTimeout(() => {
-          forgotFormSection.classList.add('hidden');
-          resetStatus.classList.add('hidden');
-          unblockBackground();
-        }, 300);
-      }, 3000);
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const fullName = document.getElementById('fullName').value;
+      const submitBtn = userForm.querySelector('button[type="submit"]');
+      
+      setButtonLoading(submitBtn, true);
+      
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        await updateProfile(user, { displayName: fullName });
+        await sendEmailVerification(user);
+        
+        alert(`Account created successfully! You can now sign in. A verification link has been sent to ${email}.`);
+        showLoginForm();
+      } catch (error) {
+        let errorMessage = 'Registration failed: ';
+        switch(error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage += 'This email is already registered.';
+            showLoginLink.click();
+            break;
+          case 'auth/invalid-email':
+            errorMessage += 'Please enter a valid email address.';
+            break;
+          case 'auth/weak-password':
+            errorMessage += 'Password should be at least 6 characters.';
+            break;
+          default:
+            errorMessage += error.message;
+        }
+        alert(errorMessage);
+      } finally {
+        setButtonLoading(submitBtn, false);
+      }
     });
+
+    // Login form
+    loginForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const submitBtn = loginForm.querySelector('button[type="submit"]');
+      
+      setButtonLoading(submitBtn, true);
+      
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        if (!user.emailVerified) {
+          const proceed = confirm(`Your email isn't verified yet. Would you like to proceed anyway? (Check ${email} for verification link)`);
+          if (!proceed) {
+            await sendEmailVerification(user);
+            alert(`New verification link sent to ${email}. Please check your inbox.`);
+            await signOut(auth);
+            return;
+          }
+        }
+        
+        window.location.href = 'careerquiz.html';
+      } catch (error) {
+        let errorMessage = 'Login failed: ';
+        switch(error.code) {
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            errorMessage += 'Invalid email or password.';
+            break;
+          case 'auth/too-many-requests':
+            errorMessage += 'Too many attempts. Try again later or reset your password.';
+            break;
+          case 'auth/user-disabled':
+            errorMessage += 'This account has been disabled.';
+            break;
+          default:
+            errorMessage += error.message;
+        }
+        alert(errorMessage);
+      } finally {
+        setButtonLoading(submitBtn, false);
+      }
+    });
+
+    // Forgot password form
+    forgotForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const email = forgotForm.querySelector('input[type="email"]').value;
+      const submitBtn = forgotForm.querySelector('button[type="submit"]');
+      
+      setButtonLoading(submitBtn, true);
+      
+      try {
+        await sendPasswordResetEmail(auth, email);
+        resetStatus.textContent = `✅ Password reset link sent to ${email}`;
+        resetStatus.classList.remove('hidden');
+        
+        setTimeout(() => {
+          forgotFormContent.classList.remove('translate-y-0', 'opacity-100');
+          forgotFormContent.classList.add('translate-y-4', 'opacity-0');
+          setTimeout(() => {
+            forgotFormSection.classList.add('hidden');
+            resetStatus.classList.add('hidden');
+            unblockBackground();
+          }, 300);
+        }, 3000);
+      } catch (error) {
+        let errorMessage = 'Password reset failed: ';
+        switch(error.code) {
+          case 'auth/user-not-found':
+            errorMessage += 'No account found with this email.';
+            break;
+          case 'auth/invalid-email':
+            errorMessage += 'Please enter a valid email address.';
+            break;
+          default:
+            errorMessage += error.message;
+        }
+        alert(errorMessage);
+      } finally {
+        setButtonLoading(submitBtn, false);
+      }
+    });
+
+    // Add resend verification button
+    const resendVerificationBtn = document.createElement('button');
+    resendVerificationBtn.type = 'button';
+    resendVerificationBtn.className = 'text-primary-600 hover:text-primary-800 text-sm mt-2 block w-full text-center';
+    resendVerificationBtn.innerHTML = '<i class="fas fa-redo mr-1"></i> Resend verification email';
+    
+    resendVerificationBtn.addEventListener('click', async function() {
+      const email = document.getElementById('loginEmail').value;
+      if (!email) {
+        alert('Please enter your email first');
+        return;
+      }
+      
+      try {
+        // Try to send verification to currently signed in user first
+        if (auth.currentUser) {
+          await sendEmailVerification(auth.currentUser);
+        } else {
+          // Fallback to password reset which will trigger verification
+          await sendPasswordResetEmail(auth, email);
+        }
+        alert(`If an account exists for ${email}, we've sent a verification link.`);
+      } catch (error) {
+        alert('Error sending verification: ' + error.message);
+      }
+    });
+
+    // Add the button to login form
+    const loginFormFooter = loginForm.querySelector('.flex.flex-col-reverse');
+    if (loginFormFooter) {
+      loginFormFooter.parentNode.insertBefore(resendVerificationBtn, loginFormFooter.nextSibling);
+    }
   });
 </script>
 <!-- f;loating buttomn -->
@@ -1757,7 +2004,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
 </div>
 </body>
 </html>
