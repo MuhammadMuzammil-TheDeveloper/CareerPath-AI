@@ -28,6 +28,8 @@
     .quiz-card {
       transform-style: preserve-3d;
       transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: linear-gradient(145deg, #ffffff 0%, #f9fafb 100%);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
     }
     
     .question-text {
@@ -35,6 +37,18 @@
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      position: relative;
+    }
+    
+    .question-text::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--deep-blue));
+      border-radius: 2px;
     }
     
     .option-card {
@@ -42,27 +56,73 @@
       transform-origin: center;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
       border: 1px solid #e2e8f0;
+      background: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .option-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 0;
+      background: linear-gradient(to bottom, var(--primary), var(--deep-blue));
+      transition: height 0.3s ease;
     }
     
     .option-card:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(79, 70, 229, 0.15);
+    }
+    
+    .option-card:hover::before {
+      height: 100%;
     }
     
     .option-card.selected {
       border-color: var(--primary);
       background-color: rgba(79, 70, 229, 0.03);
       transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.15);
+      box-shadow: 0 15px 30px rgba(79, 70, 229, 0.2);
+    }
+    
+    .option-card.selected::before {
+      height: 100%;
     }
     
     .progress-track {
       background: linear-gradient(90deg, #e0e7ff 0%, #c7d2fe 100%);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     }
     
     .progress-thumb {
       background: linear-gradient(90deg, var(--deep-blue), var(--primary));
       transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .progress-thumb::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
     }
     
     @keyframes fadeIn {
@@ -76,14 +136,18 @@
     
     .option-icon {
       transition: all 0.3s ease;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     
     .option-card:hover .option-icon {
       transform: scale(1.1);
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
     }
     
     .selected .option-icon {
       color: var(--primary);
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
     }
     
     .pulse-animation {
@@ -92,28 +156,31 @@
     
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
-      70% { box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+      70% { box-shadow: 0 0 0 15px rgba(79, 70, 229, 0); }
       100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
     }
     
     .career-match-badge {
       background: linear-gradient(135deg, var(--primary), var(--deep-blue));
       color: white;
+      box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
     }
     
     .strength-indicator {
       height: 4px;
       background: linear-gradient(90deg, var(--secondary), var(--dark-teal));
+      box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
     }
     
     .result-card {
       transition: all 0.3s ease;
       border-left: 4px solid transparent;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
     
     .result-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
     }
     
     .tech-card { border-left-color: #4f46e5; }
@@ -123,20 +190,132 @@
     .engineering-card { border-left-color: #ef4444; }
     .education-card { border-left-color: #8b5cf6; }
     .science-card { border-left-color: #ec4899; }
+    
+    /* Floating particles background */
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(79, 70, 229, 0.2) 100%);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+    
+    /* Confetti effect */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #f00;
+      opacity: 0;
+    }
+    
+    /* Tooltip styles */
+    .tooltip {
+      position: relative;
+    }
+    
+    .tooltip .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* Floating action button */
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--deep-blue));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+      cursor: pointer;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    
+    .fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4);
+    }
+    
+    /* Character animation */
+    .character {
+      transition: all 0.5s ease;
+    }
+    
+    .character:hover {
+      transform: translateY(-10px) rotate(5deg);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .quiz-card {
+        border-radius: 0;
+      }
+      
+      .question-text {
+        font-size: 1.5rem;
+      }
+      
+      .option-card {
+        padding: 1rem;
+      }
+    }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 md:p-8">
+<body class="min-h-screen flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+  <!-- Floating particles background -->
+  <div class="particles" id="particles"></div>
+  
   <!-- Main Quiz Container -->
   <div class="quiz-container w-full max-w-4xl">
     <div class="quiz-card bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-      <!-- Quiz Header -->
+      <!-- Quiz Header with animated gradient -->
       <div class="relative">
         <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-10"></div>
         <div class="relative z-10 p-6 md:p-8">
           <div class="flex justify-between items-start">
             <div>
               <div class="flex items-center mb-2">
-                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-3">
+                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-3 shadow-md">
                   <i class="fas fa-user-astronaut"></i>
                 </div>
                 <span class="text-sm font-semibold text-indigo-600">CAREERPATH AI</span>
@@ -146,7 +325,7 @@
             </div>
             <div class="text-right">
               <div class="text-xs font-medium text-gray-500 mb-1">QUESTION <span id="current-question">1</span>/<span id="total-questions">12</span></div>
-              <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden shadow-inner">
                 <div id="quiz-progress" class="h-full progress-thumb" style="width: 8.33%"></div>
               </div>
             </div>
@@ -162,20 +341,21 @@
         
         <!-- Navigation Buttons -->
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-100">
-          <button id="prev-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-all transform hover:-translate-x-1">
+          <button id="prev-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-all transform hover:-translate-x-1 hover:shadow-md">
             <i class="fas fa-arrow-left mr-2"></i> Previous
           </button>
           
-          <div class="flex items-center text-sm text-gray-500">
+          <div class="flex items-center text-sm text-gray-500 tooltip">
             <i class="fas fa-lightbulb mr-2 text-yellow-500"></i>
             <span id="quiz-tip">Select all options that resonate with you</span>
+            <span class="tooltip-text" id="quiz-tip-tooltip">Be honest with your answers for the most accurate results</span>
           </div>
           
-          <button id="next-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all transform hover:translate-x-1">
+          <button id="next-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:shadow-lg transition-all transform hover:translate-x-1 hover:scale-105">
             Next Question <i class="fas fa-arrow-right ml-2"></i>
           </button>
           
-          <button id="submit-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center bg-gradient-to-r from-green-600 to-teal-500 text-white rounded-xl font-medium hover:shadow-lg transition-all hidden pulse-animation">
+          <button id="submit-btn" class="w-full sm:w-auto px-6 py-3 flex items-center justify-center bg-gradient-to-r from-green-600 to-teal-500 text-white rounded-xl font-medium hover:shadow-lg transition-all hidden pulse-animation hover:scale-105">
             Discover My Career <i class="fas fa-chart-line ml-2"></i>
           </button>
         </div>
@@ -183,7 +363,175 @@
     </div>
   </div>
 
+  <!-- Floating action button for help -->
+  <div class="fab tooltip" id="help-btn" onclick="showHelpModal()">
+    <i class="fas fa-question"></i>
+    <span class="tooltip-text">Get help with the quiz</span>
+  </div>
+
+  <!-- Help Modal -->
+  <div id="help-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="help-modal-content">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-indigo-700">Quiz Help</h3>
+        <button onclick="hideHelpModal()" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="space-y-4">
+        <div class="flex items-start">
+          <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-3">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-900">Answer Honestly</h4>
+            <p class="text-gray-600 text-sm">Select options that truly reflect your preferences, not what you think is "correct".</p>
+          </div>
+        </div>
+        <div class="flex items-start">
+          <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-3">
+            <i class="fas fa-check-double"></i>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-900">Multiple Selection</h4>
+            <p class="text-gray-600 text-sm">Some questions allow multiple answers - select all that apply to you.</p>
+          </div>
+        </div>
+        <div class="flex items-start">
+          <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-3">
+            <i class="fas fa-undo"></i>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-900">Change Answers</h4>
+            <p class="text-gray-600 text-sm">You can go back and change previous answers anytime before submitting.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end">
+        <button onclick="hideHelpModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+          Got it!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Character animation -->
+  <div class="fixed bottom-4 left-4 z-10 hidden md:block">
+    <div class="character bg-white p-3 rounded-full shadow-lg cursor-pointer" id="quiz-character" onclick="animateCharacter()">
+      <div class="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-2xl">
+        <i class="fas fa-robot"></i>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = window.innerWidth < 768 ? 20 : 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 5px and 15px
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.bottom = `-${size}px`;
+        
+        // Random animation duration and delay
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s linear ${delay}s infinite`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    // Show help modal with animation
+    function showHelpModal() {
+      const modal = document.getElementById('help-modal');
+      const content = document.getElementById('help-modal-content');
+      
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
+      }, 10);
+    }
+    
+    // Hide help modal with animation
+    function hideHelpModal() {
+      const modal = document.getElementById('help-modal');
+      const content = document.getElementById('help-modal-content');
+      
+      content.classList.remove('scale-100', 'opacity-100');
+      content.classList.add('scale-95', 'opacity-0');
+      
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+    
+    // Animate character
+    function animateCharacter() {
+      const character = document.getElementById('quiz-character');
+      character.style.transform = 'translateY(-20px) rotate(10deg)';
+      
+      setTimeout(() => {
+        character.style.transform = 'translateY(0) rotate(0)';
+      }, 1000);
+    }
+    
+    // Create confetti effect
+    function createConfetti() {
+      const colors = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+      
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        
+        // Random properties
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 10 + 5;
+        const shape = Math.random() > 0.5 ? '50%' : '0';
+        
+        confetti.style.backgroundColor = color;
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
+        confetti.style.borderRadius = shape;
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.top = `-10px`;
+        
+        // Animation
+        const animationDuration = Math.random() * 3 + 2;
+        const animationDelay = Math.random() * 2;
+        
+        confetti.style.animation = `confetti-fall ${animationDuration}s ease-in ${animationDelay}s forwards`;
+        
+        document.body.appendChild(confetti);
+        
+        // Remove after animation
+        setTimeout(() => {
+          confetti.remove();
+        }, (animationDuration + animationDelay) * 1000);
+      }
+      
+      // Add confetti animation
+      const style = document.createElement('style');
+      style.innerHTML = `
+        @keyframes confetti-fall {
+          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
     // Comprehensive Career Quiz Questions with Logical Sequence
     const quizQuestions = [
       {
@@ -463,9 +811,15 @@
 
     // Initialize Quiz
     function initQuiz() {
+      createParticles();
       totalQuestionsEl.textContent = totalQuestions;
       showQuestion();
       updateProgress();
+      
+      // Add character animation every 30 seconds
+      setInterval(() => {
+        animateCharacter();
+      }, 30000);
     }
 
     // Show current question with animations
@@ -484,7 +838,7 @@
           <div class="option-card mb-4 p-5 rounded-xl cursor-pointer flex items-start ${isSelected ? 'selected' : ''}"
                data-index="${index}"
                onclick="selectOption(${index})">
-            <div class="option-icon w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center ${isSelected ? 'text-indigo-600' : 'text-gray-400'} mr-4 mt-0.5 flex-shrink-0">
+            <div class="option-icon w-10 h-10 rounded-lg flex items-center justify-center ${isSelected ? 'text-indigo-600' : 'text-gray-400'} mr-4 mt-0.5 flex-shrink-0">
               <i class="fas ${option.icon}"></i>
             </div>
             <div>
@@ -677,6 +1031,9 @@
     }
 
     function submitQuiz() {
+      // Create confetti effect
+      createConfetti();
+      
       // Calculate results
       const results = calculateCareerMatches();
       const topCareer = careerDatabase[results.topField];
@@ -727,6 +1084,9 @@
 
     // Make functions available globally
     window.selectOption = selectOption;
+    window.showHelpModal = showHelpModal;
+    window.hideHelpModal = hideHelpModal;
+    window.animateCharacter = animateCharacter;
 
     // Initialize the quiz
     document.addEventListener('DOMContentLoaded', initQuiz);
