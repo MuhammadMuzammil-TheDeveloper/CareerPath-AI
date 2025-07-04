@@ -5,9 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CareerPath AI Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    .setting-group {
+      .setting-group {
       border-bottom: 1px solid #f0f0f0;
       padding-bottom: 1.5rem;
     }
@@ -134,6 +139,128 @@
 
     .text-right {
       text-align: right;
+    }
+
+    /* Dark Theme Styles */
+    .dark body {
+      background-color: #1a1a1a !important;
+    }
+
+    .dark .bg-white {
+      background-color: #2d2d2d !important;
+    }
+
+    .dark .bg-gray-50 {
+      background-color: #252525 !important;
+    }
+
+    .dark .text-gray-500,
+    .dark .text-gray-400 {
+      color: #b0b0b0 !important;
+    }
+
+    .dark .text-gray-700 {
+      color: #e0e0e0 !important;
+    }
+
+    .dark .border-gray-200 {
+      border-color: #3a3a3a !important;
+    }
+
+    .dark .gradient-bg {
+      background: linear-gradient(135deg, #ff6b6b, #ff8e8e) !important;
+    }
+
+    .dark .dashboard-nav-item.active {
+      background-color: #3a3a3a !important;
+      color: #ff6b6b !important;
+    }
+
+    .dark .card-hover:hover {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .dark input,
+    .dark select,
+    .dark textarea {
+      background-color: #3a3a3a !important;
+      color: #e0e0e0 !important;
+      border-color: #4a4a4a !important;
+    }
+
+    .dark input::placeholder {
+      color: #9e9e9e !important;
+    }
+
+    .dark .btn-primary {
+      background: linear-gradient(135deg, #ff6b6b, #ff8e8e) !important;
+      color: white !important;
+    }
+
+    .dark .btn-primary:hover {
+      background: linear-gradient(135deg, #e05555, #e07b7b) !important;
+    }
+
+    .dark .text-primary-600 {
+      color: #ff6b6b !important;
+    }
+
+    .dark .text-primary-600:hover {
+      color: #ff8e8e !important;
+    }
+
+    .dark .gradient-text {
+      background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    /* High Contrast Theme */
+    .contrast-theme {
+      --tw-bg-opacity: 1;
+      --tw-text-opacity: 1;
+    }
+
+    .contrast-theme body {
+      background-color: rgb(254 252 232) !important;
+      color: rgb(0 0 0) !important;
+    }
+
+    .contrast-theme .bg-white {
+      background-color: rgb(254 249 195) !important;
+    }
+
+    .contrast-theme .bg-gray-50 {
+      background-color: rgb(254 240 138) !important;
+    }
+
+    .contrast-theme .text-gray-500,
+    .contrast-theme .text-gray-400 {
+      color: rgb(0 0 0) !important;
+    }
+
+    .contrast-theme .border-gray-200 {
+      border-color: rgb(0 0 0) !important;
+      border-width: 2px !important;
+    }
+
+    .contrast-theme .gradient-bg {
+      background: linear-gradient(135deg, #000000, #6366f1) !important;
+    }
+
+    .contrast-theme .dashboard-nav-item.active {
+      background-color: rgb(253 224 71) !important;
+      color: rgb(0 0 0) !important;
+    }
+
+    .contrast-theme .card-hover:hover {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+      border: 2px solid black !important;
+    }
+
+    /* Smooth transitions for theme changes */
+    body, .bg-white, .bg-gray-50, .border-gray-200, .text-gray-500, .text-gray-400 {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
   </style>
 </head>
@@ -786,49 +913,106 @@
     </div>
   </section>
 
+  
   <script>
-    // Language switcher functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      // Load saved language preference
+     // Theme management system
+     document.addEventListener('DOMContentLoaded', function() {
+      // Initialize theme
+      initTheme();
+      
+      // Language switcher functionality
       const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
       document.getElementById('language-selector').value = savedLanguage;
-      
-      // Load translations
       loadLanguage(savedLanguage);
       
-      // Set up language selector change event
       document.getElementById('language-selector').addEventListener('change', function() {
         const selectedLanguage = this.value;
         localStorage.setItem('selectedLanguage', selectedLanguage);
         loadLanguage(selectedLanguage);
       });
 
-      // At the top of your dashboard.js
       // Check for quiz results
       const quizResults = JSON.parse(localStorage.getItem('careerQuizResults'));
       
       if (!quizResults) {
-        // If no quiz results, redirect to quiz
         window.location.href = "career-quiz.html";
         return;
       }
       
-      // Personalize dashboard based on results
       personalizeDashboard(quizResults);
     });
 
-    function personalizeDashboard(results) {
-      // Determine top career field
-      const topField = Object.keys(results).reduce((a, b) => results[a] > results[b] ? a : b);
+    // Theme initialization
+    function initTheme() {
+      // Get saved theme or default to 'auto'
+      const savedTheme = localStorage.getItem('theme') || 'auto';
+      const themeButtons = document.querySelectorAll('.theme-btn');
       
-      // Example personalization
+      // Activate the saved theme button
+      themeButtons.forEach(button => {
+        if (button.getAttribute('data-theme') === savedTheme) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+      
+      // Apply the theme
+      applyTheme(savedTheme);
+      
+      // Set up theme button click handlers
+      themeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const selectedTheme = this.getAttribute('data-theme');
+          localStorage.setItem('theme', selectedTheme);
+          applyTheme(selectedTheme);
+          
+          themeButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+      
+      // Watch for system theme changes if in auto mode
+      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      darkModeMediaQuery.addEventListener('change', (e) => {
+        if (localStorage.getItem('theme') === 'auto') {
+          applyTheme('auto');
+        }
+      });
+    }
+
+    // Apply the selected theme
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      
+      // Remove all theme classes first
+      html.classList.remove('dark', 'contrast-theme');
+      html.removeAttribute('data-theme');
+      
+      // Apply the selected theme
+      if (theme === 'dark') {
+        html.classList.add('dark');
+      } else if (theme === 'light') {
+        // Light theme is default, no class needed
+      } else if (theme === 'high-contrast') {
+        html.classList.add('contrast-theme');
+      } else if (theme === 'auto') {
+        // Auto mode - use system preference
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          html.classList.add('dark');
+        }
+      }
+      
+      // Store the current theme for reference
+      html.setAttribute('data-theme', theme);
+    }
+
+    function personalizeDashboard(results) {
+      const topField = Object.keys(results).reduce((a, b) => results[a] > results[b] ? a : b);
       const welcomeMessage = document.querySelector('.welcome-banner h2');
       if (welcomeMessage) {
         welcomeMessage.textContent += ` - Explore ${getFieldName(topField)} Careers`;
       }
-      
-      // You can customize more elements based on the results
-      // For example, show relevant career matches, courses, etc.
     }
 
     function getFieldName(fieldKey) {
@@ -850,7 +1034,6 @@
       fetch(`${lang}.json`)
         .then(response => response.json())
         .then(translations => {
-          // Apply translations to all elements with data-i18n attribute
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
             if (translations[key]) {
@@ -858,7 +1041,6 @@
             }
           });
           
-          // Update RTL/LTR direction based on language
           if (lang === 'ur') {
             document.documentElement.dir = 'rtl';
             document.body.classList.add('text-right');
@@ -892,19 +1074,6 @@
       if (!settingsCard.contains(e.target) && e.target !== settingsIcon) {
         settingsCard.classList.add('hidden');
       }
-    });
-
-    // Theme selection
-    const themeButtons = document.querySelectorAll('.theme-btn');
-    themeButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        themeButtons.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        
-        const selectedTheme = this.getAttribute('data-theme');
-        document.documentElement.setAttribute('data-theme', selectedTheme);
-        // In a real app, you would save this preference
-      });
     });
 
     // Quiz preference buttons
@@ -941,7 +1110,6 @@
         textSizeButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
         
-        // Apply text size change
         const sizes = { 'S': 'small', 'M': 'medium', 'L': 'large' };
         document.documentElement.style.fontSize = 
           sizes[this.textContent] === 'medium' ? '' : sizes[this.textContent];
