@@ -12,7 +12,7 @@
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-      .setting-group {
+    .setting-group {
       border-bottom: 1px solid #f0f0f0;
       padding-bottom: 1.5rem;
     }
@@ -279,9 +279,24 @@
               CareerPath AI
             </span>
           </div>
-          <button id="settings-icon" class="p-2 rounded-full hover:bg-gray-100 text-gray-600">
+          <!-- Inside the header div, after the settings button -->
+<div class="flex items-center space-x-4">
+  <!-- Profile Section -->
+  <div class="flex items-center space-x-2 cursor-pointer" id="profile-section">
+    <span class="hidden md:inline-block font-medium text-gray-700" id="navbar-username">John Doe</span>
+    <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 hover:bg-blue-200 transition">
+      <i class="fas fa-user"></i>
+    </div>
+  </div>
+  
+  <!-- Existing Settings Button -->
+  <button id="settings-icon" class="p-2 rounded-full hover:bg-gray-100 text-gray-600">
+    <i class="fas fa-cog"></i>
+  </button>
+</div>
+          <!-- <button id="settings-icon" class="p-2 rounded-full hover:bg-gray-100 text-gray-600">
             <i class="fas fa-cog"></i>
-          </button>
+          </button> -->
           <!-- User & Settings -->
           <div id="settings-card" class="hidden absolute right-6 top-16 mt-2 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50 border border-gray-100">
             <!-- Settings Header -->
@@ -390,7 +405,7 @@
                 <div class="space-y-3">
                   <div>
                     <label class="block text-sm text-gray-600 mb-1" data-i18n="preferred_fields">Preferred Fields</label>
-                    <div class="flex flex-wrap gap-2">
+                    <div id="preferred-fields" class="flex flex-wrap gap-2">
                       <span class="tag active" data-i18n="tech">Tech</span>
                       <span class="tag active" data-i18n="business">Business</span>
                       <span class="tag" data-i18n="medicine">Medicine</span>
@@ -401,15 +416,15 @@
                   
                   <div>
                     <label class="block text-sm text-gray-600 mb-1" data-i18n="career_goal">Career Goal</label>
-                    <input type="text" value="Become a Frontend Developer" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                    <input id="career-goal" type="text" value="Become a Frontend Developer" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                   </div>
                   
                   <div>
                     <label class="block text-sm text-gray-600 mb-1" data-i18n="skill_level">Skill Level</label>
                     <div class="flex space-x-2">
-                      <button class="skill-level-btn active" data-i18n="beginner">Beginner</button>
-                      <button class="skill-level-btn" data-i18n="intermediate">Intermediate</button>
-                      <button class="skill-level-btn" data-i18n="expert">Expert</button>
+                      <button id="skill-level-beginner" class="skill-level-btn" data-i18n="beginner">Beginner</button>
+                      <button id="skill-level-intermediate" class="skill-level-btn" data-i18n="intermediate">Intermediate</button>
+                      <button id="skill-level-expert" class="skill-level-btn" data-i18n="expert">Expert</button>
                     </div>
                   </div>
                 </div>
@@ -552,7 +567,9 @@
               <button class="text-sm font-medium text-blue-600 hover:text-blue-800" data-i18n="save_preferences">Save Preferences</button>
             </div>
           </div>
+          
         </div>
+        
       </div>
     </header>
 
@@ -591,10 +608,10 @@
             <h3 class="font-medium text-gray-800 mb-3" data-i18n="career_progress">Career Progress</h3>
             <div class="mb-2 flex justify-between text-sm">
               <span data-i18n="profile_completion">Profile Completion</span>
-              <span>75%</span>
+              <span id="profile-completion">75%</span>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2">
-              <div class="bg-blue-600 h-2 rounded-full" style="width: 75%"></div>
+              <div id="profile-completion-bar" class="bg-blue-600 h-2 rounded-full" style="width: 75%"></div>
             </div>
             <button class="mt-4 w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg font-medium text-sm hover:shadow-md transition" data-i18n="complete_profile">
               Complete Profile
@@ -609,7 +626,7 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
               <div>
                 <h2 class="text-2xl font-bold mb-2">
-                  <span data-i18n="welcome_back">Welcome back, John Doe!</span>
+                  <span data-i18n="welcome_back">Welcome back, </span><span id="username">John Doe</span>!
                 </h2>
                 <p class="opacity-90">
                   <span data-i18n="whats_happening">Here's what's happening with your career journey today.</span>
@@ -628,7 +645,7 @@
               <div class="flex items-center justify-between">
                 <div>
                   <p class="text-gray-500 text-sm" data-i18n="career_matches">Career Matches</p>
-                  <h3 class="text-2xl font-bold mt-1">8</h3>
+                  <h3 id="career-matches-count" class="text-2xl font-bold mt-1">8</h3>
                 </div>
                 <div class="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
                   <i class="fas fa-briefcase text-xl"></i>
@@ -644,7 +661,7 @@
               <div class="flex items-center justify-between">
                 <div>
                   <p class="text-gray-500 text-sm" data-i18n="learning_progress">Learning Progress</p>
-                  <h3 class="text-2xl font-bold mt-1">42%</h3>
+                  <h3 id="learning-progress" class="text-2xl font-bold mt-1">42%</h3>
                 </div>
                 <div class="w-12 h-12 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
                   <i class="fas fa-graduation-cap text-xl"></i>
@@ -697,7 +714,7 @@
                 <h3 class="text-lg font-bold text-gray-800" data-i18n="your_top_career_matches">Your Top Career Matches</h3>
                 <a href="#" class="text-sm text-blue-600 font-medium" data-i18n="view_all">View All</a>
               </div>
-              <div class="space-y-4">
+              <div id="career-matches-container" class="space-y-4">
                 <div class="flex items-start p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
                   <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600 mr-4">
                     <i class="fas fa-laptop-code text-xl"></i>
@@ -913,10 +930,9 @@
     </div>
   </section>
 
-  
   <script>
-     // Theme management system
-     document.addEventListener('DOMContentLoaded', function() {
+    // Theme management system
+    document.addEventListener('DOMContentLoaded', function() {
       // Initialize theme
       initTheme();
       
@@ -930,18 +946,18 @@
         localStorage.setItem('selectedLanguage', selectedLanguage);
         loadLanguage(selectedLanguage);
       });
-
+  
+      // Load and display user profile data
+      updateDashboardWithUserData();
+      
       // Check for quiz results
       const quizResults = JSON.parse(localStorage.getItem('careerQuizResults'));
       
       if (!quizResults) {
-        window.location.href = "career-quiz.html";
-        return;
+        console.log("No quiz results found");
       }
-      
-      personalizeDashboard(quizResults);
     });
-
+  
     // Theme initialization
     function initTheme() {
       // Get saved theme or default to 'auto'
@@ -980,7 +996,7 @@
         }
       });
     }
-
+  
     // Apply the selected theme
     function applyTheme(theme) {
       const html = document.documentElement;
@@ -1006,30 +1022,153 @@
       // Store the current theme for reference
       html.setAttribute('data-theme', theme);
     }
-
-    function personalizeDashboard(results) {
-      const topField = Object.keys(results).reduce((a, b) => results[a] > results[b] ? a : b);
-      const welcomeMessage = document.querySelector('.welcome-banner h2');
-      if (welcomeMessage) {
-        welcomeMessage.textContent += ` - Explore ${getFieldName(topField)} Careers`;
+  
+    // Update dashboard with user profile data
+    function updateDashboardWithUserData() {
+      const userData = JSON.parse(localStorage.getItem('userProfile')) || {};
+      const quizResults = JSON.parse(localStorage.getItem('careerQuizResults')) || {};
+      
+      // Update welcome message with username
+      const usernameElement = document.getElementById('username');
+      if (usernameElement && userData.name) {
+        usernameElement.textContent = userData.name;
+      }
+      
+      // Update profile completion
+      const profileCompletion = document.getElementById('profile-completion');
+      const profileCompletionBar = document.getElementById('profile-completion-bar');
+      if (profileCompletion && profileCompletionBar) {
+        const completionPercent = userData.quizScore ? Math.min(100, Math.floor(userData.quizScore * 0.8)) : 75;
+        profileCompletion.textContent = `${completionPercent}%`;
+        profileCompletionBar.style.width = `${completionPercent}%`;
+      }
+      
+      // Update career goal
+      const careerGoalInput = document.getElementById('career-goal');
+      if (careerGoalInput && userData.careerGoal) {
+        careerGoalInput.value = userData.careerGoal;
+      }
+      
+      // Update skill level
+      if (userData.skillLevel) {
+        const skillLevelButtons = {
+          'beginner': document.getElementById('skill-level-beginner'),
+          'intermediate': document.getElementById('skill-level-intermediate'),
+          'expert': document.getElementById('skill-level-expert')
+        };
+        
+        Object.keys(skillLevelButtons).forEach(level => {
+          if (skillLevelButtons[level]) {
+            skillLevelButtons[level].classList.remove('active');
+          }
+        });
+        
+        const normalizedLevel = userData.skillLevel.toLowerCase();
+        if (skillLevelButtons[normalizedLevel]) {
+          skillLevelButtons[normalizedLevel].classList.add('active');
+        }
+      }
+      
+      // Update preferred fields
+      const preferredFieldsContainer = document.getElementById('preferred-fields');
+      if (preferredFieldsContainer) {
+        preferredFieldsContainer.innerHTML = '';
+        
+        if (userData.preferredFields && userData.preferredFields.length > 0) {
+          userData.preferredFields.forEach(field => {
+            const formattedField = field.split('_').map(word => 
+              word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+            
+            const tag = document.createElement('span');
+            tag.className = 'tag active';
+            tag.textContent = formattedField;
+            tag.setAttribute('data-i18n', field.toLowerCase());
+            preferredFieldsContainer.appendChild(tag);
+          });
+        } else {
+          // Default fields if none are set
+          ['tech', 'business'].forEach(field => {
+            const tag = document.createElement('span');
+            tag.className = 'tag active';
+            tag.textContent = field.charAt(0).toUpperCase() + field.slice(1);
+            tag.setAttribute('data-i18n', field);
+            preferredFieldsContainer.appendChild(tag);
+          });
+        }
+      }
+      
+      // Update career matches section
+      if (quizResults && quizResults.primaryMatch) {
+        const primaryCareer = quizResults.primaryMatch.details;
+        const careerMatchesContainer = document.getElementById('career-matches-container');
+        const careerMatchesCount = document.getElementById('career-matches-count');
+        
+        if (careerMatchesContainer) {
+          careerMatchesContainer.innerHTML = '';
+          
+          primaryCareer.careers.slice(0, 3).forEach(career => {
+            const fieldIcons = {
+              'technology': 'fa-laptop-code',
+              'healthcare': 'fa-heartbeat',
+              'creative': 'fa-paint-brush',
+              'business': 'fa-chart-line',
+              'engineering': 'fa-cogs',
+              'education': 'fa-chalkboard-teacher',
+              'science': 'fa-microscope'
+            };
+            
+            const icon = fieldIcons[quizResults.primaryMatch.field] || 'fa-briefcase';
+            const colorClasses = {
+              'technology': 'bg-blue-100 text-blue-600',
+              'healthcare': 'bg-green-100 text-green-600',
+              'creative': 'bg-yellow-100 text-yellow-600',
+              'business': 'bg-purple-100 text-purple-600',
+              'engineering': 'bg-red-100 text-red-600',
+              'education': 'bg-indigo-100 text-indigo-600',
+              'science': 'bg-pink-100 text-pink-600'
+            };
+            
+            const colorClass = colorClasses[quizResults.primaryMatch.field] || 'bg-gray-100 text-gray-600';
+            
+            const matchElement = document.createElement('div');
+            matchElement.className = 'flex items-start p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition';
+            matchElement.innerHTML = `
+              <div class="w-12 h-12 rounded-lg ${colorClass} flex items-center justify-center mr-4">
+                <i class="fas ${icon} text-xl"></i>
+              </div>
+              <div class="flex-1">
+                <h4 class="font-bold">${career.name}</h4>
+                <p class="text-sm text-gray-500 mt-1">
+                  <span data-i18n="match_score">Match score</span>: ${career.match}%
+                </p>
+                <div class="mt-2 flex flex-wrap gap-2">
+                  <span class="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-full" data-i18n="high_demand">High Demand</span>
+                  <span class="px-2 py-1 bg-green-50 text-green-600 text-xs rounded-full" data-i18n="salary">+$${Math.floor(Math.random() * 30) + 70}k salary</span>
+                </div>
+              </div>
+              <button class="text-blue-600 hover:text-blue-800">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            `;
+            
+            careerMatchesContainer.appendChild(matchElement);
+          });
+        }
+        
+        if (careerMatchesCount) {
+          careerMatchesCount.textContent = primaryCareer.careers.length;
+        }
+      }
+      
+      // Update learning progress based on quiz score
+      const learningProgress = document.getElementById('learning-progress');
+      if (learningProgress && userData.quizScore) {
+        const progressPercent = Math.min(100, Math.floor(userData.quizScore * 0.8));
+        learningProgress.textContent = `${progressPercent}%`;
       }
     }
-
-    function getFieldName(fieldKey) {
-      const fieldNames = {
-        'science_technology': 'Science & Technology',
-        'arts_design': 'Arts & Design',
-        'healthcare': 'Healthcare',
-        'business_finance': 'Business & Finance',
-        'engineering': 'Engineering',
-        'education': 'Education',
-        'humanities': 'Humanities',
-        'social_sciences': 'Social Sciences'
-      };
-      
-      return fieldNames[fieldKey] || 'your';
-    }
-
+  
     function loadLanguage(lang) {
       fetch(`${lang}.json`)
         .then(response => response.json())
@@ -1053,19 +1192,19 @@
           console.error('Error loading language file:', error);
         });
     }
-
+  
     // Enhanced toggle settings card
     document.getElementById('settings-icon').addEventListener('click', function(e) {
       e.stopPropagation();
       const card = document.getElementById('settings-card');
       card.classList.toggle('hidden');
     });
-
+  
     document.getElementById('close-settings').addEventListener('click', function(e) {
       e.stopPropagation();
       document.getElementById('settings-card').classList.add('hidden');
     });
-
+  
     // Close settings when clicking outside
     document.addEventListener('click', function(e) {
       const settingsCard = document.getElementById('settings-card');
@@ -1075,7 +1214,7 @@
         settingsCard.classList.add('hidden');
       }
     });
-
+  
     // Quiz preference buttons
     const quizPrefButtons = document.querySelectorAll('.quiz-pref-btn');
     quizPrefButtons.forEach(button => {
@@ -1084,16 +1223,21 @@
         this.classList.add('active');
       });
     });
-
+  
     // Skill level buttons
     const skillLevelButtons = document.querySelectorAll('.skill-level-btn');
     skillLevelButtons.forEach(button => {
       button.addEventListener('click', function() {
         skillLevelButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
+        
+        // Update user profile with new skill level
+        const userData = JSON.parse(localStorage.getItem('userProfile')) || {};
+        userData.skillLevel = this.textContent;
+        localStorage.setItem('userProfile', JSON.stringify(userData));
       });
     });
-
+  
     // Reminder buttons
     const reminderButtons = document.querySelectorAll('.reminder-btn');
     reminderButtons.forEach(button => {
@@ -1102,7 +1246,7 @@
         this.classList.add('active');
       });
     });
-
+  
     // Text size buttons
     const textSizeButtons = document.querySelectorAll('.text-size-btn');
     textSizeButtons.forEach(button => {
@@ -1115,14 +1259,67 @@
           sizes[this.textContent] === 'medium' ? '' : sizes[this.textContent];
       });
     });
-
+  
     // Tag selection
-    const tags = document.querySelectorAll('.tag');
-    tags.forEach(tag => {
-      tag.addEventListener('click', function() {
-        this.classList.toggle('active');
-      });
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('tag')) {
+        e.target.classList.toggle('active');
+        
+        // Update preferred fields in user profile
+        if (e.target.closest('#preferred-fields')) {
+          const tags = document.querySelectorAll('#preferred-fields .tag');
+          const preferredFields = Array.from(tags)
+            .filter(tag => tag.classList.contains('active'))
+            .map(tag => tag.textContent.toLowerCase().replace(/ /g, '_'));
+          
+          const userData = JSON.parse(localStorage.getItem('userProfile')) || {};
+          userData.preferredFields = preferredFields;
+          localStorage.setItem('userProfile', JSON.stringify(userData));
+        }
+      }
     });
+  
+    // Save preferences button
+    document.querySelector('[data-i18n="save_preferences"]').addEventListener('click', function() {
+      // Get all current settings
+      const activeTheme = document.querySelector('.theme-btn.active').getAttribute('data-theme');
+      const language = document.getElementById('language-selector').value;
+      const difficulty = document.querySelector('.quiz-pref-btn.active').textContent;
+      const skillLevel = document.querySelector('.skill-level-btn.active').textContent;
+      const reminderFrequency = document.querySelector('.reminder-btn.active').textContent;
+      const textSize = document.querySelector('.text-size-btn.active').textContent;
+      const careerGoal = document.getElementById('career-goal').value;
+      
+      // Update user profile
+      const userData = JSON.parse(localStorage.getItem('userProfile')) || {};
+      userData.settings = {
+        theme: activeTheme,
+        language: language,
+        difficulty: difficulty,
+        skillLevel: skillLevel,
+        reminderFrequency: reminderFrequency,
+        textSize: textSize,
+        careerGoal: careerGoal
+      };
+      
+      localStorage.setItem('userProfile', JSON.stringify(userData));
+      
+      // Show confirmation
+      alert("Preferences saved successfully!");
+      document.getElementById('settings-card').classList.add('hidden');
+    });
+
+    // Inside the DOMContentLoaded event listener, add this:
+document.getElementById('profile-section').addEventListener('click', function() {
+  window.location.href = 'profile.html';
+});
+
+// Update the navbar username with user data
+const navbarUsername = document.getElementById('navbar-username');
+const userData = JSON.parse(localStorage.getItem('userProfile')) || {};
+if (navbarUsername && userData.name) {
+  navbarUsername.textContent = userData.name;
+}
   </script>
 </body>
 </html>
