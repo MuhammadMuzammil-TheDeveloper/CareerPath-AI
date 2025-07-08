@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Profile | CareerPath AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        
+        .sidebar {
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+        }
+        
+        .sidebar-item {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            z-index: 0;
+        }
+        
+        .sidebar-item:hover::before {
+            left: 0;
+        }
+        
+        .sidebar-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .sidebar-item.active svg {
+            color: var(--primary);
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .skill-tag {
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skill-tag::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .skill-tag:hover::after {
+            left: 100%;
+        }
+        
+        .banner-edit-overlay, .avatar-edit-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .banner-container:hover .banner-edit-overlay,
+        .avatar-container:hover .avatar-edit-overlay {
+            opacity: 1;
+        }
+        
+        .progress-bar {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 2s infinite;
+        }
+        
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar w-full md:w-72 md:h-screen md:sticky md:top-0 z-10">
+            <div class="p-6 flex items-center">
+                <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center text-white mr-3">
+                    <i class="fas fa-robot text-xl"></i>
+                </div>
+                <h1 class="text-xl font-bold text-white">CareerPath AI</h1>
+            </div>
+            <nav class="mt-4 px-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#general" class="sidebar-item flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#profile" class="sidebar-item active flex items-center px-4 py-3 text-white rounded-lg">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            My Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#social" class="sidebar-item flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            Network
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#experience" class="sidebar-item flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            Career Journey
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#skills" class="sidebar-item flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            AI Skills
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#projects" class="sidebar-item flex items-center px-4 py-3 text-gray-300 rounded-lg hover:text-white">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                            AI Projects
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="absolute bottom-0 left-0 right-0 p-6">
+                <div class="bg-indigo-900/30 rounded-xl p-4 text-center">
+                    <p class="text-sm text-indigo-200 mb-2">Upgrade to Pro for AI career coaching</p>
+                    <button class="gradient-bg hover:opacity-90 text-white px-4 py-2 rounded-lg text-sm font-medium w-full transition">
+                        Upgrade Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6 md:p-10">
+            <!-- User Profile Section -->
+            <section id="profile" class="mb-12 animate-fade-in">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">AI Professional Profile</h2>
+                        <p class="text-gray-500">Optimized by CareerPath AI</p>
+                    </div>
+                    <div class="mt-4 md:mt-0 flex space-x-3">
+                        <button class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg flex items-center transition shadow-sm">
+                            <i class="fas fa-download mr-2"></i> Export
+                        </button>
+                        <button class="gradient-bg hover:opacity-90 text-white px-4 py-2 rounded-lg flex items-center transition shadow-md">
+                            <i class="fas fa-magic mr-2"></i> AI Enhance
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Banner -->
+                <div class="banner-container relative mb-6 rounded-2xl overflow-hidden shadow-lg animate-fade-in delay-100">
+                    <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="AI Technology Banner" class="w-full h-48 md:h-64 object-cover">
+                    <div class="banner-edit-overlay absolute inset-0 flex items-center justify-center">
+                        <div class="flex space-x-4">
+                            <button class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg flex items-center transition transform hover:scale-105">
+                                <i class="fas fa-image mr-2"></i> Change Cover
+                            </button>
+                            <button class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg flex items-center transition transform hover:scale-105">
+                                <i class="fas fa-palette mr-2"></i> AI Generate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Picture and Basic Info -->
+                <div class="flex flex-col md:flex-row items-start md:items-end -mt-16 md:-mt-20 mb-6 animate-fade-in delay-200">
+                    <div class="avatar-container relative mb-4 md:mb-0 md:mr-6 group">
+                        <div class="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg overflow-hidden relative pulse">
+                            <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Profile" class="w-full h-full object-cover">
+                            <div class="avatar-edit-overlay absolute inset-0 rounded-full flex items-center justify-center">
+                                <div class="flex space-x-3">
+                                    <button class="bg-white hover:bg-gray-100 text-gray-800 p-2 rounded-full transition transform hover:scale-110">
+                                        <i class="fas fa-camera"></i>
+                                    </button>
+                                    <button class="bg-white hover:bg-gray-100 text-gray-800 p-2 rounded-full transition transform hover:scale-110">
+                                        <i class="fas fa-robot"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-white shadow-md">
+                            <i class="fas fa-check text-xs"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 w-full">
+                        <div class="flex flex-col md:flex-row md:items-end md:justify-between bg-white rounded-xl p-6 shadow-sm">
+                            <div>
+                                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Dr. Alex Chen</h1>
+                                <p class="text-gray-600">AI Research Scientist & Machine Learning Engineer</p>
+                                <p class="text-indigo-500 text-sm mt-1 flex items-center">
+                                    <i class="fas fa-link mr-1"></i> 
+                                    <span>https://careerpath.ai/alexchen</span>
+                                    <button class="ml-2 text-indigo-300 hover:text-indigo-600">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="mt-4 md:mt-0 flex space-x-3">
+                                <button class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg transition flex items-center">
+                                    <i class="fas fa-share-alt mr-2"></i> Share
+                                </button>
+                                <button class="gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition flex items-center shadow-md">
+                                    <i class="fas fa-pen mr-2"></i> Edit Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location and About -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in delay-300">
+                    <div class="md:col-span-2 space-y-6">
+                        <div class="card bg-white rounded-xl p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-lg text-gray-800 flex items-center">
+                                    <i class="fas fa-map-marker-alt text-indigo-500 mr-2"></i>
+                                    Location & Contact
+                                </h3>
+                                <button class="text-indigo-500 hover:text-indigo-700">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-gray-500">Location</p>
+                                    <p class="text-gray-800 font-medium">San Francisco, CA</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Email</p>
+                                    <p class="text-gray-800 font-medium">alex.chen@careerpath.ai</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Phone</p>
+                                    <p class="text-gray-800 font-medium">+1 (415) 555-0199</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Timezone</p>
+                                    <p class="text-gray-800 font-medium">PST (UTC-8)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card bg-white rounded-xl p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-semibold text-lg text-gray-800 flex items-center">
+                                    <i class="fas fa-user-tie text-indigo-500 mr-2"></i>
+                                    Professional Summary
+                                </h3>
+                                <div class="flex space-x-2">
+                                    <button class="text-indigo-500 hover:text-indigo-700">
+                                        <i class="fas fa-pen"></i>
+                                    </button>
+                                    <button class="text-indigo-500 hover:text-indigo-700">
+                                        <i class="fas fa-robot"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-gray-800 mb-4">PhD in Artificial Intelligence with 8+ years of experience in machine learning, deep learning, and AI research. Specialized in computer vision, natural language processing, and reinforcement learning. Passionate about developing ethical AI solutions that solve real-world problems.</p>
+                            <div class="flex justify-between items-center text-sm text-gray-500">
+                                <div class="flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    <span>AI Optimized Summary</span>
+                                </div>
+                                <button class="text-indigo-500 hover:text-indigo-700 flex items-center">
+                                    <i class="fas fa-sync-alt mr-1"></i>
+                                    <span>Regenerate</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="card bg-white rounded-xl p-6">
+                            <h3 class="font-semibold text-lg text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-chart-line text-indigo-500 mr-2"></i>
+                                AI Profile Strength
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <p class="text-sm text-gray-500">Completion</p>
+                                        <p class="text-sm font-medium text-indigo-500">85%</p>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5 progress-bar">
+                                        <div class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2.5 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Profile Views</p>
+                                    <p class="text-gray-800 font-medium text-2xl">1,842</p>
+                                    <p class="text-xs text-green-500 mt-1 flex items-center">
+                                        <i class="fas fa-arrow-up mr-1"></i>
+                                        <span>12% increase this month</span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">AI Match Score</p>
+                                    <div class="flex items-center">
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                                            <div class="bg-gradient-to-r from-green-400 to-blue-500 h-2.5 rounded-full" style="width: 92%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-700">92/100</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card bg-white rounded-xl p-6">
+                            <h3 class="font-semibold text-lg text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-bell text-indigo-500 mr-2"></i>
+                                AI Recommendations
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="flex items-start">
+                                    <div class="bg-indigo-100 text-indigo-600 rounded-full w-8 h-8 flex items-center justify-center mr-3 mt-0.5">
+                                        <i class="fas fa-plus text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">Add 3 more projects to increase visibility by 25%</p>
+                                        <button class="text-indigo-500 text-xs mt-1 hover:text-indigo-700">View suggestions</button>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-green-100 text-green-600 rounded-full w-8 h-8 flex items-center justify-center mr-3 mt-0.5">
+                                        <i class="fas fa-users text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">Connect with 5 AI researchers in your network</p>
+                                        <button class="text-indigo-500 text-xs mt-1 hover:text-indigo-700">See matches</button>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-purple-100 text-purple-600 rounded-full w-8 h-8 flex items-center justify-center mr-3 mt-0.5">
+                                        <i class="fas fa-book text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">Complete the 'Advanced NLP' skill assessment</p>
+                                        <button class="text-indigo-500 text-xs mt-1 hover:text-indigo-700">Take test</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Network Section -->
+            <section id="social" class="mb-12 animate-fade-in delay-400">
+                <div class="card bg-white rounded-xl p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-users text-indigo-500 mr-2"></i>
+                                Professional Network
+                            </h2>
+                            <p class="text-gray-500">Connect with AI professionals and recruiters</p>
+                        </div>
+                        <button class="mt-4 md:mt-0 gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition shadow-md flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Expand Network
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-indigo-50 rounded-xl p-4 text-center group hover:bg-indigo-100 transition cursor-pointer">
+                            <div class="w-16 h-16 rounded-full bg-white mx-auto mb-3 overflow-hidden shadow-md group-hover:shadow-lg transition">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Connection" class="w-full h-full object-cover">
+                            </div>
+                            <p class="font-medium text-gray-800">Dr. Sarah Lin</p>
+                            <p class="text-xs text-gray-500">NLP Researcher</p>
+                            <button class="mt-2 text-xs bg-white hover:bg-gray-100 text-gray-800 px-3 py-1 rounded-full transition">
+                                Connect
+                            </button>
+                        </div>
+                        <div class="bg-indigo-50 rounded-xl p-4 text-center group hover:bg-indigo-100 transition cursor-pointer">
+                            <div class="w-16 h-16 rounded-full bg-white mx-auto mb-3 overflow-hidden shadow-md group-hover:shadow-lg transition">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Connection" class="w-full h-full object-cover">
+                            </div>
+                            <p class="font-medium text-gray-800">Raj Patel</p>
+                            <p class="text-xs text-gray-500">AI Product Manager</p>
+                            <button class="mt-2 text-xs bg-white hover:bg-gray-100 text-gray-800 px-3 py-1 rounded-full transition">
+                                Connect
+                            </button>
+                        </div>
+                        <div class="bg-indigo-50 rounded-xl p-4 text-center group hover:bg-indigo-100 transition cursor-pointer">
+                            <div class="w-16 h-16 rounded-full bg-white mx-auto mb-3 overflow-hidden shadow-md group-hover:shadow-lg transition">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Connection" class="w-full h-full object-cover">
+                            </div>
+                            <p class="font-medium text-gray-800">Maria Garcia</p>
+                            <p class="text-xs text-gray-500">Computer Vision Engineer</p>
+                            <button class="mt-2 text-xs bg-white hover:bg-gray-100 text-gray-800 px-3 py-1 rounded-full transition">
+                                Connect
+                            </button>
+                        </div>
+                        <div class="bg-indigo-50 rounded-xl p-4 text-center group hover:bg-indigo-100 transition cursor-pointer">
+                            <div class="w-16 h-16 rounded-full bg-white mx-auto mb-3 overflow-hidden shadow-md group-hover:shadow-lg transition">
+                                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Connection" class="w-full h-full object-cover">
+                            </div>
+                            <p class="font-medium text-gray-800">James Wilson</p>
+                            <p class="text-xs text-gray-500">AI Recruiter</p>
+                            <button class="mt-2 text-xs bg-white hover:bg-gray-100 text-gray-800 px-3 py-1 rounded-full transition">
+                                Connect
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="font-medium text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-link text-indigo-500 mr-2"></i>
+                            Professional Links
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                                <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center mr-4 shadow-sm">
+                                    <i class="fab fa-github text-gray-700"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">GitHub</p>
+                                    <p class="text-indigo-500 text-sm">github.com/alexchen-ai</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                                <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center mr-4 shadow-sm">
+                                    <i class="fab fa-linkedin text-blue-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">LinkedIn</p>
+                                    <p class="text-indigo-500 text-sm">linkedin.com/in/alexchen-ai</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                                <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center mr-4 shadow-sm">
+                                    <i class="fab fa-google text-red-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">Google Scholar</p>
+                                    <p class="text-indigo-500 text-sm">scholar.google.com/citations?user=alexchen</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="mt-4 text-indigo-500 hover:text-indigo-700 flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Add more links
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience & Education Section -->
+            <section id="experience" class="mb-12 animate-fade-in delay-500">
+                <div class="card bg-white rounded-xl p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-briefcase text-indigo-500 mr-2"></i>
+                                Career Journey
+                            </h2>
+                            <p class="text-gray-500">Your professional experience and education</p>
+                        </div>
+                        <div class="mt-4 md:mt-0 flex space-x-3">
+                            <button class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg transition shadow-sm flex items-center">
+                                <i class="fas fa-plus mr-2"></i> Add Experience
+                            </button>
+                            <button class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg transition shadow-sm flex items-center">
+                                <i class="fas fa-graduation-cap mr-2"></i> Add Education
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Experience -->
+                        <div>
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-building text-indigo-500 mr-2"></i>
+                                Experience
+                            </h3>
+                            <div class="space-y-6">
+                                <div class="border-l-2 border-indigo-500 pl-4 py-1 group">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">Senior AI Research Scientist</h4>
+                                            <p class="text-gray-600">at DeepMind Technologies</p>
+                                        </div>
+                                        <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">2021 - Present</span>
+                                    </div>
+                                    <p class="mt-2 text-gray-700">Leading research on multimodal AI systems combining vision and language. Published 8 papers in top-tier conferences (NeurIPS, ICML, CVPR).</p>
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Deep Learning</span>
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Computer Vision</span>
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">NLP</span>
+                                    </div>
+                                </div>
+
+                                <div class="border-l-2 border-indigo-500 pl-4 py-1 group">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">Machine Learning Engineer</h4>
+                                            <p class="text-gray-600">at OpenAI</p>
+                                        </div>
+                                        <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">2018 - 2021</span>
+                                    </div>
+                                    <p class="mt-2 text-gray-700">Developed large language models and contributed to GPT-3 architecture improvements. Optimized training pipelines reducing costs by 22%.</p>
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">LLMs</span>
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">PyTorch</span>
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Distributed Training</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Education -->
+                        <div>
+                            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-university text-indigo-500 mr-2"></i>
+                                Education
+                            </h3>
+                            <div class="space-y-6">
+                                <div class="border-l-2 border-indigo-500 pl-4 py-1 group">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">PhD in Artificial Intelligence</h4>
+                                            <p class="text-gray-600">Stanford University</p>
+                                        </div>
+                                        <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">2014 - 2018</span>
+                                    </div>
+                                    <p class="mt-2 text-gray-700">Thesis on "Self-Supervised Learning for Visual Representation Learning". Advised by Prof. Andrew Ng. GPA: 3.9/4.0</p>
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Research</span>
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Machine Learning</span>
+                                    </div>
+                                </div>
+
+                                <div class="border-l-2 border-indigo-500 pl-4 py-1 group">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">MSc in Computer Science</h4>
+                                            <p class="text-gray-600">MIT</p>
+                                        </div>
+                                        <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">2012 - 2014</span>
+                                    </div>
+                                    <p class="mt-2 text-gray-700">Specialized in Machine Learning and Artificial Intelligence. Thesis on "Reinforcement Learning for Robotics". GPA: 4.0/4.0</p>
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">RL</span>
+                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Robotics</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills & Tools Section -->
+            <section id="skills" class="mb-12">
+                <div class="card bg-white rounded-xl p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-cogs text-indigo-500 mr-2"></i>
+                                AI Skills & Expertise
+                            </h2>
+                            <p class="text-gray-500">Validated by CareerPath AI assessment system</p>
+                        </div>
+                        <button class="mt-4 md:mt-0 gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition shadow-md flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Add Skills
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-medium text-gray-700 mb-3 flex items-center">
+                                <i class="fas fa-brain text-indigo-500 mr-2"></i>
+                                Core AI Skills
+                            </h3>
+                            <div class="flex flex-wrap gap-3">
+                                <div class="relative">
+                                    <span class="skill-tag bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2 rounded-full flex items-center">
+                                        <span>Machine Learning</span>
+                                        <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">98%</span>
+                                    </span>
+                                    <div class="absolute -top-2 -right-2 bg-yellow-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-md">
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <span class="skill-tag bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2 rounded-full flex items-center">
+                                        <span>Deep Learning</span>
+                                        <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">96%</span>
+                                    </span>
+                                </div>
+                                <span class="skill-tag bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>Natural Language Processing</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">94%</span>
+                                </span>
+                                <span class="skill-tag bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>Computer Vision</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">92%</span>
+                                </span>
+                                <span class="skill-tag bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>Reinforcement Learning</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">88%</span>
+                                </span>
+                                <span class="skill-tag bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>Generative AI</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">95%</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-medium text-gray-700 mb-3 flex items-center">
+                                <i class="fas fa-tools text-indigo-500 mr-2"></i>
+                                Technical Tools
+                            </h3>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>Python</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">99%</span>
+                                </span>
+                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>PyTorch</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">97%</span>
+                                </span>
+                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>TensorFlow</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">93%</span>
+                                </span>
+                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>HuggingFace</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">96%</span>
+                                </span>
+                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>Docker</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">90%</span>
+                                </span>
+                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
+                                    <span>CUDA</span>
+                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">89%</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="font-medium text-gray-700 mb-3 flex items-center">
+                            <i class="fas fa-medal text-indigo-500 mr-2"></i>
+                            AI Certifications
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-gradient-to-r from-indigo-500 to-blue-500 rounded-xl p-4 text-white">
+                                <div class="flex items-center mb-3">
+                                    <div class="bg-white/20 rounded-lg p-2 mr-3">
+                                        <i class="fas fa-certificate"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold">Deep Learning Specialization</p>
+                                        <p class="text-xs opacity-80">DeepLearning.AI</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm mb-3">Completed advanced coursework in deep learning architectures and applications.</p>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span>Issued: 2020</span>
+                                    <button class="bg-white/20 hover:bg-white/30 px-2 py-1 rounded">View</button>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl p-4 text-white">
+                                <div class="flex items-center mb-3">
+                                    <div class="bg-white/20 rounded-lg p-2 mr-3">
+                                        <i class="fas fa-certificate"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold">NLP with Transformers</p>
+                                        <p class="text-xs opacity-80">HuggingFace</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm mb-3">Certified in state-of-the-art natural language processing techniques.</p>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span>Issued: 2022</span>
+                                    <button class="bg-white/20 hover:bg-white/30 px-2 py-1 rounded">View</button>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-r from-blue-500 to-teal-400 rounded-xl p-4 text-white">
+                                <div class="flex items-center mb-3">
+                                    <div class="bg-white/20 rounded-lg p-2 mr-3">
+                                        <i class="fas fa-certificate"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold">AI Ethics</p>
+                                        <p class="text-xs opacity-80">Stanford University</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm mb-3">Certification in ethical AI development and responsible innovation.</p>
+                                <div class="flex justify-between items-center text-xs">
+                                    <span>Issued: 2021</span>
+                                    <button class="bg-white/20 hover:bg-white/30 px-2 py-1 rounded">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="mb-12">
+                <div class="card bg-white rounded-xl p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-project-diagram text-indigo-500 mr-2"></i>
+                                AI Projects & Publications
+                            </h2>
+                            <p class="text-gray-500">Showcase your work to potential collaborators and employers</p>
+                        </div>
+                        <button class="mt-4 md:mt-0 gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition shadow-md flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Add Project
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
+                            <div class="h-40 bg-gradient-to-r from-indigo-500 to-purple-600 relative">
+                                <div class="absolute inset-0 flex items-center justify-center text-white opacity-20">
+                                    <i class="fas fa-project-diagram text-6xl"></i>
+                                </div>
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="bg-white text-indigo-600 px-2 py-1 rounded text-xs font-medium">Research</span>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="font-bold text-lg text-gray-800 mb-2">Multimodal AI for Medical Diagnosis</h3>
+                                <p class="text-gray-600 text-sm mb-4">Combining medical imaging and patient history for improved diagnostic accuracy.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Computer Vision</span>
+                                    <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">NLP</span>
+                                    <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Healthcare AI</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-500">Published: NeurIPS 2022</span>
+                                    <button class="text-indigo-500 hover:text-indigo-700">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
+                            <div class="h-40 bg-gradient-to-r from-blue-500 to-teal-400 relative">
+                                <div class="absolute inset-0 flex items-center justify-center text-white opacity-20">
+                                    <i class="fas fa-project-diagram text-6xl"></i>
+                                </div>
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="bg-white text-blue-600 px-2 py-1 rounded text-xs font-medium">Open Source</span>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <h3 class="font-bold text-lg text-gray-800 mb-2">EfficientLLM - Optimized Language Models</h3>
+                                <p class="text-gray-600 text-sm mb-4">Framework for deploying large language models with reduced computational costs.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">LLMs</span>
+                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Optimization</span>
+                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">PyTorch</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-gray-500">GitHub Stars: 1.2k</span>
+                                    <button class="text-blue-500 hover:text-blue-700">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="font-medium text-gray-700 mb-4 flex items-center">
+                            <i class="fas fa-book text-indigo-500 mr-2"></i>
+                            Publications
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="border-l-2 border-indigo-500 pl-4 py-2 group">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">"Self-Supervised Learning for Medical Imaging"</h4>
+                                        <p class="text-gray-600">Nature Machine Intelligence, 2023</p>
+                                    </div>
+                                    <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">Citations: 142</span>
+                                </div>
+                                <p class="mt-1 text-gray-700 text-sm">Novel approach to self-supervised pretraining for medical image analysis achieving state-of-the-art results.</p>
+                                <div class="mt-2">
+                                    <button class="text-indigo-500 text-sm hover:text-indigo-700 mr-3">
+                                        <i class="fas fa-link mr-1"></i> View Paper
+                                    </button>
+                                    <button class="text-indigo-500 text-sm hover:text-indigo-700">
+                                        <i class="fas fa-quote-right mr-1"></i> Cite
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="border-l-2 border-indigo-500 pl-4 py-2 group">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">"Efficient Transformers for Real-Time Applications"</h4>
+                                        <p class="text-gray-600">ICML 2022</p>
+                                    </div>
+                                    <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">Citations: 89</span>
+                                </div>
+                                <p class="mt-1 text-gray-700 text-sm">Architecture modifications to transformer models enabling real-time inference on edge devices.</p>
+                                <div class="mt-2">
+                                    <button class="text-indigo-500 text-sm hover:text-indigo-700 mr-3">
+                                        <i class="fas fa-link mr-1"></i> View Paper
+                                    </button>
+                                    <button class="text-indigo-500 text-sm hover:text-indigo-700">
+                                        <i class="fas fa-quote-right mr-1"></i> Cite
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="mt-4 text-indigo-500 hover:text-indigo-700 flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Add Publication
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced JavaScript for interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar navigation active state
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Smooth scroll to section
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Skill tags shine effect on hover
+            const skillTags = document.querySelectorAll('.skill-tag');
+            skillTags.forEach(tag => {
+                tag.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                tag.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            // Banner and avatar image upload simulation
+            const editButtons = document.querySelectorAll('.banner-edit-overlay button, .avatar-edit-overlay button');
+            editButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const action = this.querySelector('i').className.includes('image') ? 'change' : 
+                                  this.querySelector('i').className.includes('palette') ? 'AI generate' : 
+                                  this.querySelector('i').className.includes('robot') ? 'AI generate profile picture' : 'edit';
+                    showToast(`Would ${action} image in a real application`);
+                });
+            });
+
+            // Add buttons functionality
+            const addButtons = document.querySelectorAll('section button');
+            addButtons.forEach(button => {
+                if (button.textContent.includes('Add')) {
+                    button.addEventListener('click', function() {
+                        const section = this.closest('section').id;
+                        showToast(`Would open a form to add new ${section} content`);
+                    });
+                }
+            });
+
+            // Copy profile link
+            const copyButton = document.querySelector('button i.fa-copy').parentElement;
+            copyButton.addEventListener('click', function() {
+                const link = this.previousElementSibling.textContent;
+                navigator.clipboard.writeText(link);
+                showToast('Profile link copied to clipboard!');
+            });
+
+            // Connect buttons in network section
+            const connectButtons = document.querySelectorAll('#social button:not(.bg-gradient-to-r)');
+            connectButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const name = this.closest('.bg-indigo-50').querySelector('p.font-medium').textContent;
+                    showToast(`Connection request sent to ${name}`);
+                });
+            });
+
+            // Toast notification function
+            function showToast(message) {
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg flex items-center animate-fade-in';
+                toast.innerHTML = `
+                    <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                    <span>${message}</span>
+                `;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            // Animate elements when they come into view
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.animate-fade-in');
+                elements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const isVisible = (rect.top <= window.innerHeight * 0.8);
+                    
+                    if (isVisible) {
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+
+            // Initial check and then on scroll
+            animateOnScroll();
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+</body>
+</html>
