@@ -158,6 +158,38 @@
             70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
             100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -254,10 +286,10 @@
 
                 <!-- Banner -->
                 <div class="banner-container relative mb-6 rounded-2xl overflow-hidden shadow-lg animate-fade-in delay-100">
-                    <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="AI Technology Banner" class="w-full h-48 md:h-64 object-cover">
+                    <img id="banner-image" src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="AI Technology Banner" class="w-full h-48 md:h-64 object-cover">
                     <div class="banner-edit-overlay absolute inset-0 flex items-center justify-center">
                         <div class="flex space-x-4">
-                            <button class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg flex items-center transition transform hover:scale-105">
+                            <button onclick="openBannerUploadModal()" class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg flex items-center transition transform hover:scale-105">
                                 <i class="fas fa-image mr-2"></i> Change Cover
                             </button>
                             <button class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg flex items-center transition transform hover:scale-105">
@@ -271,10 +303,10 @@
                 <div class="flex flex-col md:flex-row items-start md:items-end -mt-16 md:-mt-20 mb-6 animate-fade-in delay-200">
                     <div class="avatar-container relative mb-4 md:mb-0 md:mr-6 group">
                         <div class="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg overflow-hidden relative pulse">
-                            <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Profile" class="w-full h-full object-cover">
+                            <img id="profile-image" src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Profile" class="w-full h-full object-cover">
                             <div class="avatar-edit-overlay absolute inset-0 rounded-full flex items-center justify-center">
                                 <div class="flex space-x-3">
-                                    <button class="bg-white hover:bg-gray-100 text-gray-800 p-2 rounded-full transition transform hover:scale-110">
+                                    <button onclick="openAvatarUploadModal()" class="bg-white hover:bg-gray-100 text-gray-800 p-2 rounded-full transition transform hover:scale-110">
                                         <i class="fas fa-camera"></i>
                                     </button>
                                     <button class="bg-white hover:bg-gray-100 text-gray-800 p-2 rounded-full transition transform hover:scale-110">
@@ -291,12 +323,12 @@
                     <div class="flex-1 w-full">
                         <div class="flex flex-col md:flex-row md:items-end md:justify-between bg-white rounded-xl p-6 shadow-sm">
                             <div>
-                                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Dr. Alex Chen</h1>
-                                <p class="text-gray-600">AI Research Scientist & Machine Learning Engineer</p>
+                                <h1 id="user-name" class="text-2xl md:text-3xl font-bold text-gray-800">Dr. Alex Chen</h1>
+                                <p id="user-title" class="text-gray-600">AI Research Scientist & Machine Learning Engineer</p>
                                 <p class="text-indigo-500 text-sm mt-1 flex items-center">
                                     <i class="fas fa-link mr-1"></i> 
-                                    <span>https://careerpath.ai/alexchen</span>
-                                    <button class="ml-2 text-indigo-300 hover:text-indigo-600">
+                                    <span id="profile-link">https://careerpath.ai/alexchen</span>
+                                    <button class="ml-2 text-indigo-300 hover:text-indigo-600" onclick="copyProfileLink()">
                                         <i class="fas fa-copy"></i>
                                     </button>
                                 </p>
@@ -305,7 +337,7 @@
                                 <button class="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg transition flex items-center">
                                     <i class="fas fa-share-alt mr-2"></i> Share
                                 </button>
-                                <button class="gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition flex items-center shadow-md">
+                                <button onclick="openEditProfileModal()" class="gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition flex items-center shadow-md">
                                     <i class="fas fa-pen mr-2"></i> Edit Profile
                                 </button>
                             </div>
@@ -322,26 +354,26 @@
                                     <i class="fas fa-map-marker-alt text-indigo-500 mr-2"></i>
                                     Location & Contact
                                 </h3>
-                                <button class="text-indigo-500 hover:text-indigo-700">
+                                <button onclick="openEditLocationModal()" class="text-indigo-500 hover:text-indigo-700">
                                     <i class="fas fa-pen"></i>
                                 </button>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <p class="text-sm text-gray-500">Location</p>
-                                    <p class="text-gray-800 font-medium">San Francisco, CA</p>
+                                    <p id="user-location" class="text-gray-800 font-medium">San Francisco, CA</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-500">Email</p>
-                                    <p class="text-gray-800 font-medium">alex.chen@careerpath.ai</p>
+                                    <p id="user-email" class="text-gray-800 font-medium">alex.chen@careerpath.ai</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-500">Phone</p>
-                                    <p class="text-gray-800 font-medium">+1 (415) 555-0199</p>
+                                    <p id="user-phone" class="text-gray-800 font-medium">+1 (415) 555-0199</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-500">Timezone</p>
-                                    <p class="text-gray-800 font-medium">PST (UTC-8)</p>
+                                    <p id="user-timezone" class="text-gray-800 font-medium">PST (UTC-8)</p>
                                 </div>
                             </div>
                         </div>
@@ -353,7 +385,7 @@
                                     Professional Summary
                                 </h3>
                                 <div class="flex space-x-2">
-                                    <button class="text-indigo-500 hover:text-indigo-700">
+                                    <button onclick="openEditSummaryModal()" class="text-indigo-500 hover:text-indigo-700">
                                         <i class="fas fa-pen"></i>
                                     </button>
                                     <button class="text-indigo-500 hover:text-indigo-700">
@@ -361,7 +393,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <p class="text-gray-800 mb-4">PhD in Artificial Intelligence with 8+ years of experience in machine learning, deep learning, and AI research. Specialized in computer vision, natural language processing, and reinforcement learning. Passionate about developing ethical AI solutions that solve real-world problems.</p>
+                            <p id="user-summary" class="text-gray-800 mb-4">PhD in Artificial Intelligence with 8+ years of experience in machine learning, deep learning, and AI research. Specialized in computer vision, natural language processing, and reinforcement learning. Passionate about developing ethical AI solutions that solve real-world problems.</p>
                             <div class="flex justify-between items-center text-sm text-gray-500">
                                 <div class="flex items-center">
                                     <i class="fas fa-eye mr-1"></i>
@@ -521,9 +553,9 @@
                                 </div>
                                 <div class="flex-1">
                                     <p class="font-medium">GitHub</p>
-                                    <p class="text-indigo-500 text-sm">github.com/alexchen-ai</p>
+                                    <p id="user-github" class="text-indigo-500 text-sm">github.com/alexchen-ai</p>
                                 </div>
-                                <button class="text-gray-400 hover:text-gray-600">
+                                <button onclick="openEditLinksModal()" class="text-gray-400 hover:text-gray-600">
                                     <i class="fas fa-ellipsis-v"></i>
                                 </button>
                             </div>
@@ -533,9 +565,9 @@
                                 </div>
                                 <div class="flex-1">
                                     <p class="font-medium">LinkedIn</p>
-                                    <p class="text-indigo-500 text-sm">linkedin.com/in/alexchen-ai</p>
+                                    <p id="user-linkedin" class="text-indigo-500 text-sm">linkedin.com/in/alexchen-ai</p>
                                 </div>
-                                <button class="text-gray-400 hover:text-gray-600">
+                                <button onclick="openEditLinksModal()" class="text-gray-400 hover:text-gray-600">
                                     <i class="fas fa-ellipsis-v"></i>
                                 </button>
                             </div>
@@ -545,14 +577,14 @@
                                 </div>
                                 <div class="flex-1">
                                     <p class="font-medium">Google Scholar</p>
-                                    <p class="text-indigo-500 text-sm">scholar.google.com/citations?user=alexchen</p>
+                                    <p id="user-scholar" class="text-indigo-500 text-sm">scholar.google.com/citations?user=alexchen</p>
                                 </div>
-                                <button class="text-gray-400 hover:text-gray-600">
+                                <button onclick="openEditLinksModal()" class="text-gray-400 hover:text-gray-600">
                                     <i class="fas fa-ellipsis-v"></i>
                                 </button>
                             </div>
                         </div>
-                        <button class="mt-4 text-indigo-500 hover:text-indigo-700 flex items-center">
+                        <button onclick="openEditLinksModal()" class="mt-4 text-indigo-500 hover:text-indigo-700 flex items-center">
                             <i class="fas fa-plus mr-2"></i> Add more links
                         </button>
                     </div>
@@ -571,10 +603,10 @@
                             <p class="text-gray-500">Your professional experience and education</p>
                         </div>
                         <div class="mt-4 md:mt-0 flex space-x-3">
-                            <button class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg transition shadow-sm flex items-center">
+                            <button onclick="openAddExperienceModal()" class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg transition shadow-sm flex items-center">
                                 <i class="fas fa-plus mr-2"></i> Add Experience
                             </button>
-                            <button class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg transition shadow-sm flex items-center">
+                            <button onclick="openAddEducationModal()" class="bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg transition shadow-sm flex items-center">
                                 <i class="fas fa-graduation-cap mr-2"></i> Add Education
                             </button>
                         </div>
@@ -587,38 +619,8 @@
                                 <i class="fas fa-building text-indigo-500 mr-2"></i>
                                 Experience
                             </h3>
-                            <div class="space-y-6">
-                                <div class="border-l-2 border-indigo-500 pl-4 py-1 group">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">Senior AI Research Scientist</h4>
-                                            <p class="text-gray-600">at DeepMind Technologies</p>
-                                        </div>
-                                        <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">2021 - Present</span>
-                                    </div>
-                                    <p class="mt-2 text-gray-700">Leading research on multimodal AI systems combining vision and language. Published 8 papers in top-tier conferences (NeurIPS, ICML, CVPR).</p>
-                                    <div class="mt-3 flex flex-wrap gap-2">
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Deep Learning</span>
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Computer Vision</span>
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">NLP</span>
-                                    </div>
-                                </div>
-
-                                <div class="border-l-2 border-indigo-500 pl-4 py-1 group">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">Machine Learning Engineer</h4>
-                                            <p class="text-gray-600">at OpenAI</p>
-                                        </div>
-                                        <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">2018 - 2021</span>
-                                    </div>
-                                    <p class="mt-2 text-gray-700">Developed large language models and contributed to GPT-3 architecture improvements. Optimized training pipelines reducing costs by 22%.</p>
-                                    <div class="mt-3 flex flex-wrap gap-2">
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">LLMs</span>
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">PyTorch</span>
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Distributed Training</span>
-                                    </div>
-                                </div>
+                            <div id="experience-list" class="space-y-6">
+                                <!-- Experience items will be dynamically added here -->
                             </div>
                         </div>
 
@@ -628,36 +630,8 @@
                                 <i class="fas fa-university text-indigo-500 mr-2"></i>
                                 Education
                             </h3>
-                            <div class="space-y-6">
-                                <div class="border-l-2 border-indigo-500 pl-4 py-1 group">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">PhD in Artificial Intelligence</h4>
-                                            <p class="text-gray-600">Stanford University</p>
-                                        </div>
-                                        <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">2014 - 2018</span>
-                                    </div>
-                                    <p class="mt-2 text-gray-700">Thesis on "Self-Supervised Learning for Visual Representation Learning". Advised by Prof. Andrew Ng. GPA: 3.9/4.0</p>
-                                    <div class="mt-3 flex flex-wrap gap-2">
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Research</span>
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Machine Learning</span>
-                                    </div>
-                                </div>
-
-                                <div class="border-l-2 border-indigo-500 pl-4 py-1 group">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">MSc in Computer Science</h4>
-                                            <p class="text-gray-600">MIT</p>
-                                        </div>
-                                        <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">2012 - 2014</span>
-                                    </div>
-                                    <p class="mt-2 text-gray-700">Specialized in Machine Learning and Artificial Intelligence. Thesis on "Reinforcement Learning for Robotics". GPA: 4.0/4.0</p>
-                                    <div class="mt-3 flex flex-wrap gap-2">
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">RL</span>
-                                        <span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Robotics</span>
-                                    </div>
-                                </div>
+                            <div id="education-list" class="space-y-6">
+                                <!-- Education items will be dynamically added here -->
                             </div>
                         </div>
                     </div>
@@ -675,7 +649,7 @@
                             </h2>
                             <p class="text-gray-500">Validated by CareerPath AI assessment system</p>
                         </div>
-                        <button class="mt-4 md:mt-0 gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition shadow-md flex items-center">
+                        <button onclick="openAddSkillsModal()" class="mt-4 md:mt-0 gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition shadow-md flex items-center">
                             <i class="fas fa-plus mr-2"></i> Add Skills
                         </button>
                     </div>
@@ -686,38 +660,8 @@
                                 <i class="fas fa-brain text-indigo-500 mr-2"></i>
                                 Core AI Skills
                             </h3>
-                            <div class="flex flex-wrap gap-3">
-                                <div class="relative">
-                                    <span class="skill-tag bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2 rounded-full flex items-center">
-                                        <span>Machine Learning</span>
-                                        <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">98%</span>
-                                    </span>
-                                    <div class="absolute -top-2 -right-2 bg-yellow-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-md">
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                                <div class="relative">
-                                    <span class="skill-tag bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2 rounded-full flex items-center">
-                                        <span>Deep Learning</span>
-                                        <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">96%</span>
-                                    </span>
-                                </div>
-                                <span class="skill-tag bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>Natural Language Processing</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">94%</span>
-                                </span>
-                                <span class="skill-tag bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>Computer Vision</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">92%</span>
-                                </span>
-                                <span class="skill-tag bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>Reinforcement Learning</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">88%</span>
-                                </span>
-                                <span class="skill-tag bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>Generative AI</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">95%</span>
-                                </span>
+                            <div id="core-skills-list" class="flex flex-wrap gap-3">
+                                <!-- Core skills will be dynamically added here -->
                             </div>
                         </div>
 
@@ -726,31 +670,8 @@
                                 <i class="fas fa-tools text-indigo-500 mr-2"></i>
                                 Technical Tools
                             </h3>
-                            <div class="flex flex-wrap gap-3">
-                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>Python</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">99%</span>
-                                </span>
-                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>PyTorch</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">97%</span>
-                                </span>
-                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>TensorFlow</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">93%</span>
-                                </span>
-                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>HuggingFace</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">96%</span>
-                                </span>
-                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>Docker</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">90%</span>
-                                </span>
-                                <span class="skill-tag bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full flex items-center">
-                                    <span>CUDA</span>
-                                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">89%</span>
-                                </span>
+                            <div id="technical-skills-list" class="flex flex-wrap gap-3">
+                                <!-- Technical skills will be dynamically added here -->
                             </div>
                         </div>
                     </div>
@@ -760,55 +681,8 @@
                             <i class="fas fa-medal text-indigo-500 mr-2"></i>
                             AI Certifications
                         </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-gradient-to-r from-indigo-500 to-blue-500 rounded-xl p-4 text-white">
-                                <div class="flex items-center mb-3">
-                                    <div class="bg-white/20 rounded-lg p-2 mr-3">
-                                        <i class="fas fa-certificate"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold">Deep Learning Specialization</p>
-                                        <p class="text-xs opacity-80">DeepLearning.AI</p>
-                                    </div>
-                                </div>
-                                <p class="text-sm mb-3">Completed advanced coursework in deep learning architectures and applications.</p>
-                                <div class="flex justify-between items-center text-xs">
-                                    <span>Issued: 2020</span>
-                                    <button class="bg-white/20 hover:bg-white/30 px-2 py-1 rounded">View</button>
-                                </div>
-                            </div>
-                            <div class="bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl p-4 text-white">
-                                <div class="flex items-center mb-3">
-                                    <div class="bg-white/20 rounded-lg p-2 mr-3">
-                                        <i class="fas fa-certificate"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold">NLP with Transformers</p>
-                                        <p class="text-xs opacity-80">HuggingFace</p>
-                                    </div>
-                                </div>
-                                <p class="text-sm mb-3">Certified in state-of-the-art natural language processing techniques.</p>
-                                <div class="flex justify-between items-center text-xs">
-                                    <span>Issued: 2022</span>
-                                    <button class="bg-white/20 hover:bg-white/30 px-2 py-1 rounded">View</button>
-                                </div>
-                            </div>
-                            <div class="bg-gradient-to-r from-blue-500 to-teal-400 rounded-xl p-4 text-white">
-                                <div class="flex items-center mb-3">
-                                    <div class="bg-white/20 rounded-lg p-2 mr-3">
-                                        <i class="fas fa-certificate"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold">AI Ethics</p>
-                                        <p class="text-xs opacity-80">Stanford University</p>
-                                    </div>
-                                </div>
-                                <p class="text-sm mb-3">Certification in ethical AI development and responsible innovation.</p>
-                                <div class="flex justify-between items-center text-xs">
-                                    <span>Issued: 2021</span>
-                                    <button class="bg-white/20 hover:bg-white/30 px-2 py-1 rounded">View</button>
-                                </div>
-                            </div>
+                        <div id="certifications-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Certifications will be dynamically added here -->
                         </div>
                     </div>
                 </div>
@@ -825,58 +699,13 @@
                             </h2>
                             <p class="text-gray-500">Showcase your work to potential collaborators and employers</p>
                         </div>
-                        <button class="mt-4 md:mt-0 gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition shadow-md flex items-center">
+                        <button onclick="openAddProjectModal()" class="mt-4 md:mt-0 gradient-bg hover:opacity-90 text-white px-6 py-2 rounded-lg transition shadow-md flex items-center">
                             <i class="fas fa-plus mr-2"></i> Add Project
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
-                            <div class="h-40 bg-gradient-to-r from-indigo-500 to-purple-600 relative">
-                                <div class="absolute inset-0 flex items-center justify-center text-white opacity-20">
-                                    <i class="fas fa-project-diagram text-6xl"></i>
-                                </div>
-                                <div class="absolute bottom-4 left-4">
-                                    <span class="bg-white text-indigo-600 px-2 py-1 rounded text-xs font-medium">Research</span>
-                                </div>
-                            </div>
-                            <div class="p-5">
-                                <h3 class="font-bold text-lg text-gray-800 mb-2">Multimodal AI for Medical Diagnosis</h3>
-                                <p class="text-gray-600 text-sm mb-4">Combining medical imaging and patient history for improved diagnostic accuracy.</p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Computer Vision</span>
-                                    <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">NLP</span>
-                                    <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">Healthcare AI</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm">
-                                    <span class="text-gray-500">Published: NeurIPS 2022</span>
-                                    <button class="text-indigo-500 hover:text-indigo-700">View Details</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
-                            <div class="h-40 bg-gradient-to-r from-blue-500 to-teal-400 relative">
-                                <div class="absolute inset-0 flex items-center justify-center text-white opacity-20">
-                                    <i class="fas fa-project-diagram text-6xl"></i>
-                                </div>
-                                <div class="absolute bottom-4 left-4">
-                                    <span class="bg-white text-blue-600 px-2 py-1 rounded text-xs font-medium">Open Source</span>
-                                </div>
-                            </div>
-                            <div class="p-5">
-                                <h3 class="font-bold text-lg text-gray-800 mb-2">EfficientLLM - Optimized Language Models</h3>
-                                <p class="text-gray-600 text-sm mb-4">Framework for deploying large language models with reduced computational costs.</p>
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">LLMs</span>
-                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">Optimization</span>
-                                    <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">PyTorch</span>
-                                </div>
-                                <div class="flex justify-between items-center text-sm">
-                                    <span class="text-gray-500">GitHub Stars: 1.2k</span>
-                                    <button class="text-blue-500 hover:text-blue-700">View Details</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="projects-list" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Projects will be dynamically added here -->
                     </div>
 
                     <div class="mt-8">
@@ -884,50 +713,338 @@
                             <i class="fas fa-book text-indigo-500 mr-2"></i>
                             Publications
                         </h3>
-                        <div class="space-y-4">
-                            <div class="border-l-2 border-indigo-500 pl-4 py-2 group">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">"Self-Supervised Learning for Medical Imaging"</h4>
-                                        <p class="text-gray-600">Nature Machine Intelligence, 2023</p>
-                                    </div>
-                                    <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">Citations: 142</span>
-                                </div>
-                                <p class="mt-1 text-gray-700 text-sm">Novel approach to self-supervised pretraining for medical image analysis achieving state-of-the-art results.</p>
-                                <div class="mt-2">
-                                    <button class="text-indigo-500 text-sm hover:text-indigo-700 mr-3">
-                                        <i class="fas fa-link mr-1"></i> View Paper
-                                    </button>
-                                    <button class="text-indigo-500 text-sm hover:text-indigo-700">
-                                        <i class="fas fa-quote-right mr-1"></i> Cite
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="border-l-2 border-indigo-500 pl-4 py-2 group">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">"Efficient Transformers for Real-Time Applications"</h4>
-                                        <p class="text-gray-600">ICML 2022</p>
-                                    </div>
-                                    <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">Citations: 89</span>
-                                </div>
-                                <p class="mt-1 text-gray-700 text-sm">Architecture modifications to transformer models enabling real-time inference on edge devices.</p>
-                                <div class="mt-2">
-                                    <button class="text-indigo-500 text-sm hover:text-indigo-700 mr-3">
-                                        <i class="fas fa-link mr-1"></i> View Paper
-                                    </button>
-                                    <button class="text-indigo-500 text-sm hover:text-indigo-700">
-                                        <i class="fas fa-quote-right mr-1"></i> Cite
-                                    </button>
-                                </div>
-                            </div>
+                        <div id="publications-list" class="space-y-4">
+                            <!-- Publications will be dynamically added here -->
                         </div>
-                        <button class="mt-4 text-indigo-500 hover:text-indigo-700 flex items-center">
+                        <button onclick="openAddPublicationModal()" class="mt-4 text-indigo-500 hover:text-indigo-700 flex items-center">
                             <i class="fas fa-plus mr-2"></i> Add Publication
                         </button>
                     </div>
                 </div>
             </section>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('edit-profile-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Edit Profile</h2>
+            <form id="profile-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="edit-name" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Professional Title</label>
+                    <input type="text" id="edit-title" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Profile URL</label>
+                    <input type="text" id="edit-profile-url" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Location Modal -->
+    <div id="edit-location-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('edit-location-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Edit Location & Contact</h2>
+            <form id="location-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Location</label>
+                    <input type="text" id="edit-location" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="edit-email" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Phone</label>
+                    <input type="tel" id="edit-phone" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Timezone</label>
+                    <select id="edit-timezone" class="w-full px-4 py-2 border rounded-lg">
+                        <option value="PST (UTC-8)">PST (UTC-8)</option>
+                        <option value="EST (UTC-5)">EST (UTC-5)</option>
+                        <option value="CST (UTC-6)">CST (UTC-6)</option>
+                        <option value="GMT (UTC+0)">GMT (UTC+0)</option>
+                        <option value="CET (UTC+1)">CET (UTC+1)</option>
+                    </select>
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Summary Modal -->
+    <div id="edit-summary-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('edit-summary-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Edit Professional Summary</h2>
+            <form id="summary-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Summary</label>
+                    <textarea id="edit-summary" rows="6" class="w-full px-4 py-2 border rounded-lg"></textarea>
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Links Modal -->
+    <div id="edit-links-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('edit-links-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Edit Professional Links</h2>
+            <form id="links-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">GitHub</label>
+                    <input type="url" id="edit-github" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">LinkedIn</label>
+                    <input type="url" id="edit-linkedin" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Google Scholar</label>
+                    <input type="url" id="edit-scholar" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Experience Modal -->
+    <div id="add-experience-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('add-experience-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Add Experience</h2>
+            <form id="experience-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Job Title</label>
+                    <input type="text" id="experience-title" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Company</label>
+                    <input type="text" id="experience-company" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Start Date</label>
+                        <input type="text" id="experience-start" class="w-full px-4 py-2 border rounded-lg" placeholder="YYYY" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">End Date</label>
+                        <input type="text" id="experience-end" class="w-full px-4 py-2 border rounded-lg" placeholder="YYYY or Present">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Description</label>
+                    <textarea id="experience-description" rows="4" class="w-full px-4 py-2 border rounded-lg"></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Skills (comma separated)</label>
+                    <input type="text" id="experience-skills" class="w-full px-4 py-2 border rounded-lg" placeholder="e.g., Machine Learning, Python, AI">
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Add Experience</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Education Modal -->
+    <div id="add-education-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('add-education-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Add Education</h2>
+            <form id="education-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Degree</label>
+                    <input type="text" id="education-degree" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Institution</label>
+                    <input type="text" id="education-institution" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Start Date</label>
+                        <input type="text" id="education-start" class="w-full px-4 py-2 border rounded-lg" placeholder="YYYY" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">End Date</label>
+                        <input type="text" id="education-end" class="w-full px-4 py-2 border rounded-lg" placeholder="YYYY">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Description</label>
+                    <textarea id="education-description" rows="4" class="w-full px-4 py-2 border rounded-lg"></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Skills (comma separated)</label>
+                    <input type="text" id="education-skills" class="w-full px-4 py-2 border rounded-lg" placeholder="e.g., Machine Learning, Python, AI">
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Add Education</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Skills Modal -->
+    <div id="add-skills-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('add-skills-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Add Skills</h2>
+            <form id="skills-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Skill Type</label>
+                    <select id="skill-type" class="w-full px-4 py-2 border rounded-lg">
+                        <option value="core">Core AI Skill</option>
+                        <option value="technical">Technical Tool</option>
+                        <option value="certification">Certification</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Skill Name</label>
+                    <input type="text" id="skill-name" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Proficiency (0-100%)</label>
+                    <input type="number" id="skill-proficiency" min="0" max="100" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div id="certification-fields" style="display: none;">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Issuing Organization</label>
+                        <input type="text" id="certification-org" class="w-full px-4 py-2 border rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Year Issued</label>
+                        <input type="text" id="certification-year" class="w-full px-4 py-2 border rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Description</label>
+                        <textarea id="certification-description" rows="3" class="w-full px-4 py-2 border rounded-lg"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Add Skill</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div id="add-project-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('add-project-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Add Project</h2>
+            <form id="project-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Project Name</label>
+                    <input type="text" id="project-name" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Description</label>
+                    <textarea id="project-description" rows="4" class="w-full px-4 py-2 border rounded-lg" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Project Type</label>
+                    <select id="project-type" class="w-full px-4 py-2 border rounded-lg">
+                        <option value="Research">Research</option>
+                        <option value="Open Source">Open Source</option>
+                        <option value="Commercial">Commercial</option>
+                        <option value="Personal">Personal</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">GitHub Link</label>
+                    <input type="url" id="project-github" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Documentation Link</label>
+                    <input type="url" id="project-docs" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Skills Used (comma separated)</label>
+                    <input type="text" id="project-skills" class="w-full px-4 py-2 border rounded-lg" placeholder="e.g., Python, Machine Learning, NLP">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Project Image</label>
+                    <input type="file" id="project-image" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Add Project</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Publication Modal -->
+    <div id="add-publication-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('add-publication-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Add Publication</h2>
+            <form id="publication-form" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 mb-2">Title</label>
+                    <input type="text" id="publication-title" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Journal/Conference</label>
+                    <input type="text" id="publication-journal" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Year</label>
+                    <input type="text" id="publication-year" class="w-full px-4 py-2 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Description</label>
+                    <textarea id="publication-description" rows="4" class="w-full px-4 py-2 border rounded-lg"></textarea>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Link</label>
+                    <input type="url" id="publication-link" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Add Publication</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Avatar Upload Modal -->
+    <div id="avatar-upload-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('avatar-upload-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Upload Profile Picture</h2>
+            <form id="avatar-form" class="space-y-4">
+                <div class="flex justify-center">
+                    <div class="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg overflow-hidden relative">
+                        <img id="avatar-preview" src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80" alt="Profile Preview" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Select Image</label>
+                    <input type="file" id="avatar-input" accept="image/*" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Upload & Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Banner Upload Modal -->
+    <div id="banner-upload-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('banner-upload-modal')">&times;</span>
+            <h2 class="text-xl font-bold mb-4">Upload Banner Image</h2>
+            <form id="banner-form" class="space-y-4">
+                <div class="h-40 bg-gray-100 rounded-lg overflow-hidden">
+                    <img id="banner-preview" src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Banner Preview" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2">Select Image</label>
+                    <input type="file" id="banner-input" accept="image/*" class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <button type="submit" class="gradient-bg text-white px-4 py-2 rounded-lg w-full">Upload & Save</button>
+            </form>
         </div>
     </div>
 
@@ -965,37 +1082,6 @@
                 });
             });
 
-            // Banner and avatar image upload simulation
-            const editButtons = document.querySelectorAll('.banner-edit-overlay button, .avatar-edit-overlay button');
-            editButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const action = this.querySelector('i').className.includes('image') ? 'change' : 
-                                  this.querySelector('i').className.includes('palette') ? 'AI generate' : 
-                                  this.querySelector('i').className.includes('robot') ? 'AI generate profile picture' : 'edit';
-                    showToast(`Would ${action} image in a real application`);
-                });
-            });
-
-            // Add buttons functionality
-            const addButtons = document.querySelectorAll('section button');
-            addButtons.forEach(button => {
-                if (button.textContent.includes('Add')) {
-                    button.addEventListener('click', function() {
-                        const section = this.closest('section').id;
-                        showToast(`Would open a form to add new ${section} content`);
-                    });
-                }
-            });
-
-            // Copy profile link
-            const copyButton = document.querySelector('button i.fa-copy').parentElement;
-            copyButton.addEventListener('click', function() {
-                const link = this.previousElementSibling.textContent;
-                navigator.clipboard.writeText(link);
-                showToast('Profile link copied to clipboard!');
-            });
-
             // Connect buttons in network section
             const connectButtons = document.querySelectorAll('#social button:not(.bg-gradient-to-r)');
             connectButtons.forEach(button => {
@@ -1004,22 +1090,6 @@
                     showToast(`Connection request sent to ${name}`);
                 });
             });
-
-            // Toast notification function
-            function showToast(message) {
-                const toast = document.createElement('div');
-                toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg flex items-center animate-fade-in';
-                toast.innerHTML = `
-                    <i class="fas fa-check-circle text-green-400 mr-2"></i>
-                    <span>${message}</span>
-                `;
-                document.body.appendChild(toast);
-                
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            }
 
             // Animate elements when they come into view
             const animateOnScroll = () => {
@@ -1038,7 +1108,1010 @@
             // Initial check and then on scroll
             animateOnScroll();
             window.addEventListener('scroll', animateOnScroll);
+
+            // Show certification fields when certification is selected
+            document.getElementById('skill-type').addEventListener('change', function() {
+                const certificationFields = document.getElementById('certification-fields');
+                if (this.value === 'certification') {
+                    certificationFields.style.display = 'block';
+                } else {
+                    certificationFields.style.display = 'none';
+                }
+            });
+
+            // Preview avatar image before upload
+            document.getElementById('avatar-input')?.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('avatar-preview').src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Preview banner image before upload
+            document.getElementById('banner-input')?.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('banner-preview').src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function openEditProfileModal() {
+            // Populate form with current data
+            document.getElementById('edit-name').value = document.getElementById('user-name').textContent;
+            document.getElementById('edit-title').value = document.getElementById('user-title').textContent;
+            document.getElementById('edit-profile-url').value = document.getElementById('profile-link').textContent;
+            openModal('edit-profile-modal');
+        }
+
+        function openEditLocationModal() {
+            // Populate form with current data
+            document.getElementById('edit-location').value = document.getElementById('user-location').textContent;
+            document.getElementById('edit-email').value = document.getElementById('user-email').textContent;
+            document.getElementById('edit-phone').value = document.getElementById('user-phone').textContent;
+            document.getElementById('edit-timezone').value = document.getElementById('user-timezone').textContent;
+            openModal('edit-location-modal');
+        }
+
+        function openEditSummaryModal() {
+            // Populate form with current data
+            document.getElementById('edit-summary').value = document.getElementById('user-summary').textContent;
+            openModal('edit-summary-modal');
+        }
+
+        function openEditLinksModal() {
+            // Populate form with current data
+            document.getElementById('edit-github').value = document.getElementById('user-github').textContent;
+            document.getElementById('edit-linkedin').value = document.getElementById('user-linkedin').textContent;
+            document.getElementById('edit-scholar').value = document.getElementById('user-scholar').textContent;
+            openModal('edit-links-modal');
+        }
+
+        function openAddExperienceModal() {
+            openModal('add-experience-modal');
+        }
+
+        function openAddEducationModal() {
+            openModal('add-education-modal');
+        }
+
+        function openAddSkillsModal() {
+            openModal('add-skills-modal');
+        }
+
+        function openAddProjectModal() {
+            openModal('add-project-modal');
+        }
+
+        function openAddPublicationModal() {
+            openModal('add-publication-modal');
+        }
+
+        function openAvatarUploadModal() {
+            openModal('avatar-upload-modal');
+        }
+
+        function openBannerUploadModal() {
+            openModal('banner-upload-modal');
+        }
+
+        function copyProfileLink() {
+            const link = document.getElementById('profile-link').textContent;
+            navigator.clipboard.writeText(link);
+            showToast('Profile link copied to clipboard!');
+        }
+
+        // Toast notification function
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg flex items-center animate-fade-in';
+            toast.innerHTML = `
+                <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Form submission handlers
+        document.getElementById('profile-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Update the UI with new values
+            document.getElementById('user-name').textContent = document.getElementById('edit-name').value;
+            document.getElementById('user-title').textContent = document.getElementById('edit-title').value;
+            document.getElementById('profile-link').textContent = document.getElementById('edit-profile-url').value;
+            
+            // Here you would also update Firestore
+            // updateUserData({ 
+            //     name: document.getElementById('edit-name').value,
+            //     title: document.getElementById('edit-title').value,
+            //     profileUrl: document.getElementById('edit-profile-url').value
+            // });
+            
+            closeModal('edit-profile-modal');
+            showToast('Profile updated successfully!');
+        });
+
+        document.getElementById('location-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Update the UI with new values
+            document.getElementById('user-location').textContent = document.getElementById('edit-location').value;
+            document.getElementById('user-email').textContent = document.getElementById('edit-email').value;
+            document.getElementById('user-phone').textContent = document.getElementById('edit-phone').value;
+            document.getElementById('user-timezone').textContent = document.getElementById('edit-timezone').value;
+            
+            // Here you would also update Firestore
+            // updateUserData({ 
+            //     location: document.getElementById('edit-location').value,
+            //     email: document.getElementById('edit-email').value,
+            //     phone: document.getElementById('edit-phone').value,
+            //     timezone: document.getElementById('edit-timezone').value
+            // });
+            
+            closeModal('edit-location-modal');
+            showToast('Location & contact updated successfully!');
+        });
+
+        document.getElementById('summary-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Update the UI with new values
+            document.getElementById('user-summary').textContent = document.getElementById('edit-summary').value;
+            
+            // Here you would also update Firestore
+            // updateUserData({ 
+            //     summary: document.getElementById('edit-summary').value
+            // });
+            
+            closeModal('edit-summary-modal');
+            showToast('Professional summary updated successfully!');
+        });
+
+        document.getElementById('links-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Update the UI with new values
+            document.getElementById('user-github').textContent = document.getElementById('edit-github').value;
+            document.getElementById('user-linkedin').textContent = document.getElementById('edit-linkedin').value;
+            document.getElementById('user-scholar').textContent = document.getElementById('edit-scholar').value;
+            
+            // Here you would also update Firestore
+            // updateUserData({ 
+            //     github: document.getElementById('edit-github').value,
+            //     linkedin: document.getElementById('edit-linkedin').value,
+            //     scholar: document.getElementById('edit-scholar').value
+            // });
+            
+            closeModal('edit-links-modal');
+            showToast('Professional links updated successfully!');
+        });
+
+        document.getElementById('experience-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Create experience item
+            const experienceItem = {
+                title: document.getElementById('experience-title').value,
+                company: document.getElementById('experience-company').value,
+                start: document.getElementById('experience-start').value,
+                end: document.getElementById('experience-end').value || 'Present',
+                description: document.getElementById('experience-description').value,
+                skills: document.getElementById('experience-skills').value.split(',').map(skill => skill.trim())
+            };
+            
+            // Here you would add to Firestore
+            // addExperience(experienceItem);
+            
+            // Add to UI
+            addExperienceToUI(experienceItem);
+            
+            // Reset form
+            this.reset();
+            closeModal('add-experience-modal');
+            showToast('Experience added successfully!');
+        });
+
+        document.getElementById('education-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Create education item
+            const educationItem = {
+                degree: document.getElementById('education-degree').value,
+                institution: document.getElementById('education-institution').value,
+                start: document.getElementById('education-start').value,
+                end: document.getElementById('education-end').value || 'Present',
+                description: document.getElementById('education-description').value,
+                skills: document.getElementById('education-skills').value.split(',').map(skill => skill.trim())
+            };
+            
+            // Here you would add to Firestore
+            // addEducation(educationItem);
+            
+            // Add to UI
+            addEducationToUI(educationItem);
+            
+            // Reset form
+            this.reset();
+            closeModal('add-education-modal');
+            showToast('Education added successfully!');
+        });
+
+        document.getElementById('skills-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const skillType = document.getElementById('skill-type').value;
+            const skillName = document.getElementById('skill-name').value;
+            
+            if (skillType === 'certification') {
+                const certification = {
+                    name: skillName,
+                    organization: document.getElementById('certification-org').value,
+                    year: document.getElementById('certification-year').value,
+                    description: document.getElementById('certification-description').value
+                };
+                
+                // Here you would add to Firestore
+                // addCertification(certification);
+                
+                // Add to UI
+                addCertificationToUI(certification);
+            } else {
+                const skill = {
+                    name: skillName,
+                    type: skillType,
+                    proficiency: document.getElementById('skill-proficiency').value || '0'
+                };
+                
+                // Here you would add to Firestore
+                // addSkill(skill);
+                
+                // Add to UI
+                addSkillToUI(skill);
+            }
+            
+            // Reset form
+            this.reset();
+            closeModal('add-skills-modal');
+            showToast('Skill added successfully!');
+        });
+
+        document.getElementById('project-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Create project item
+            const projectItem = {
+                name: document.getElementById('project-name').value,
+                description: document.getElementById('project-description').value,
+                type: document.getElementById('project-type').value,
+                github: document.getElementById('project-github').value,
+                documentation: document.getElementById('project-docs').value,
+                skills: document.getElementById('project-skills').value.split(',').map(skill => skill.trim()),
+                image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80' // Default image
+            };
+            
+            // Handle image upload
+            const imageFile = document.getElementById('project-image').files[0];
+            if (imageFile) {
+                // Here you would upload the image to Firebase Storage
+                // and get the URL to store in Firestore
+                // uploadProjectImage(imageFile).then(url => {
+                //     projectItem.image = url;
+                //     addProject(projectItem);
+                // });
+            } else {
+                // addProject(projectItem);
+            }
+            
+            // Add to UI
+            addProjectToUI(projectItem);
+            
+            // Reset form
+            this.reset();
+            closeModal('add-project-modal');
+            showToast('Project added successfully!');
+        });
+
+        document.getElementById('publication-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Create publication item
+            const publicationItem = {
+                title: document.getElementById('publication-title').value,
+                journal: document.getElementById('publication-journal').value,
+                year: document.getElementById('publication-year').value,
+                description: document.getElementById('publication-description').value,
+                link: document.getElementById('publication-link').value
+            };
+            
+            // Here you would add to Firestore
+            // addPublication(publicationItem);
+            
+            // Add to UI
+            addPublicationToUI(publicationItem);
+            
+            // Reset form
+            this.reset();
+            closeModal('add-publication-modal');
+            showToast('Publication added successfully!');
+        });
+
+        document.getElementById('avatar-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const file = document.getElementById('avatar-input').files[0];
+            if (file) {
+                // Here you would upload the image to Firebase Storage
+                // and update the user's profile picture in Firestore
+                // uploadProfileImage(file).then(url => {
+                //     updateProfileImage(url);
+                // });
+                
+                // For demo purposes, we'll just update the UI
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('profile-image').src = event.target.result;
+                    document.getElementById('avatar-preview').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+                
+                closeModal('avatar-upload-modal');
+                showToast('Profile picture updated successfully!');
+            } else {
+                showToast('Please select an image first!', 'error');
+            }
+        });
+
+        document.getElementById('banner-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const file = document.getElementById('banner-input').files[0];
+            if (file) {
+                // Here you would upload the image to Firebase Storage
+                // and update the user's banner image in Firestore
+                // uploadBannerImage(file).then(url => {
+                //     updateBannerImage(url);
+                // });
+                
+                // For demo purposes, we'll just update the UI
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('banner-image').src = event.target.result;
+                    document.getElementById('banner-preview').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+                
+                closeModal('banner-upload-modal');
+                showToast('Banner image updated successfully!');
+            } else {
+                showToast('Please select an image first!', 'error');
+            }
+        });
+
+        // UI update functions
+        function addExperienceToUI(experience) {
+            const experienceList = document.getElementById('experience-list');
+            
+            const experienceItem = document.createElement('div');
+            experienceItem.className = 'border-l-2 border-indigo-500 pl-4 py-1 group';
+            experienceItem.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">${experience.title}</h4>
+                        <p class="text-gray-600">at ${experience.company}</p>
+                    </div>
+                    <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">${experience.start} - ${experience.end}</span>
+                </div>
+                <p class="mt-2 text-gray-700">${experience.description}</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                    ${experience.skills.map(skill => `<span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">${skill}</span>`).join('')}
+                </div>
+            `;
+            
+            experienceList.appendChild(experienceItem);
+        }
+
+        function addEducationToUI(education) {
+            const educationList = document.getElementById('education-list');
+            
+            const educationItem = document.createElement('div');
+            educationItem.className = 'border-l-2 border-indigo-500 pl-4 py-1 group';
+            educationItem.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">${education.degree}</h4>
+                        <p class="text-gray-600">at ${education.institution}</p>
+                    </div>
+                    <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">${education.start} - ${education.end}</span>
+                </div>
+                <p class="mt-2 text-gray-700">${education.description}</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                    ${education.skills.map(skill => `<span class="skill-tag bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">${skill}</span>`).join('')}
+                </div>
+            `;
+            
+            educationList.appendChild(educationItem);
+        }
+
+        function addSkillToUI(skill) {
+            let skillList;
+            if (skill.type === 'core') {
+                skillList = document.getElementById('core-skills-list');
+            } else {
+                skillList = document.getElementById('technical-skills-list');
+            }
+            
+            const skillItem = document.createElement('div');
+            skillItem.className = 'relative';
+            skillItem.innerHTML = `
+                <span class="skill-tag bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-4 py-2 rounded-full flex items-center">
+                    <span>${skill.name}</span>
+                    <span class="ml-2 bg-white/20 rounded-full px-2 py-0.5 text-xs">${skill.proficiency}%</span>
+                </span>
+            `;
+            
+            skillList.appendChild(skillItem);
+        }
+
+        function addCertificationToUI(certification) {
+            const certificationsList = document.getElementById('certifications-list');
+            
+            const certificationItem = document.createElement('div');
+            certificationItem.className = 'bg-gradient-to-r from-indigo-500 to-blue-500 rounded-xl p-4 text-white';
+            certificationItem.innerHTML = `
+                <div class="flex items-center mb-3">
+                    <div class="bg-white/20 rounded-lg p-2 mr-3">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold">${certification.name}</p>
+                        <p class="text-xs opacity-80">${certification.organization}</p>
+                    </div>
+                </div>
+                <p class="text-sm mb-3">${certification.description}</p>
+                <div class="flex justify-between items-center text-xs">
+                    <span>Issued: ${certification.year}</span>
+                    <button class="bg-white/20 hover:bg-white/30 px-2 py-1 rounded">View</button>
+                </div>
+            `;
+            
+            certificationsList.appendChild(certificationItem);
+        }
+
+        function addProjectToUI(project) {
+            const projectsList = document.getElementById('projects-list');
+            
+            const projectItem = document.createElement('div');
+            projectItem.className = 'border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition';
+            projectItem.innerHTML = `
+                <div class="h-40 bg-gradient-to-r from-indigo-500 to-purple-600 relative">
+                    <img src="${project.image}" alt="${project.name}" class="w-full h-full object-cover">
+                    <div class="absolute bottom-4 left-4">
+                        <span class="bg-white text-indigo-600 px-2 py-1 rounded text-xs font-medium">${project.type}</span>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="font-bold text-lg text-gray-800 mb-2">${project.name}</h3>
+                    <p class="text-gray-600 text-sm mb-4">${project.description}</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        ${project.skills.map(skill => `<span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">${skill}</span>`).join('')}
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        ${project.github ? `<a href="${project.github}" target="_blank" class="text-indigo-500 hover:text-indigo-700">GitHub</a>` : ''}
+                                        ${project.documentation ? `<a href="${project.documentation}" target="_blank" class="text-indigo-500 hover:text-indigo-700">Docs</a>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            projectsList.appendChild(projectItem);
+        }
+
+        function addPublicationToUI(publication) {
+            const publicationsList = document.getElementById('publications-list');
+            
+            const publicationItem = document.createElement('div');
+            publicationItem.className = 'border-l-2 border-indigo-500 pl-4 py-2 group';
+            publicationItem.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="font-bold text-gray-800 group-hover:text-indigo-600 transition">"${publication.title}"</h4>
+                        <p class="text-gray-600">${publication.journal}, ${publication.year}</p>
+                    </div>
+                    <span class="text-sm text-gray-500 bg-indigo-50 px-2 py-1 rounded">Citations: 0</span>
+                </div>
+                <p class="mt-1 text-gray-700 text-sm">${publication.description}</p>
+                <div class="mt-2">
+                    ${publication.link ? `<a href="${publication.link}" target="_blank" class="text-indigo-500 text-sm hover:text-indigo-700 mr-3">
+                        <i class="fas fa-link mr-1"></i> View Paper
+                    </a>` : ''}
+                    <button class="text-indigo-500 text-sm hover:text-indigo-700">
+                        <i class="fas fa-quote-right mr-1"></i> Cite
+                    </button>
+                </div>
+            `;
+            
+            publicationsList.appendChild(publicationItem);
+        }
+    </script>
+
+    <!-- Firebase Integration Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            setDoc,
+            collection,
+            addDoc,
+            updateDoc,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { 
+            getStorage, 
+            ref, 
+            uploadBytes, 
+            getDownloadURL 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCcFX4LXH-wWpTAPjXRd_7CIL0_PkldyFY",
+            authDomain: "newproject-eaafb.firebaseapp.com",
+            projectId: "newproject-eaafb",
+            storageBucket: "newproject-eaafb.appspot.com",
+            messagingSenderId: "462532086346",
+            appId: "1:462532086346:web:f3689678f389eb941534b3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Add logout button functionality
+        function setupLogoutButton() {
+            const logoutButton = document.createElement('button');
+            logoutButton.className = 'absolute bottom-24 left-6 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center transition shadow-md';
+            logoutButton.innerHTML = '<i class="fas fa-sign-out-alt mr-2"></i> Logout';
+            logoutButton.onclick = () => {
+                signOut(auth).then(() => {
+                    window.location.href = 'login.html';
+                }).catch((error) => {
+                    console.error('Logout error:', error);
+                    showToast('Error logging out. Please try again.', 'error');
+                });
+            };
+            document.querySelector('.sidebar').appendChild(logoutButton);
+        }
+
+        // Function to update user data in Firestore
+        async function updateUserData(userId, data) {
+            try {
+                await setDoc(doc(db, "users", userId), data, { merge: true });
+                showToast('Profile updated successfully!');
+                return true;
+            } catch (error) {
+                console.error("Error updating user data:", error);
+                showToast('Error updating profile. Please try again.', 'error');
+                return false;
+            }
+        }
+
+        // Function to upload image to Firebase Storage
+        async function uploadImage(userId, file, path) {
+            try {
+                const storageRef = ref(storage, `${path}/${userId}/${file.name}`);
+                await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(storageRef);
+                return downloadURL;
+            } catch (error) {
+                console.error("Error uploading image:", error);
+                showToast('Error uploading image. Please try again.', 'error');
+                return null;
+            }
+        }
+
+        // Function to add a new document to a collection
+        async function addDocument(collectionName, data) {
+            try {
+                const docRef = await addDoc(collection(db, collectionName), data);
+                return docRef.id;
+            } catch (error) {
+                console.error(`Error adding ${collectionName}:`, error);
+                showToast(`Error adding ${collectionName}. Please try again.`, 'error');
+                return null;
+            }
+        }
+
+        // Function to fetch user data from Firestore
+        async function fetchUserData(userId) {
+            try {
+                const docRef = doc(db, "users", userId);
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    return docSnap.data();
+                } else {
+                    console.log("No such document!");
+                    return null;
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                return null;
+            }
+        }
+
+        // Function to fetch collection data with real-time updates
+        function fetchCollectionData(userId, collectionName, callback) {
+            const collectionRef = collection(db, "users", userId, collectionName);
+            
+            return onSnapshot(collectionRef, (querySnapshot) => {
+                const data = [];
+                querySnapshot.forEach((doc) => {
+                    data.push({ id: doc.id, ...doc.data() });
+                });
+                callback(data);
+            }, (error) => {
+                console.error(`Error fetching ${collectionName}:`, error);
+            });
+        }
+
+        // Main initialization when auth state changes
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in
+                const userId = user.uid;
+                
+                // Setup logout button
+                setupLogoutButton();
+                
+                // Fetch user data
+                const userData = await fetchUserData(userId);
+                if (userData) {
+                    // Update profile information
+                    if (userData.name) document.getElementById('user-name').textContent = userData.name;
+                    if (userData.title) document.getElementById('user-title').textContent = userData.title;
+                    if (userData.profileUrl) document.getElementById('profile-link').textContent = userData.profileUrl;
+                    if (userData.location) document.getElementById('user-location').textContent = userData.location;
+                    if (userData.email) document.getElementById('user-email').textContent = userData.email;
+                    if (userData.phone) document.getElementById('user-phone').textContent = userData.phone;
+                    if (userData.timezone) document.getElementById('user-timezone').textContent = userData.timezone;
+                    if (userData.summary) document.getElementById('user-summary').textContent = userData.summary;
+                    if (userData.github) document.getElementById('user-github').textContent = userData.github;
+                    if (userData.linkedin) document.getElementById('user-linkedin').textContent = userData.linkedin;
+                    if (userData.scholar) document.getElementById('user-scholar').textContent = userData.scholar;
+                    if (userData.profileImage) document.getElementById('profile-image').src = userData.profileImage;
+                    if (userData.bannerImage) document.getElementById('banner-image').src = userData.bannerImage;
+                    
+                    // Set up real-time listeners for collections
+                    fetchCollectionData(userId, 'experience', (data) => {
+                        const experienceList = document.getElementById('experience-list');
+                        experienceList.innerHTML = '';
+                        data.forEach(exp => {
+                            addExperienceToUI(exp);
+                        });
+                    });
+                    
+                    fetchCollectionData(userId, 'education', (data) => {
+                        const educationList = document.getElementById('education-list');
+                        educationList.innerHTML = '';
+                        data.forEach(edu => {
+                            addEducationToUI(edu);
+                        });
+                    });
+                    
+                    fetchCollectionData(userId, 'skills', (data) => {
+                        const coreSkillsList = document.getElementById('core-skills-list');
+                        const techSkillsList = document.getElementById('technical-skills-list');
+                        coreSkillsList.innerHTML = '';
+                        techSkillsList.innerHTML = '';
+                        
+                        data.forEach(skill => {
+                            if (skill.type === 'core') {
+                                addSkillToUI(skill);
+                            } else {
+                                addSkillToUI(skill);
+                            }
+                        });
+                    });
+                    
+                    fetchCollectionData(userId, 'certifications', (data) => {
+                        const certificationsList = document.getElementById('certifications-list');
+                        certificationsList.innerHTML = '';
+                        data.forEach(cert => {
+                            addCertificationToUI(cert);
+                        });
+                    });
+                    
+                    fetchCollectionData(userId, 'projects', (data) => {
+                        const projectsList = document.getElementById('projects-list');
+                        projectsList.innerHTML = '';
+                        data.forEach(project => {
+                            addProjectToUI(project);
+                        });
+                    });
+                    
+                    fetchCollectionData(userId, 'publications', (data) => {
+                        const publicationsList = document.getElementById('publications-list');
+                        publicationsList.innerHTML = '';
+                        data.forEach(pub => {
+                            addPublicationToUI(pub);
+                        });
+                    });
+                } else {
+                    // Initialize with default data if no document exists
+                    await setDoc(doc(db, "users", userId), {
+                        name: "Dr. Alex Chen",
+                        title: "AI Research Scientist & Machine Learning Engineer",
+                        profileUrl: "https://careerpath.ai/alexchen",
+                        location: "San Francisco, CA",
+                        email: "alex.chen@careerpath.ai",
+                        phone: "+1 (415) 555-0199",
+                        timezone: "PST (UTC-8)",
+                        summary: "PhD in Artificial Intelligence with 8+ years of experience in machine learning, deep learning, and AI research. Specialized in computer vision, natural language processing, and reinforcement learning. Passionate about developing ethical AI solutions that solve real-world problems.",
+                        github: "github.com/alexchen-ai",
+                        linkedin: "linkedin.com/in/alexchen-ai",
+                        scholar: "scholar.google.com/citations?user=alexchen",
+                        profileImage: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1180&q=80",
+                        bannerImage: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
+                    });
+                }
+                
+                // Update form submission handlers to use Firestore
+                document.getElementById('profile-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const success = await updateUserData(userId, {
+                        name: document.getElementById('edit-name').value,
+                        title: document.getElementById('edit-title').value,
+                        profileUrl: document.getElementById('edit-profile-url').value
+                    });
+                    
+                    if (success) {
+                        closeModal('edit-profile-modal');
+                    }
+                });
+                
+                document.getElementById('location-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const success = await updateUserData(userId, {
+                        location: document.getElementById('edit-location').value,
+                        email: document.getElementById('edit-email').value,
+                        phone: document.getElementById('edit-phone').value,
+                        timezone: document.getElementById('edit-timezone').value
+                    });
+                    
+                    if (success) {
+                        closeModal('edit-location-modal');
+                    }
+                });
+                
+                document.getElementById('summary-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const success = await updateUserData(userId, {
+                        summary: document.getElementById('edit-summary').value
+                    });
+                    
+                    if (success) {
+                        closeModal('edit-summary-modal');
+                    }
+                });
+                
+                document.getElementById('links-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const success = await updateUserData(userId, {
+                        github: document.getElementById('edit-github').value,
+                        linkedin: document.getElementById('edit-linkedin').value,
+                        scholar: document.getElementById('edit-scholar').value
+                    });
+                    
+                    if (success) {
+                        closeModal('edit-links-modal');
+                    }
+                });
+                
+                document.getElementById('experience-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const experienceItem = {
+                        title: document.getElementById('experience-title').value,
+                        company: document.getElementById('experience-company').value,
+                        start: document.getElementById('experience-start').value,
+                        end: document.getElementById('experience-end').value || 'Present',
+                        description: document.getElementById('experience-description').value,
+                        skills: document.getElementById('experience-skills').value.split(',').map(skill => skill.trim())
+                    };
+                    
+                    const docId = await addDocument(`users/${userId}/experience`, experienceItem);
+                    
+                    if (docId) {
+                        this.reset();
+                        closeModal('add-experience-modal');
+                    }
+                });
+                
+                document.getElementById('education-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const educationItem = {
+                        degree: document.getElementById('education-degree').value,
+                        institution: document.getElementById('education-institution').value,
+                        start: document.getElementById('education-start').value,
+                        end: document.getElementById('education-end').value || 'Present',
+                        description: document.getElementById('education-description').value,
+                        skills: document.getElementById('education-skills').value.split(',').map(skill => skill.trim())
+                    };
+                    
+                    const docId = await addDocument(`users/${userId}/education`, educationItem);
+                    
+                    if (docId) {
+                        this.reset();
+                        closeModal('add-education-modal');
+                    }
+                });
+                
+                document.getElementById('skills-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const skillType = document.getElementById('skill-type').value;
+                    const skillName = document.getElementById('skill-name').value;
+                    
+                    if (skillType === 'certification') {
+                        const certification = {
+                            name: skillName,
+                            organization: document.getElementById('certification-org').value,
+                            year: document.getElementById('certification-year').value,
+                            description: document.getElementById('certification-description').value
+                        };
+                        
+                        const docId = await addDocument(`users/${userId}/certifications`, certification);
+                    } else {
+                        const skill = {
+                            name: skillName,
+                            type: skillType,
+                            proficiency: document.getElementById('skill-proficiency').value || '0'
+                        };
+                        
+                        const docId = await addDocument(`users/${userId}/skills`, skill);
+                    }
+                    
+                    if (docId) {
+                        this.reset();
+                        closeModal('add-skills-modal');
+                    }
+                });
+                
+                document.getElementById('project-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const projectItem = {
+                        name: document.getElementById('project-name').value,
+                        description: document.getElementById('project-description').value,
+                        type: document.getElementById('project-type').value,
+                        github: document.getElementById('project-github').value,
+                        documentation: document.getElementById('project-docs').value,
+                        skills: document.getElementById('project-skills').value.split(',').map(skill => skill.trim()),
+                        image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80' // Default image
+                    };
+                    
+                    const imageFile = document.getElementById('project-image').files[0];
+                    if (imageFile) {
+                        const imageUrl = await uploadImage(userId, imageFile, 'project_images');
+                        if (imageUrl) {
+                            projectItem.image = imageUrl;
+                        }
+                    }
+                    
+                    const docId = await addDocument(`users/${userId}/projects`, projectItem);
+                    
+                    if (docId) {
+                        this.reset();
+                        closeModal('add-project-modal');
+                    }
+                });
+                
+                document.getElementById('publication-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const publicationItem = {
+                        title: document.getElementById('publication-title').value,
+                        journal: document.getElementById('publication-journal').value,
+                        year: document.getElementById('publication-year').value,
+                        description: document.getElementById('publication-description').value,
+                        link: document.getElementById('publication-link').value
+                    };
+                    
+                    const docId = await addDocument(`users/${userId}/publications`, publicationItem);
+                    
+                    if (docId) {
+                        this.reset();
+                        closeModal('add-publication-modal');
+                    }
+                });
+                
+                document.getElementById('avatar-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const file = document.getElementById('avatar-input').files[0];
+                    if (file) {
+                        const imageUrl = await uploadImage(userId, file, 'profile_images');
+                        if (imageUrl) {
+                            const success = await updateUserData(userId, { profileImage: imageUrl });
+                            if (success) {
+                                document.getElementById('profile-image').src = imageUrl;
+                                document.getElementById('avatar-preview').src = imageUrl;
+                                closeModal('avatar-upload-modal');
+                            }
+                        }
+                    } else {
+                        showToast('Please select an image first!', 'error');
+                    }
+                });
+                
+                document.getElementById('banner-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const file = document.getElementById('banner-input').files[0];
+                    if (file) {
+                        const imageUrl = await uploadImage(userId, file, 'banner_images');
+                        if (imageUrl) {
+                            const success = await updateUserData(userId, { bannerImage: imageUrl });
+                            if (success) {
+                                document.getElementById('banner-image').src = imageUrl;
+                                document.getElementById('banner-preview').src = imageUrl;
+                                closeModal('banner-upload-modal');
+                            }
+                        }
+                    } else {
+                        showToast('Please select an image first!', 'error');
+                    }
+                });
+                
+            } else {
+                // User is signed out, redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Enhanced toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? 'fa-check-circle text-green-400' : 'fa-exclamation-circle text-red-400';
+            
+            toast.className = `fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg flex items-center animate-fade-in`;
+            toast.innerHTML = `
+                <i class="fas ${icon} mr-2"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html>
