@@ -1577,21 +1577,26 @@ showSuccessPopup(user.displayName, true);
   });
 </script>
 
-<!-- Add these scripts right before the closing </body> tag -->
 <script type="module">
+  // Firebase SDKs
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword, 
-    sendEmailVerification, 
-    sendPasswordResetEmail,
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    sendEmailVerification,
     updateProfile,
-    signOut,
     GoogleAuthProvider,
     signInWithPopup
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+  import {
+    getFirestore,
+    doc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // ✅ Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyCcFX4LXH-wWpTAPjXRd_7CIL0_PkldyFY",
     authDomain: "newproject-eaafb.firebaseapp.com",
@@ -1603,313 +1608,105 @@ showSuccessPopup(user.displayName, true);
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app);
   const provider = new GoogleAuthProvider();
 
-  // Google Sign In Function
+  // ✅ Google Login
   async function loginWithGoogle() {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
 
-    const isNew = result._tokenResponse?.isNewUser ?? false;
-    showSuccessPopup(user.displayName, isNew);
-  } catch (error) {
-    alert('Google login failed: ' + error.message);
+      const userRef = doc(db, "users", user.uid);
+      await setDoc(userRef, {
+        name: user.displayName,
+        email: user.email,
+        createdAt: new Date().toISOString()
+      }, { merge: true });
+
+      localStorage.setItem("userId", user.uid);
+      alert("✅ Google Login Success!");
+      window.location.href = "careerquiz.html";
+    } catch (error) {
+      alert("❌ Google login failed: " + error.message);
+    }
   }
-}
 
-
-  document.addEventListener('DOMContentLoaded', function () {
-    // Google Buttons
-    document.querySelectorAll('.fab.fa-google').forEach(googleBtn => {
-      googleBtn.parentElement.addEventListener('click', loginWithGoogle);
+  // ✅ DOM Ready
+  document.addEventListener("DOMContentLoaded", () => {
+    // Google login
+    document.querySelectorAll(".fab.fa-google").forEach(btn => {
+      btn.parentElement.addEventListener("click", loginWithGoogle);
     });
 
-    // Form elements
-    const startQuizBtn = document.querySelector('.start-quiz-btn');
-    const quizFormSection = document.getElementById('quiz-form');
-    const quizFormContent = document.getElementById('quizFormContent');
-    const closeFormBtn = document.getElementById('closeForm');
-    const showRegisterBtn = document.getElementById('showRegister');
-    const loginFormSection = document.getElementById('login-form');
-    const loginFormContent = document.getElementById('loginFormContent');
-    const closeLoginBtn = document.getElementById('closeLogin');
-    const showLoginLink = document.getElementById('showLogin');
-    const forgotLink = document.getElementById('showForgotForm');
-    const forgotFormSection = document.getElementById('forgot-password-form');
-    const forgotFormContent = forgotFormSection.querySelector('div');
-    const cancelForgotBtn = document.getElementById('cancelForgot');
-    const forgotForm = document.getElementById('forgotForm');
-    const resetStatus = document.getElementById('resetStatus');
-    const userForm = document.getElementById('userForm');
-    const loginForm = document.getElementById('loginForm');
+    const userForm = document.getElementById("userForm");
+    const loginForm = document.getElementById("loginForm");
 
-    // UI helpers
-    function blockBackground() {
-      document.body.classList.add('overflow-hidden');
-    }
-
-    function unblockBackground() {
-      document.body.classList.remove('overflow-hidden');
-    }
-
-    function setButtonLoading(button, isLoading) {
-      if (isLoading) {
-        button.dataset.originalText = button.innerHTML;
-        button.disabled = true;
-        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-      } else {
-        button.disabled = false;
-        button.innerHTML = button.dataset.originalText;
-      }
-    }
-
-    // Form toggle logic
-    startQuizBtn.addEventListener('click', showLoginForm);
-    showRegisterBtn.addEventListener('click', showRegistrationForm);
-    showLoginLink.addEventListener('click', showLoginForm);
-    closeFormBtn.addEventListener('click', closeRegistrationForm);
-    closeLoginBtn.addEventListener('click', closeLoginForm);
-    forgotLink.addEventListener('click', showForgotPasswordForm);
-    cancelForgotBtn.addEventListener('click', closeForgotPasswordForm);
-
-    function showLoginForm(e) {
-      if (e) e.preventDefault();
-      loginFormSection.classList.remove('hidden');
-      blockBackground();
-      requestAnimationFrame(() => {
-        loginFormContent.classList.remove('scale-95', 'opacity-0');
-        loginFormContent.classList.add('scale-100', 'opacity-100');
-      });
-    }
-
-    function showRegistrationForm(e) {
-      if (e) e.preventDefault();
-      loginFormSection.classList.add('hidden');
-      quizFormSection.classList.remove('hidden');
-      requestAnimationFrame(() => {
-        quizFormContent.classList.remove('scale-95', 'opacity-0');
-        quizFormContent.classList.add('scale-100', 'opacity-100');
-      });
-    }
-
-    function closeRegistrationForm() {
-      quizFormContent.classList.remove('scale-100', 'opacity-100');
-      quizFormContent.classList.add('scale-95', 'opacity-0');
-      setTimeout(() => {
-        quizFormSection.classList.add('hidden');
-        unblockBackground();
-      }, 300);
-    }
-
-    function closeLoginForm() {
-      loginFormContent.classList.remove('scale-100', 'opacity-100');
-      loginFormContent.classList.add('scale-95', 'opacity-0');
-      setTimeout(() => {
-        loginFormSection.classList.add('hidden');
-        unblockBackground();
-      }, 300);
-    }
-
-    function showForgotPasswordForm(e) {
+    // ✅ Registration
+    userForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
-      loginFormSection.classList.add('hidden');
-      forgotFormSection.classList.remove('hidden');
-      blockBackground();
-      requestAnimationFrame(() => {
-        forgotFormContent.classList.remove('translate-y-4', 'opacity-0');
-        forgotFormContent.classList.add('translate-y-0', 'opacity-100');
-      });
-      resetStatus.classList.add('hidden');
-    }
 
-    function closeForgotPasswordForm() {
-      forgotFormContent.classList.remove('translate-y-0', 'opacity-100');
-      forgotFormContent.classList.add('translate-y-4', 'opacity-0');
-      setTimeout(() => {
-        forgotFormSection.classList.add('hidden');
-        unblockBackground();
-      }, 300);
-    }
+      const fullName = document.getElementById("fullName").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const age = document.getElementById("age").value;
+      const gender = document.getElementById("gender").value;
+      const education = document.getElementById("education").value;
+      const country = document.getElementById("country").value;
 
-    // Registration form
-    userForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const fullName = document.getElementById('fullName').value;
-      const submitBtn = userForm.querySelector('button[type="submit"]');
-      
-      setButtonLoading(submitBtn, true);
-      
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        const user = cred.user;
+
         await updateProfile(user, { displayName: fullName });
         await sendEmailVerification(user);
-        
-        alert(`Account created successfully! You can now sign in. A verification link has been sent to ${email}.`);
-        showLoginForm();
+
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, {
+          name: fullName,
+          email: email,
+          age: age,
+          gender: gender,
+          education: education,
+          country: country,
+          createdAt: new Date().toISOString()
+        });
+
+        localStorage.setItem("userId", user.uid);
+        alert(`✅ Account created! Verification email sent to ${email}`);
+        window.location.href = "careerquiz.html";
       } catch (error) {
-        let errorMessage = 'Registration failed: ';
-        switch(error.code) {
-          case 'auth/email-already-in-use':
-            errorMessage += 'This email is already registered.';
-            showLoginLink.click();
-            break;
-          case 'auth/invalid-email':
-            errorMessage += 'Please enter a valid email address.';
-            break;
-          case 'auth/weak-password':
-            errorMessage += 'Password should be at least 6 characters.';
-            break;
-          default:
-            errorMessage += error.message;
-        }
-        alert(errorMessage);
-      } finally {
-        setButtonLoading(submitBtn, false);
+        alert("❌ Registration failed: " + error.message);
       }
     });
 
-    // Login form
-    loginForm.addEventListener('submit', async function (e) {
+    // ✅ Login
+    loginForm?.addEventListener("submit", async (e) => {
       e.preventDefault();
-      
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      const submitBtn = loginForm.querySelector('button[type="submit"]');
-      
-      setButtonLoading(submitBtn, true);
-      
+
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
       try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const user = cred.user;
+
         if (!user.emailVerified) {
-          const proceed = confirm(`Your email isn't verified yet. Would you like to proceed anyway? (Check ${email} for verification link)`);
-          if (!proceed) {
-            await sendEmailVerification(user);
-            alert(`New verification link sent to ${email}. Please check your inbox.`);
-            await signOut(auth);
-            return;
-          }
+          alert("⚠ Please verify your email first.");
+          await sendEmailVerification(user);
+          return;
         }
-        
-        window.location.href = 'careerquiz.html';
+
+        localStorage.setItem("userId", user.uid);
+        alert("✅ Login successful!");
+        window.location.href = "careerquiz.html";
       } catch (error) {
-        let errorMessage = 'Login failed: ';
-        switch(error.code) {
-          case 'auth/user-not-found':
-          case 'auth/wrong-password':
-            errorMessage += 'Invalid email or password.';
-            break;
-          case 'auth/too-many-requests':
-            errorMessage += 'Too many attempts. Try again later or reset your password.';
-            break;
-          case 'auth/user-disabled':
-            errorMessage += 'This account has been disabled.';
-            break;
-          default:
-            errorMessage += error.message;
-        }
-        alert(errorMessage);
-      } finally {
-        setButtonLoading(submitBtn, false);
+        alert("❌ Login failed: " + error.message);
       }
     });
-
-    // Forgot password form
-    forgotForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const email = forgotForm.querySelector('input[type="email"]').value;
-      const submitBtn = forgotForm.querySelector('button[type="submit"]');
-      
-      setButtonLoading(submitBtn, true);
-      
-      try {
-        await sendPasswordResetEmail(auth, email);
-        resetStatus.textContent = `✅ Password reset link sent to ${email}`;
-        resetStatus.classList.remove('hidden');
-        
-        setTimeout(() => {
-          forgotFormContent.classList.remove('translate-y-0', 'opacity-100');
-          forgotFormContent.classList.add('translate-y-4', 'opacity-0');
-          setTimeout(() => {
-            forgotFormSection.classList.add('hidden');
-            resetStatus.classList.add('hidden');
-            unblockBackground();
-          }, 300);
-        }, 3000);
-      } catch (error) {
-        let errorMessage = 'Password reset failed: ';
-        switch(error.code) {
-          case 'auth/user-not-found':
-            errorMessage += 'No account found with this email.';
-            break;
-          case 'auth/invalid-email':
-            errorMessage += 'Please enter a valid email address.';
-            break;
-          default:
-            errorMessage += error.message;
-        }
-        alert(errorMessage);
-      } finally {
-        setButtonLoading(submitBtn, false);
-      }
-    });
-
-    // Add resend verification button
-    const resendVerificationBtn = document.createElement('button');
-    resendVerificationBtn.type = 'button';
-    resendVerificationBtn.className = 'text-primary-600 hover:text-primary-800 text-sm mt-2 block w-full text-center';
-    resendVerificationBtn.innerHTML = '<i class="fas fa-redo mr-1"></i> Resend verification email';
-    
-    resendVerificationBtn.addEventListener('click', async function() {
-      const email = document.getElementById('loginEmail').value;
-      if (!email) {
-        alert('Please enter your email first');
-        return;
-      }
-      
-      try {
-        // Try to send verification to currently signed in user first
-        if (auth.currentUser) {
-          await sendEmailVerification(auth.currentUser);
-        } else {
-          // Fallback to password reset which will trigger verification
-          await sendPasswordResetEmail(auth, email);
-        }
-        alert(`If an account exists for ${email}, we've sent a verification link.`);
-      } catch (error) {
-        alert('Error sending verification: ' + error.message);
-      }
-    });
-
-    // Add the button to login form
-    const loginFormFooter = loginForm.querySelector('.flex.flex-col-reverse');
-    if (loginFormFooter) {
-      loginFormFooter.parentNode.insertBefore(resendVerificationBtn, loginFormFooter.nextSibling);
-    }
   });
-
-function showToast(message) {
-  const toast = document.getElementById('toastMessage');
-  const text = document.getElementById('toastText');
-  text.textContent = message;
-
-  toast.classList.remove('opacity-0', 'pointer-events-none');
-  toast.classList.add('opacity-100');
-
-  setTimeout(() => {
-    toast.classList.remove('opacity-100');
-    toast.classList.add('opacity-0', 'pointer-events-none');
-  }, 4000); // Hide after 4 seconds
-}
-
 </script>
+
 <!-- floating buttomn -->
 <script>
   // Update your existing JavaScript with this code
@@ -2066,6 +1863,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+
 </div>
 </body>
 </html>
