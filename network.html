@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network | CareerPath AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .connection-status {
+            transition: all 0.2s ease;
+        }
+        
+        .connection-status:hover {
+            transform: scale(1.05);
+        }
+        
+        .notification-dot {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-white shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center">
+                        <i class="fas fa-brain text-white text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                        CareerPath AI
+                    </span>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="dashboard.html" class="text-gray-600 hover:text-blue-600">Dashboard</a>
+                    <a href="profile.html" class="text-gray-600 hover:text-blue-600">Profile</a>
+                    <a href="network.html" class="text-blue-600 font-medium">Network</a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600">Jobs</a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600">Messages</a>
+                </nav>
+                
+                <!-- User & Notifications -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="notifications-btn" class="p-2 rounded-full hover:bg-gray-100 text-gray-600 relative">
+                            <i class="fas fa-bell"></i>
+                            <span id="notification-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                        </button>
+                        <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+                            <div class="p-4 border-b border-gray-200">
+                                <h3 class="font-medium text-gray-800">Notifications</h3>
+                            </div>
+                            <div id="notifications-list" class="max-h-80 overflow-y-auto">
+                                <!-- Notifications will be loaded here -->
+                            </div>
+                            <div class="p-3 border-t border-gray-200 text-center">
+                                <a href="#" class="text-sm text-blue-600 hover:text-blue-800">View all</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Dropdown -->
+                    <div class="relative">
+                        <button id="profile-btn" class="flex items-center space-x-2 focus:outline-none">
+                            <span class="hidden md:inline-block font-medium text-gray-700" id="navbar-username">John Doe</span>
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 hover:bg-blue-200 transition">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </button>
+                        <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+                            <div class="py-1">
+                                <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
+                                <a href="dashboard.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                                <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Sidebar -->
+            <aside class="lg:w-64 flex-shrink-0">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="font-medium text-gray-800 mb-4">My Network</h3>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600">
+                                <i class="fas fa-user-friends mr-3 text-blue-500"></i>
+                                <span>Connections</span>
+                                <span id="connection-count" class="ml-auto bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">0</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600">
+                                <i class="fas fa-user-plus mr-3 text-blue-500"></i>
+                                <span>Invitations</span>
+                                <span id="invitation-count" class="ml-auto bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">0</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600">
+                                <i class="fas fa-users mr-3 text-blue-500"></i>
+                                <span>Groups</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600">
+                                <i class="fas fa-hashtag mr-3 text-blue-500"></i>
+                                <span>Hashtags</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 class="font-medium text-gray-800 mb-4">Recent Activity</h3>
+                    <div id="recent-activity" class="space-y-4">
+                        <!-- Recent activity will be loaded here -->
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Main Feed -->
+            <div class="flex-1">
+                <!-- Network Suggestions -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">People you may know</h2>
+                        <a href="#" class="text-sm text-blue-600 font-medium">See all</a>
+                    </div>
+                    
+                    <div id="network-suggestions" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Network suggestions will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Your Connections -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Your Connections</h2>
+                        <a href="#" class="text-sm text-blue-600 font-medium">Manage</a>
+                    </div>
+                    
+                    <div id="your-connections" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Connections will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Profile View Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('profile-modal')">&times;</span>
+            <div id="profile-modal-content">
+                <!-- Profile content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Connection Request Modal -->
+    <div id="connection-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('connection-modal')">&times;</span>
+            <div id="connection-modal-content">
+                <!-- Connection request content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Integration Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            setDoc,
+            collection,
+            addDoc,
+            updateDoc,
+            onSnapshot,
+            query,
+            where,
+            getDocs,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { 
+            getStorage, 
+            ref, 
+            getDownloadURL 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCcFX4LXH-wWpTAPjXRd_7CIL0_PkldyFY",
+            authDomain: "newproject-eaafb.firebaseapp.com",
+            projectId: "newproject-eaafb",
+            storageBucket: "newproject-eaafb.appspot.com",
+            messagingSenderId: "462532086346",
+            appId: "1:462532086346:web:f3689678f389eb941534b3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // DOM elements
+        const notificationsBtn = document.getElementById('notifications-btn');
+        const notificationsDropdown = document.getElementById('notifications-dropdown');
+        const notificationsList = document.getElementById('notifications-list');
+        const notificationCount = document.getElementById('notification-count');
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const logoutBtn = document.getElementById('logout-btn');
+        const navbarUsername = document.getElementById('navbar-username');
+        const connectionCount = document.getElementById('connection-count');
+        const invitationCount = document.getElementById('invitation-count');
+        const recentActivity = document.getElementById('recent-activity');
+        const networkSuggestions = document.getElementById('network-suggestions');
+        const yourConnections = document.getElementById('your-connections');
+        const profileModal = document.getElementById('profile-modal');
+        const profileModalContent = document.getElementById('profile-modal-content');
+        const connectionModal = document.getElementById('connection-modal');
+        const connectionModalContent = document.getElementById('connection-modal-content');
+
+        // Toggle dropdowns
+        notificationsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notificationsDropdown.classList.toggle('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+
+        profileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('hidden');
+            notificationsDropdown.classList.add('hidden');
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', () => {
+            notificationsDropdown.classList.add('hidden');
+            profileDropdown.classList.add('hidden');
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = 'login.html';
+            }).catch((error) => {
+                console.error('Logout error:', error);
+                showToast('Error logging out. Please try again.', 'error');
+            });
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? 'fa-check-circle text-green-400' : 'fa-exclamation-circle text-red-400';
+            
+            toast.className = `fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg flex items-center`;
+            toast.innerHTML = `
+                <i class="fas ${icon} mr-2"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Format timestamp
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return 'Just now';
+            
+            const now = new Date();
+            const date = timestamp.toDate();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'Just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+            return `${Math.floor(diffInSeconds / 86400)}d ago`;
+        }
+
+        // Main initialization when auth state changes
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // User is signed in
+                const userId = user.uid;
+                
+                // Load user data
+                const userDoc = await getDoc(doc(db, "users", userId));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    if (navbarUsername && userData.name) {
+                        navbarUsername.textContent = userData.name;
+                    }
+                }
+                
+                // Set up real-time listeners
+                setupConnectionListeners(userId);
+                setupNotificationListeners(userId);
+                loadNetworkSuggestions(userId);
+                loadRecentActivity(userId);
+                
+            } else {
+                // User is signed out, redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Set up connection listeners
+        function setupConnectionListeners(userId) {
+            // Listen for incoming connection requests
+            const incomingQuery = query(
+                collection(db, "connections"),
+                where("receiverId", "==", userId),
+                where("status", "==", "pending")
+            );
+            
+            onSnapshot(incomingQuery, (snapshot) => {
+                invitationCount.textContent = snapshot.size;
+                invitationCount.classList.toggle('hidden', snapshot.size === 0);
+                
+                // Update UI if modal is open
+                if (!connectionModal.classList.contains('hidden')) {
+                    loadConnectionRequests(userId);
+                }
+            });
+            
+            // Listen for accepted connections
+            const connectionsQuery = query(
+                collection(db, "connections"),
+                where("status", "==", "accepted"),
+                where("senderId", "==", userId)
+            );
+            
+            const connectionsQuery2 = query(
+                collection(db, "connections"),
+                where("status", "==", "accepted"),
+                where("receiverId", "==", userId)
+            );
+            
+            onSnapshot(connectionsQuery, (snapshot) => {
+                connectionCount.textContent = snapshot.size;
+                loadYourConnections(userId);
+            });
+            
+            onSnapshot(connectionsQuery2, (snapshot) => {
+                connectionCount.textContent = parseInt(connectionCount.textContent || 0) + snapshot.size;
+                loadYourConnections(userId);
+            });
+        }
+
+        // Set up notification listeners
+        function setupNotificationListeners(userId) {
+            const notificationsQuery = query(
+                collection(db, "notifications"),
+                where("toUserId", "==", userId),
+                where("read", "==", false)
+            );
+            
+            onSnapshot(notificationsQuery, (snapshot) => {
+                notificationCount.textContent = snapshot.size;
+                notificationCount.classList.toggle('hidden', snapshot.size === 0);
+                loadNotifications(userId);
+            });
+        }
+
+        // Load network suggestions
+        async function loadNetworkSuggestions(userId) {
+            try {
+                // Get all users except current user and existing connections
+                const usersSnapshot = await getDocs(collection(db, "users"));
+                const connectionsSnapshot = await getDocs(query(
+                    collection(db, "connections"),
+                    where("senderId", "==", userId)
+                ));
+                
+                const connectedUserIds = connectionsSnapshot.docs.map(doc => 
+                    doc.data().receiverId === userId ? doc.data().senderId : doc.data().receiverId
+                );
+                
+                // Filter out current user and existing connections
+                const suggestions = [];
+                for (const doc of usersSnapshot.docs) {
+                    if (doc.id !== userId && !connectedUserIds.includes(doc.id)) {
+                        suggestions.push({ id: doc.id, ...doc.data() });
+                    }
+                }
+                
+                // Display suggestions
+                networkSuggestions.innerHTML = '';
+                suggestions.slice(0, 6).forEach(user => {
+                    const userCard = document.createElement('div');
+                    userCard.className = 'bg-white rounded-lg border border-gray-200 overflow-hidden card-hover';
+                    userCard.innerHTML = `
+                        <div class="p-4 text-center">
+                            <div class="w-20 h-20 rounded-full bg-gray-200 mx-auto mb-3 overflow-hidden">
+                                <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                            </div>
+                            <h3 class="font-bold text-gray-800">${user.name}</h3>
+                            <p class="text-sm text-gray-500">${user.title || 'Professional'}</p>
+                            <p class="text-xs text-gray-400 mt-1">${user.location || 'Unknown location'}</p>
+                            <button onclick="sendConnectionRequest('${userId}', '${user.id}')" class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium connection-status">
+                                Connect
+                            </button>
+                        </div>
+                    `;
+                    networkSuggestions.appendChild(userCard);
+                });
+                
+            } catch (error) {
+                console.error("Error loading network suggestions:", error);
+                showToast('Error loading network suggestions', 'error');
+            }
+        }
+
+        // Load your connections
+        async function loadYourConnections(userId) {
+            try {
+                // Get all accepted connections where user is sender or receiver
+                const connectionsQuery1 = query(
+                    collection(db, "connections"),
+                    where("senderId", "==", userId),
+                    where("status", "==", "accepted")
+                );
+                
+                const connectionsQuery2 = query(
+                    collection(db, "connections"),
+                    where("receiverId", "==", userId),
+                    where("status", "==", "accepted")
+                );
+                
+                const [snapshot1, snapshot2] = await Promise.all([
+                    getDocs(connectionsQuery1),
+                    getDocs(connectionsQuery2)
+                ]);
+                
+                const connectionIds = [
+                    ...snapshot1.docs.map(doc => doc.data().receiverId),
+                    ...snapshot2.docs.map(doc => doc.data().senderId)
+                ];
+                
+                // Get user data for each connection
+                const connections = [];
+                for (const id of connectionIds) {
+                    const userDoc = await getDoc(doc(db, "users", id));
+                    if (userDoc.exists()) {
+                        connections.push({ id: userDoc.id, ...userDoc.data() });
+                    }
+                }
+                
+                // Display connections
+                yourConnections.innerHTML = '';
+                connections.slice(0, 6).forEach(user => {
+                    const userCard = document.createElement('div');
+                    userCard.className = 'bg-white rounded-lg border border-gray-200 overflow-hidden card-hover';
+                    userCard.innerHTML = `
+                        <div class="p-4 text-center">
+                            <div class="w-20 h-20 rounded-full bg-gray-200 mx-auto mb-3 overflow-hidden cursor-pointer" onclick="viewProfile('${user.id}')">
+                                <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                            </div>
+                            <h3 class="font-bold text-gray-800 cursor-pointer" onclick="viewProfile('${user.id}')">${user.name}</h3>
+                            <p class="text-sm text-gray-500">${user.title || 'Professional'}</p>
+                            <div class="mt-3 flex justify-center space-x-2">
+                                <button onclick="startChat('${userId}', '${user.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-medium connection-status">
+                                    Message
+                                </button>
+                                <button onclick="removeConnection('${userId}', '${user.id}')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-full text-xs font-medium connection-status">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    yourConnections.appendChild(userCard);
+                });
+                
+            } catch (error) {
+                console.error("Error loading connections:", error);
+                showToast('Error loading connections', 'error');
+            }
+        }
+
+        // Load connection requests
+        async function loadConnectionRequests(userId) {
+            try {
+                const querySnapshot = await getDocs(query(
+                    collection(db, "connections"),
+                    where("receiverId", "==", userId),
+                    where("status", "==", "pending")
+                ));
+                
+                connectionModalContent.innerHTML = `
+                    <h2 class="text-xl font-bold mb-4">Connection Requests</h2>
+                    <div class="space-y-4">
+                        ${querySnapshot.size === 0 ? '<p class="text-gray-500">No pending requests</p>' : ''}
+                    </div>
+                `;
+                
+                const requestsContainer = connectionModalContent.querySelector('.space-y-4');
+                
+                for (const doc of querySnapshot.docs) {
+                    const connection = doc.data();
+                    const userDoc = await getDoc(doc(db, "users", connection.senderId));
+                    
+                    if (userDoc.exists()) {
+                        const user = userDoc.data();
+                        const requestElement = document.createElement('div');
+                        requestElement.className = 'flex items-center justify-between p-3 border border-gray-200 rounded-lg';
+                        requestElement.innerHTML = `
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-3">
+                                    <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">${user.name}</h4>
+                                    <p class="text-sm text-gray-500">${user.title || 'Professional'}</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button onclick="acceptConnectionRequest('${doc.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-medium">
+                                    Accept
+                                </button>
+                                <button onclick="rejectConnectionRequest('${doc.id}')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-full text-xs font-medium">
+                                    Decline
+                                </button>
+                            </div>
+                        `;
+                        requestsContainer.appendChild(requestElement);
+                    }
+                }
+                
+                openModal('connection-modal');
+                
+            } catch (error) {
+                console.error("Error loading connection requests:", error);
+                showToast('Error loading connection requests', 'error');
+            }
+        }
+
+        // Load notifications
+        async function loadNotifications(userId) {
+            try {
+                const querySnapshot = await getDocs(query(
+                    collection(db, "notifications"),
+                    where("toUserId", "==", userId),
+                    orderBy("timestamp", "desc"),
+                    limit(10)
+                ));
+                
+                notificationsList.innerHTML = '';
+                
+                for (const doc of querySnapshot.docs) {
+                    const notification = doc.data();
+                    const fromUserDoc = await getDoc(doc(db, "users", notification.fromUserId));
+                    const fromUserName = fromUserDoc.exists() ? fromUserDoc.data().name : 'Someone';
+                    
+                    const notificationElement = document.createElement('div');
+                    notificationElement.className = 'p-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer';
+                    notificationElement.innerHTML = `
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 mr-3">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm">${notification.message.replace('User X', fromUserName)}</p>
+                                <p class="text-xs text-gray-500 mt-1">${formatTimestamp(notification.timestamp)}</p>
+                            </div>
+                            ${notification.read ? '' : '<div class="w-2 h-2 rounded-full bg-blue-500 notification-dot"></div>'}
+                        </div>
+                    `;
+                    
+                    notificationElement.addEventListener('click', async () => {
+                        // Mark as read
+                        await updateDoc(doc(db, "notifications", doc.id), { read: true });
+                        
+                        // Handle notification click based on type
+                        if (notification.type === 'connection_request') {
+                            loadConnectionRequests(userId);
+                        } else if (notification.type === 'profile_view') {
+                            viewProfile(notification.fromUserId);
+                        }
+                    });
+                    
+                    notificationsList.appendChild(notificationElement);
+                }
+                
+            } catch (error) {
+                console.error("Error loading notifications:", error);
+                showToast('Error loading notifications', 'error');
+            }
+        }
+
+        // Load recent activity
+        async function loadRecentActivity(userId) {
+            try {
+                const querySnapshot = await getDocs(query(
+                    collection(db, "notifications"),
+                    where("toUserId", "==", userId),
+                    orderBy("timestamp", "desc"),
+                    limit(5)
+                ));
+                
+                recentActivity.innerHTML = '';
+                
+                for (const doc of querySnapshot.docs) {
+                    const notification = doc.data();
+                    const fromUserDoc = await getDoc(doc(db, "users", notification.fromUserId));
+                    const fromUserName = fromUserDoc.exists() ? fromUserDoc.data().name : 'Someone';
+                    
+                    const activityElement = document.createElement('div');
+                    activityElement.className = 'flex items-start';
+                    activityElement.innerHTML = `
+                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 mr-3">
+                            <i class="fas fa-bell text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm">${notification.message.replace('User X', fromUserName)}</p>
+                            <p class="text-xs text-gray-500 mt-1">${formatTimestamp(notification.timestamp)}</p>
+                        </div>
+                    `;
+                    recentActivity.appendChild(activityElement);
+                }
+                
+            } catch (error) {
+                console.error("Error loading recent activity:", error);
+                showToast('Error loading recent activity', 'error');
+            }
+        }
+
+        // View profile
+        async function viewProfile(userId) {
+            try {
+                const userDoc = await getDoc(doc(db, "users", userId));
+                
+                if (userDoc.exists()) {
+                    const user = userDoc.data();
+                    
+                    // Create profile view notification if viewing someone else's profile
+                    const currentUser = auth.currentUser;
+                    if (currentUser && currentUser.uid !== userId) {
+                        await addDoc(collection(db, "notifications"), {
+                            toUserId: userId,
+                            fromUserId: currentUser.uid,
+                            type: "profile_view",
+                            message: "User X viewed your profile",
+                            timestamp: serverTimestamp(),
+                            read: false
+                        });
+                    }
+                    
+                    // Display profile in modal
+                    profileModalContent.innerHTML = `
+                        <div class="text-center mb-6">
+                            <div class="w-24 h-24 rounded-full bg-gray-200 mx-auto mb-4 overflow-hidden">
+                                <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                            </div>
+                            <h2 class="text-xl font-bold">${user.name}</h2>
+                            <p class="text-gray-600">${user.title || 'Professional'}</p>
+                            <p class="text-sm text-gray-500 mt-2">${user.location || 'Unknown location'}</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h3 class="font-medium text-gray-800 mb-2">About</h3>
+                            <p class="text-gray-700">${user.summary || 'No summary provided'}</p>
+                        </div>
+                        
+                        <div class="flex justify-center space-x-4">
+                            <button onclick="startChat('${currentUser.uid}', '${userId}')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full font-medium">
+                                Message
+                            </button>
+                            <button onclick="closeModal('profile-modal')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-full font-medium">
+                                Close
+                            </button>
+                        </div>
+                    `;
+                    
+                    openModal('profile-modal');
+                } else {
+                    showToast('Profile not found', 'error');
+                }
+            } catch (error) {
+                console.error("Error viewing profile:", error);
+                showToast('Error viewing profile', 'error');
+            }
+        }
+
+        // Send connection request
+        async function sendConnectionRequest(senderId, receiverId) {
+            try {
+                // Check if request already exists
+                const existingRequest = await getDocs(query(
+                    collection(db, "connections"),
+                    where("senderId", "==", senderId),
+                    where("receiverId", "==", receiverId)
+                ));
+                
+                if (!existingRequest.empty) {
+                    showToast('Connection request already sent', 'error');
+                    return;
+                }
+                
+                // Create connection request
+                await addDoc(collection(db, "connections"), {
+                    senderId,
+                    receiverId,
+                    status: "pending",
+                    createdAt: serverTimestamp()
+                });
+                
+                // Create notification
+                await addDoc(collection(db, "notifications"), {
+                    toUserId: receiverId,
+                    fromUserId: senderId,
+                    type: "connection_request",
+                    message: "User X wants to connect with you",
+                    timestamp: serverTimestamp(),
+                    read: false
+                });
+                
+                showToast('Connection request sent');
+                
+            } catch (error) {
+                console.error("Error sending connection request:", error);
+                showToast('Error sending connection request', 'error');
+            }
+        }
+
+        // Accept connection request
+        async function acceptConnectionRequest(connectionId) {
+            try {
+                await updateDoc(doc(db, "connections", connectionId), {
+                    status: "accepted",
+                    acceptedAt: serverTimestamp()
+                });
+                
+                showToast('Connection request accepted');
+                closeModal('connection-modal');
+                
+            } catch (error) {
+                console.error("Error accepting connection request:", error);
+                showToast('Error accepting connection request', 'error');
+            }
+        }
+
+        // Reject connection request
+        async function rejectConnectionRequest(connectionId) {
+            try {
+                await updateDoc(doc(db, "connections", connectionId), {
+                    status: "rejected"
+                });
+                
+                showToast('Connection request declined');
+                closeModal('connection-modal');
+                
+            } catch (error) {
+                console.error("Error rejecting connection request:", error);
+                showToast('Error rejecting connection request', 'error');
+            }
+        }
+
+        // Remove connection
+        async function removeConnection(userId, connectionId) {
+            try {
+                // Find the connection document
+                const connectionQuery1 = query(
+                    collection(db, "connections"),
+                    where("senderId", "==", userId),
+                    where("receiverId", "==", connectionId),
+                    where("status", "==", "accepted")
+                );
+                
+                const connectionQuery2 = query(
+                    collection(db, "connections"),
+                    where("senderId", "==", connectionId),
+                    where("receiverId", "==", userId),
+                    where("status", "==", "accepted")
+                );
+                
+                const [snapshot1, snapshot2] = await Promise.all([
+                    getDocs(connectionQuery1),
+                    getDocs(connectionQuery2)
+                ]);
+                
+                const connectionDoc = snapshot1.docs[0] || snapshot2.docs[0];
+                
+                if (connectionDoc) {
+                    await deleteDoc(connectionDoc.ref);
+                    showToast('Connection removed');
+                } else {
+                    showToast('Connection not found', 'error');
+                }
+                
+            } catch (error) {
+                console.error("Error removing connection:", error);
+                showToast('Error removing connection', 'error');
+            }
+        }
+
+        // Start chat (placeholder - would navigate to messages page)
+        function startChat(currentUserId, otherUserId) {
+            showToast('Redirecting to messages...');
+            // In a real app, you would navigate to a chat page with the selected user
+            // window.location.href = `messages.html?userId=${otherUserId}`;
+        }
+
+        // Make functions available globally
+        window.viewProfile = viewProfile;
+        window.sendConnectionRequest = sendConnectionRequest;
+        window.acceptConnectionRequest = acceptConnectionRequest;
+        window.rejectConnectionRequest = rejectConnectionRequest;
+        window.removeConnection = removeConnection;
+        window.startChat = startChat;
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+
+    </script>
+</body>
+</html>
