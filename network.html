@@ -11,23 +11,29 @@
             background: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
         }
         
-        .card-hover {
-            transition: all 0.3s ease;
+        /* Modern card hover effect */
+        .profile-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
         }
         
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        .profile-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
         
-        .connection-status {
+        /* Button animations */
+        .btn-action {
             transition: all 0.2s ease;
         }
         
-        .connection-status:hover {
-            transform: scale(1.05);
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         
+        /* Notification dot */
         .notification-dot {
             animation: pulse 1.5s infinite;
         }
@@ -55,11 +61,13 @@
         .modal-content {
             background-color: white;
             padding: 2rem;
-            border-radius: 0.5rem;
+            border-radius: 12px;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             max-height: 90vh;
             overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
         
         .modal-close {
@@ -68,6 +76,124 @@
             right: 1rem;
             font-size: 1.5rem;
             cursor: pointer;
+            color: #6b7280;
+            transition: color 0.2s;
+        }
+        
+        .modal-close:hover {
+            color: #1f2937;
+        }
+        
+        /* List items */
+        .list-item {
+            transition: background-color 0.2s;
+            border-radius: 8px;
+        }
+        
+        .list-item:hover {
+            background-color: #f9fafb;
+        }
+        
+        /* Chat UI */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background-color: #f9fafb;
+        }
+        
+        .chat-input-container {
+            border-top: 1px solid #e5e7eb;
+            padding: 1rem;
+            background-color: white;
+        }
+        
+        .message {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 18px;
+            margin-bottom: 0.75rem;
+            word-wrap: break-word;
+        }
+        
+        .message-sent {
+            background-color: #3b82f6;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message-received {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+        
+        /* Status badges */
+        .status-badge {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-accepted {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+        
+        /* Tab system */
+        .tab-button {
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab-button.active {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .tab-button:hover:not(.active) {
+            border-bottom-color: #e5e7eb;
         }
     </style>
 </head>
@@ -102,15 +228,16 @@
                             <i class="fas fa-bell"></i>
                             <span id="notification-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
                         </button>
-                        <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-50 border border-gray-200">
-                            <div class="p-4 border-b border-gray-200">
+                        <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-lg z-50 border border-gray-200">
+                            <div class="p-4 border-b border-gray-200 flex justify-between items-center">
                                 <h3 class="font-medium text-gray-800">Notifications</h3>
+                                <button id="mark-all-read" class="text-sm text-blue-600 hover:text-blue-800">Mark all as read</button>
                             </div>
                             <div id="notifications-list" class="max-h-80 overflow-y-auto">
                                 <!-- Notifications will be loaded here -->
                             </div>
                             <div class="p-3 border-t border-gray-200 text-center">
-                                <a href="#" class="text-sm text-blue-600 hover:text-blue-800">View all</a>
+                                <a href="#" class="text-sm text-blue-600 hover:text-blue-800">View all notifications</a>
                             </div>
                         </div>
                     </div>
@@ -118,8 +245,8 @@
                     <!-- Profile Dropdown -->
                     <div class="relative">
                         <button id="profile-btn" class="flex items-center space-x-2 focus:outline-none">
-                            <span class="hidden md:inline-block font-medium text-gray-700" id="navbar-username">John Doe</span>
-                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 hover:bg-blue-200 transition">
+                            <span class="hidden md:inline-block font-medium text-gray-700" id="navbar-username">Loading...</span>
+                            <div id="profile-avatar" class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 hover:bg-blue-200 transition">
                                 <i class="fas fa-user"></i>
                             </div>
                         </button>
@@ -146,29 +273,23 @@
                     <h3 class="font-medium text-gray-800 mb-4">My Network</h3>
                     <ul class="space-y-3">
                         <li>
-                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600">
+                            <a href="#" id="connections-link" class="flex items-center text-gray-700 hover:text-blue-600">
                                 <i class="fas fa-user-friends mr-3 text-blue-500"></i>
                                 <span>Connections</span>
                                 <span id="connection-count" class="ml-auto bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">0</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600">
+                            <a href="#" id="invitations-link" class="flex items-center text-gray-700 hover:text-blue-600">
                                 <i class="fas fa-user-plus mr-3 text-blue-500"></i>
                                 <span>Invitations</span>
                                 <span id="invitation-count" class="ml-auto bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">0</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600">
+                            <a href="#" id="groups-link" class="flex items-center text-gray-700 hover:text-blue-600">
                                 <i class="fas fa-users mr-3 text-blue-500"></i>
                                 <span>Groups</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center text-gray-700 hover:text-blue-600">
-                                <i class="fas fa-hashtag mr-3 text-blue-500"></i>
-                                <span>Hashtags</span>
                             </a>
                         </li>
                     </ul>
@@ -196,69 +317,168 @@
                     </div>
                 </div>
                 
-                <!-- Your Connections -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-bold text-gray-800">Your Connections</h2>
-                        <a href="#" class="text-sm text-blue-600 font-medium">Manage</a>
+                <!-- Invitations Section (Hidden by default) -->
+                <div id="invitations-section" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex space-x-4 mb-6 border-b border-gray-200">
+                        <button id="received-tab" class="tab-button pb-2 px-1 font-medium active">Received</button>
+                        <button id="sent-tab" class="tab-button pb-2 px-1 font-medium">Sent</button>
                     </div>
                     
-                    <div id="your-connections" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div id="received-invitations" class="space-y-4">
+                        <!-- Received invitations will be loaded here -->
+                    </div>
+                    
+                    <div id="sent-invitations" class="space-y-4 hidden">
+                        <!-- Sent invitations will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Connections Section (Hidden by default) -->
+                <div id="connections-section" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Your Connections</h2>
+                        <div class="relative">
+                            <input type="text" id="connections-search" placeholder="Search connections..." class="text-sm border border-gray-300 rounded-full pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <i class="fas fa-search absolute right-3 top-2.5 text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <div id="connections-list" class="space-y-3">
                         <!-- Connections will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Groups Section (Hidden by default) -->
+                <div id="groups-section" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Your Groups</h2>
+                        <button id="create-group-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium btn-action">
+                            <i class="fas fa-plus mr-1"></i> New Group
+                        </button>
+                    </div>
+                    
+                    <div id="groups-list" class="space-y-3">
+                        <!-- Groups will be loaded here -->
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Profile View Modal -->
+    <!-- Profile View Modal with Chat -->
     <div id="profile-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 800px;">
             <span class="modal-close" onclick="closeModal('profile-modal')">&times;</span>
-            <div id="profile-modal-content">
-                <!-- Profile content will be loaded here -->
+            <div id="profile-modal-content" class="flex flex-col lg:flex-row gap-6">
+                <!-- Left Column - Profile -->
+                <div class="lg:w-1/2">
+                    <div class="text-center mb-6">
+                        <div class="w-24 h-24 rounded-full bg-gray-200 mx-auto mb-4 overflow-hidden">
+                            <img id="profile-modal-image" src="https://via.placeholder.com/150" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                        <h2 id="profile-modal-name" class="text-xl font-bold">John Doe</h2>
+                        <p id="profile-modal-title" class="text-gray-600">Professional</p>
+                        <p id="profile-modal-location" class="text-sm text-gray-500 mt-2">Unknown location</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="font-medium text-gray-800 mb-2">About</h3>
+                        <p id="profile-modal-about" class="text-gray-700">No summary provided</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <h3 class="font-medium text-gray-800 mb-2">Experience</h3>
+                            <div id="profile-modal-experience">
+                                <p class="text-gray-500 text-sm">No experience added</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 mb-2">Education</h3>
+                            <div id="profile-modal-education">
+                                <p class="text-gray-500 text-sm">No education added</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Chat -->
+                <div class="lg:w-1/2">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- Messages will be loaded here -->
+                            <div class="text-center text-gray-500 py-8">
+                                <i class="fas fa-comments text-2xl mb-2"></i>
+                                <p>Start a conversation</p>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <div class="flex items-center">
+                                <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <button id="send-message-btn" class="ml-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-10 h-10 flex items-center justify-center btn-action">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Connection Request Modal -->
-    <div id="connection-modal" class="modal">
+    <!-- Create Group Modal -->
+    <div id="group-modal" class="modal">
         <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('connection-modal')">&times;</span>
-            <div id="connection-modal-content">
-                <!-- Connection request content will be loaded here -->
+            <span class="modal-close" onclick="closeModal('group-modal')">&times;</span>
+            <div id="group-modal-content">
+                <h2 class="text-xl font-bold mb-4">Create New Group</h2>
+                <div class="mb-4">
+                    <label for="group-name" class="block text-sm font-medium text-gray-700 mb-1">Group Name</label>
+                    <input type="text" id="group-name" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label for="group-description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="group-description" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Add Members</label>
+                    <div id="group-members-search-container" class="relative mb-2">
+                        <input type="text" id="group-members-search" placeholder="Search connections..." class="w-full text-sm border border-gray-300 rounded-full pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <i class="fas fa-search absolute right-3 top-2.5 text-gray-400"></i>
+                    </div>
+                    <div id="group-members-results" class="max-h-40 overflow-y-auto border border-gray-200 rounded-lg hidden">
+                        <!-- Search results will appear here -->
+                    </div>
+                    <div id="group-selected-members" class="mt-2 flex flex-wrap gap-2">
+                        <!-- Selected members will appear here -->
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button onclick="closeModal('group-modal')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium">
+                        Cancel
+                    </button>
+                    <button id="create-group-confirm" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                        Create Group
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase Integration Script -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { 
-            getAuth, 
-            onAuthStateChanged,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            getDoc, 
-            setDoc,
-            collection,
-            addDoc,
-            updateDoc,
-            onSnapshot,
-            query,
-            where,
-            getDocs,
-            serverTimestamp
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { 
-            getStorage, 
-            ref, 
-            getDownloadURL 
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg flex items-center opacity-0 transition-opacity duration-300 pointer-events-none">
+        <i id="toast-icon" class="fas fa-check-circle mr-2"></i>
+        <span id="toast-message"></span>
+    </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+    <script>
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCcFX4LXH-wWpTAPjXRd_7CIL0_PkldyFY",
             authDomain: "newproject-eaafb.firebaseapp.com",
@@ -268,29 +488,68 @@
             appId: "1:462532086346:web:f3689678f389eb941534b3"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
         // DOM elements
         const notificationsBtn = document.getElementById('notifications-btn');
         const notificationsDropdown = document.getElementById('notifications-dropdown');
         const notificationsList = document.getElementById('notifications-list');
         const notificationCount = document.getElementById('notification-count');
+        const markAllReadBtn = document.getElementById('mark-all-read');
         const profileBtn = document.getElementById('profile-btn');
         const profileDropdown = document.getElementById('profile-dropdown');
         const logoutBtn = document.getElementById('logout-btn');
         const navbarUsername = document.getElementById('navbar-username');
+        const profileAvatar = document.getElementById('profile-avatar');
         const connectionCount = document.getElementById('connection-count');
         const invitationCount = document.getElementById('invitation-count');
+        const invitationsLink = document.getElementById('invitations-link');
+        const connectionsLink = document.getElementById('connections-link');
+        const groupsLink = document.getElementById('groups-link');
         const recentActivity = document.getElementById('recent-activity');
         const networkSuggestions = document.getElementById('network-suggestions');
-        const yourConnections = document.getElementById('your-connections');
+        const invitationsSection = document.getElementById('invitations-section');
+        const receivedInvitations = document.getElementById('received-invitations');
+        const sentInvitations = document.getElementById('sent-invitations');
+        const receivedTab = document.getElementById('received-tab');
+        const sentTab = document.getElementById('sent-tab');
+        const connectionsSection = document.getElementById('connections-section');
+        const connectionsList = document.getElementById('connections-list');
+        const connectionsSearch = document.getElementById('connections-search');
+        const groupsSection = document.getElementById('groups-section');
+        const groupsList = document.getElementById('groups-list');
+        const createGroupBtn = document.getElementById('create-group-btn');
         const profileModal = document.getElementById('profile-modal');
         const profileModalContent = document.getElementById('profile-modal-content');
-        const connectionModal = document.getElementById('connection-modal');
-        const connectionModalContent = document.getElementById('connection-modal-content');
+        const profileModalImage = document.getElementById('profile-modal-image');
+        const profileModalName = document.getElementById('profile-modal-name');
+        const profileModalTitle = document.getElementById('profile-modal-title');
+        const profileModalLocation = document.getElementById('profile-modal-location');
+        const profileModalAbout = document.getElementById('profile-modal-about');
+        const profileModalExperience = document.getElementById('profile-modal-experience');
+        const profileModalEducation = document.getElementById('profile-modal-education');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendMessageBtn = document.getElementById('send-message-btn');
+        const groupModal = document.getElementById('group-modal');
+        const groupNameInput = document.getElementById('group-name');
+        const groupDescriptionInput = document.getElementById('group-description');
+        const groupMembersSearch = document.getElementById('group-members-search');
+        const groupMembersResults = document.getElementById('group-members-results');
+        const groupSelectedMembers = document.getElementById('group-selected-members');
+        const createGroupConfirm = document.getElementById('create-group-confirm');
+        const toast = document.getElementById('toast');
+        const toastIcon = document.getElementById('toast-icon');
+        const toastMessage = document.getElementById('toast-message');
+
+        // State variables
+        let currentChatUserId = null;
+        let selectedGroupMembers = [];
+        let allConnections = [];
 
         // Toggle dropdowns
         notificationsBtn.addEventListener('click', (e) => {
@@ -313,7 +572,7 @@
 
         // Logout functionality
         logoutBtn.addEventListener('click', () => {
-            signOut(auth).then(() => {
+            auth.signOut().then(() => {
                 window.location.href = 'login.html';
             }).catch((error) => {
                 console.error('Logout error:', error);
@@ -321,30 +580,305 @@
             });
         });
 
+        // Mark all notifications as read
+        markAllReadBtn?.addEventListener('click', async () => {
+            const currentUser = auth.currentUser;
+            if (!currentUser) return;
+
+            try {
+                const querySnapshot = await db.collection("notifications")
+                    .where("toUserId", "==", currentUser.uid)
+                    .where("read", "==", false)
+                    .get();
+
+                const batch = db.batch();
+                querySnapshot.forEach(doc => {
+                    batch.update(doc.ref, { read: true });
+                });
+
+                await batch.commit();
+                showToast('All notifications marked as read');
+            } catch (error) {
+                console.error("Error marking notifications as read:", error);
+                showToast('Error marking notifications as read', 'error');
+            }
+        });
+
+        // Tab switching for invitations
+        receivedTab.addEventListener('click', () => {
+            receivedTab.classList.add('active');
+            sentTab.classList.remove('active');
+            receivedInvitations.classList.remove('hidden');
+            sentInvitations.classList.add('hidden');
+        });
+
+        sentTab.addEventListener('click', () => {
+            sentTab.classList.add('active');
+            receivedTab.classList.remove('active');
+            sentInvitations.classList.remove('hidden');
+            receivedInvitations.classList.add('hidden');
+        });
+
+        // Section switching
+        invitationsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            networkSuggestions.parentElement.classList.remove('hidden');
+            invitationsSection.classList.remove('hidden');
+            connectionsSection.classList.add('hidden');
+            groupsSection.classList.add('hidden');
+            loadInvitations(auth.currentUser.uid);
+        });
+
+        connectionsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            networkSuggestions.parentElement.classList.add('hidden');
+            invitationsSection.classList.add('hidden');
+            connectionsSection.classList.remove('hidden');
+            groupsSection.classList.add('hidden');
+            loadConnections(auth.currentUser.uid);
+        });
+
+        groupsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            networkSuggestions.parentElement.classList.add('hidden');
+            invitationsSection.classList.add('hidden');
+            connectionsSection.classList.add('hidden');
+            groupsSection.classList.remove('hidden');
+            loadGroups(auth.currentUser.uid);
+        });
+
+        // Create group button
+        createGroupBtn.addEventListener('click', () => {
+            openModal('group-modal');
+            groupNameInput.value = '';
+            groupDescriptionInput.value = '';
+            groupSelectedMembers.innerHTML = '';
+            selectedGroupMembers = [];
+        });
+
+        // Group member search
+        groupMembersSearch.addEventListener('input', async (e) => {
+            const searchTerm = e.target.value.trim();
+            if (searchTerm.length < 2) {
+                groupMembersResults.classList.add('hidden');
+                return;
+            }
+
+            try {
+                const currentUser = auth.currentUser;
+                if (!currentUser) return;
+
+                // Search connections by name
+                const querySnapshot = await db.collection("users")
+                    .where("name", ">=", searchTerm)
+                    .where("name", "<=", searchTerm + '\uf8ff')
+                    .get();
+
+                groupMembersResults.innerHTML = '';
+                
+                querySnapshot.forEach(doc => {
+                    // Don't show current user or already selected members
+                    if (doc.id !== currentUser.uid && !selectedGroupMembers.includes(doc.id)) {
+                        const user = doc.data();
+                        const memberElement = document.createElement('div');
+                        memberElement.className = 'p-3 hover:bg-gray-50 cursor-pointer flex items-center';
+                        memberElement.innerHTML = `
+                            <div class="w-8 h-8 rounded-full bg-gray-200 mr-3 overflow-hidden">
+                                <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">${user.name}</p>
+                                <p class="text-xs text-gray-500">${user.title || ''}</p>
+                            </div>
+                        `;
+                        memberElement.addEventListener('click', () => {
+                            if (!selectedGroupMembers.includes(doc.id)) {
+                                selectedGroupMembers.push(doc.id);
+                                renderSelectedMembers();
+                            }
+                            groupMembersSearch.value = '';
+                            groupMembersResults.classList.add('hidden');
+                        });
+                        groupMembersResults.appendChild(memberElement);
+                    }
+                });
+
+                if (groupMembersResults.children.length > 0) {
+                    groupMembersResults.classList.remove('hidden');
+                } else {
+                    groupMembersResults.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error("Error searching members:", error);
+            }
+        });
+
+        function renderSelectedMembers() {
+            groupSelectedMembers.innerHTML = '';
+            selectedGroupMembers.forEach(memberId => {
+                db.collection("users").doc(memberId).get().then(doc => {
+                    if (doc.exists) {
+                        const user = doc.data();
+                        const memberElement = document.createElement('div');
+                        memberElement.className = 'flex items-center bg-gray-100 rounded-full px-3 py-1';
+                        memberElement.innerHTML = `
+                            <div class="w-6 h-6 rounded-full bg-gray-200 mr-2 overflow-hidden">
+                                <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                            </div>
+                            <span class="text-sm">${user.name}</span>
+                            <button class="ml-2 text-gray-500 hover:text-gray-700" onclick="removeSelectedMember('${doc.id}')">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
+                        `;
+                        groupSelectedMembers.appendChild(memberElement);
+                    }
+                });
+            });
+        }
+
+        window.removeSelectedMember = function(memberId) {
+            selectedGroupMembers = selectedGroupMembers.filter(id => id !== memberId);
+            renderSelectedMembers();
+        };
+
+        // Create group confirmation
+        createGroupConfirm.addEventListener('click', async () => {
+            const groupName = groupNameInput.value.trim();
+            const groupDescription = groupDescriptionInput.value.trim();
+            const currentUser = auth.currentUser;
+
+            if (!groupName) {
+                showToast('Please enter a group name', 'error');
+                return;
+            }
+
+            if (selectedGroupMembers.length === 0) {
+                showToast('Please add at least one member', 'error');
+                return;
+            }
+
+            try {
+                // Add current user to members
+                const allMembers = [...selectedGroupMembers, currentUser.uid];
+                
+                // Create group document
+                const groupRef = await db.collection("groups").add({
+                    name: groupName,
+                    description: groupDescription,
+                    createdBy: currentUser.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    members: allMembers
+                });
+
+                // Create notifications for invited members
+                const batch = db.batch();
+                selectedGroupMembers.forEach(memberId => {
+                    const notificationRef = db.collection("notifications").doc();
+                    batch.set(notificationRef, {
+                        toUserId: memberId,
+                        fromUserId: currentUser.uid,
+                        type: "group_invitation",
+                        message: `User X invited you to join the group "${groupName}"`,
+                        groupId: groupRef.id,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        read: false
+                    });
+                });
+
+                await batch.commit();
+                closeModal('group-modal');
+                showToast('Group created successfully');
+                loadGroups(currentUser.uid);
+            } catch (error) {
+                console.error("Error creating group:", error);
+                showToast('Error creating group', 'error');
+            }
+        });
+
+        // Connections search
+        connectionsSearch.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const connectionItems = connectionsList.querySelectorAll('.connection-item');
+            
+            connectionItems.forEach(item => {
+                const name = item.querySelector('.connection-name').textContent.toLowerCase();
+                if (name.includes(searchTerm)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        });
+
+        // Send message functionality
+        sendMessageBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message || !currentChatUserId) return;
+
+            const currentUser = auth.currentUser;
+            if (!currentUser) return;
+
+            try {
+                // Add message to Firestore
+                await db.collection("messages").add({
+                    senderId: currentUser.uid,
+                    receiverId: currentChatUserId,
+                    content: message,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Clear input
+                chatInput.value = '';
+                
+                // Add message to UI
+                addMessageToChat(currentUser.uid, message, true);
+            } catch (error) {
+                console.error("Error sending message:", error);
+                showToast('Error sending message', 'error');
+            }
+        }
+
+        function addMessageToChat(senderId, message, isSent) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${isSent ? 'message-sent' : 'message-received'}`;
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
         // Modal functions
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
         // Show toast notification
         function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            const icon = type === 'success' ? 'fa-check-circle text-green-400' : 'fa-exclamation-circle text-red-400';
+            const icon = type === 'success' ? 'fa-check-circle text-green-400' : 
+                         type === 'error' ? 'fa-exclamation-circle text-red-400' : 
+                         'fa-info-circle text-blue-400';
             
-            toast.className = `fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg flex items-center`;
-            toast.innerHTML = `
-                <i class="fas ${icon} mr-2"></i>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(toast);
+            toastIcon.className = `fas ${icon} mr-2`;
+            toastMessage.textContent = message;
+            
+            toast.style.opacity = '1';
+            toast.style.pointerEvents = 'auto';
             
             setTimeout(() => {
                 toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
+                toast.style.pointerEvents = 'none';
             }, 3000);
         }
 
@@ -363,17 +897,29 @@
         }
 
         // Main initialization when auth state changes
-        onAuthStateChanged(auth, async (user) => {
+        auth.onAuthStateChanged(async (user) => {
             if (user) {
                 // User is signed in
                 const userId = user.uid;
                 
                 // Load user data
-                const userDoc = await getDoc(doc(db, "users", userId));
-                if (userDoc.exists()) {
+                const userDoc = await db.collection("users").doc(userId).get();
+                if (userDoc.exists) {
                     const userData = userDoc.data();
+                    
+                    // Update navbar
                     if (navbarUsername && userData.name) {
                         navbarUsername.textContent = userData.name;
+                    }
+                    
+                    // Update profile avatar
+                    if (profileAvatar && userData.profileImage) {
+                        profileAvatar.innerHTML = '';
+                        const img = document.createElement('img');
+                        img.src = userData.profileImage;
+                        img.alt = userData.name;
+                        img.className = 'w-full h-full object-cover rounded-full';
+                        profileAvatar.appendChild(img);
                     }
                 }
                 
@@ -392,150 +938,73 @@
         // Set up connection listeners
         function setupConnectionListeners(userId) {
             // Listen for incoming connection requests
-            const incomingQuery = query(
-                collection(db, "connections"),
-                where("receiverId", "==", userId),
-                where("status", "==", "pending")
-            );
+            db.collection("connections")
+                .where("receiverId", "==", userId)
+                .where("status", "==", "pending")
+                .onSnapshot((snapshot) => {
+                    invitationCount.textContent = snapshot.size;
+                    invitationCount.classList.toggle('hidden', snapshot.size === 0);
+                });
             
-            onSnapshot(incomingQuery, (snapshot) => {
-                invitationCount.textContent = snapshot.size;
-                invitationCount.classList.toggle('hidden', snapshot.size === 0);
-                
-                // Update UI if modal is open
-                if (!connectionModal.classList.contains('hidden')) {
-                    loadConnectionRequests(userId);
-                }
-            });
+            // Listen for accepted connections (where user is sender or receiver)
+            const connectionsQuery1 = db.collection("connections")
+                .where("senderId", "==", userId)
+                .where("status", "==", "accepted");
             
-            // Listen for accepted connections
-            const connectionsQuery = query(
-                collection(db, "connections"),
-                where("status", "==", "accepted"),
-                where("senderId", "==", userId)
-            );
+            const connectionsQuery2 = db.collection("connections")
+                .where("receiverId", "==", userId)
+                .where("status", "==", "accepted");
             
-            const connectionsQuery2 = query(
-                collection(db, "connections"),
-                where("status", "==", "accepted"),
-                where("receiverId", "==", userId)
-            );
-            
-            onSnapshot(connectionsQuery, (snapshot) => {
+            connectionsQuery1.onSnapshot((snapshot) => {
                 connectionCount.textContent = snapshot.size;
-                loadYourConnections(userId);
             });
             
-            onSnapshot(connectionsQuery2, (snapshot) => {
+            connectionsQuery2.onSnapshot((snapshot) => {
                 connectionCount.textContent = parseInt(connectionCount.textContent || 0) + snapshot.size;
-                loadYourConnections(userId);
             });
         }
 
         // Set up notification listeners
         function setupNotificationListeners(userId) {
-            const notificationsQuery = query(
-                collection(db, "notifications"),
-                where("toUserId", "==", userId),
-                where("read", "==", false)
-            );
-            
-            onSnapshot(notificationsQuery, (snapshot) => {
-                notificationCount.textContent = snapshot.size;
-                notificationCount.classList.toggle('hidden', snapshot.size === 0);
-                loadNotifications(userId);
-            });
+            db.collection("notifications")
+                .where("toUserId", "==", userId)
+                .where("read", "==", false)
+                .onSnapshot((snapshot) => {
+                    notificationCount.textContent = snapshot.size;
+                    notificationCount.classList.toggle('hidden', snapshot.size === 0);
+                    loadNotifications(userId);
+                });
         }
 
         // Load network suggestions
         async function loadNetworkSuggestions(userId) {
             try {
-                // Get all users except current user and existing connections
-                const usersSnapshot = await getDocs(collection(db, "users"));
-                const connectionsSnapshot = await getDocs(query(
-                    collection(db, "connections"),
-                    where("senderId", "==", userId)
-                ));
+                // Get all users except current user
+                const usersSnapshot = await db.collection("users").get();
                 
+                // Get existing connections
+                const connectionsSnapshot = await db.collection("connections")
+                    .where("senderId", "==", userId)
+                    .get();
+                
+                // Get IDs of users we're already connected with
                 const connectedUserIds = connectionsSnapshot.docs.map(doc => 
                     doc.data().receiverId === userId ? doc.data().senderId : doc.data().receiverId
                 );
                 
                 // Filter out current user and existing connections
                 const suggestions = [];
-                for (const doc of usersSnapshot.docs) {
+                usersSnapshot.forEach(doc => {
                     if (doc.id !== userId && !connectedUserIds.includes(doc.id)) {
                         suggestions.push({ id: doc.id, ...doc.data() });
                     }
-                }
+                });
                 
                 // Display suggestions
                 networkSuggestions.innerHTML = '';
                 suggestions.slice(0, 6).forEach(user => {
                     const userCard = document.createElement('div');
-                    userCard.className = 'bg-white rounded-lg border border-gray-200 overflow-hidden card-hover';
-                    userCard.innerHTML = `
-                        <div class="p-4 text-center">
-                            <div class="w-20 h-20 rounded-full bg-gray-200 mx-auto mb-3 overflow-hidden">
-                                <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
-                            </div>
-                            <h3 class="font-bold text-gray-800">${user.name}</h3>
-                            <p class="text-sm text-gray-500">${user.title || 'Professional'}</p>
-                            <p class="text-xs text-gray-400 mt-1">${user.location || 'Unknown location'}</p>
-                            <button onclick="sendConnectionRequest('${userId}', '${user.id}')" class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium connection-status">
-                                Connect
-                            </button>
-                        </div>
-                    `;
-                    networkSuggestions.appendChild(userCard);
-                });
-                
-            } catch (error) {
-                console.error("Error loading network suggestions:", error);
-                showToast('Error loading network suggestions', 'error');
-            }
-        }
-
-        // Load your connections
-        async function loadYourConnections(userId) {
-            try {
-                // Get all accepted connections where user is sender or receiver
-                const connectionsQuery1 = query(
-                    collection(db, "connections"),
-                    where("senderId", "==", userId),
-                    where("status", "==", "accepted")
-                );
-                
-                const connectionsQuery2 = query(
-                    collection(db, "connections"),
-                    where("receiverId", "==", userId),
-                    where("status", "==", "accepted")
-                );
-                
-                const [snapshot1, snapshot2] = await Promise.all([
-                    getDocs(connectionsQuery1),
-                    getDocs(connectionsQuery2)
-                ]);
-                
-                const connectionIds = [
-                    ...snapshot1.docs.map(doc => doc.data().receiverId),
-                    ...snapshot2.docs.map(doc => doc.data().senderId)
-                ];
-                
-                // Get user data for each connection
-                const connections = [];
-                for (const id of connectionIds) {
-                    const userDoc = await getDoc(doc(db, "users", id));
-                    if (userDoc.exists()) {
-                        connections.push({ id: userDoc.id, ...userDoc.data() });
-                    }
-                }
-                
-                // Display connections
-                yourConnections.innerHTML = '';
-                connections.slice(0, 6).forEach(user => {
-                    const userCard = document.createElement('div');
-                    userCard.className = 'bg-white rounded-lg border border-gray-200 overflow-hidden card-hover';
+                    userCard.className = 'profile-card bg-white rounded-lg border border-gray-200 overflow-hidden';
                     userCard.innerHTML = `
                         <div class="p-4 text-center">
                             <div class="w-20 h-20 rounded-full bg-gray-200 mx-auto mb-3 overflow-hidden cursor-pointer" onclick="viewProfile('${user.id}')">
@@ -543,18 +1012,208 @@
                             </div>
                             <h3 class="font-bold text-gray-800 cursor-pointer" onclick="viewProfile('${user.id}')">${user.name}</h3>
                             <p class="text-sm text-gray-500">${user.title || 'Professional'}</p>
-                            <div class="mt-3 flex justify-center space-x-2">
-                                <button onclick="startChat('${userId}', '${user.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-medium connection-status">
-                                    Message
-                                </button>
-                                <button onclick="removeConnection('${userId}', '${user.id}')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-full text-xs font-medium connection-status">
-                                    Remove
-                                </button>
-                            </div>
+                            <p class="text-xs text-gray-400 mt-1">${user.location || 'Unknown location'}</p>
+                            <button onclick="sendConnectionRequest('${userId}', '${user.id}')" class="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium btn-action">
+                                <i class="fas fa-user-plus mr-1"></i> Connect
+                            </button>
                         </div>
                     `;
-                    yourConnections.appendChild(userCard);
+                    networkSuggestions.appendChild(userCard);
                 });
+                
+                // Show empty state if no suggestions
+                if (suggestions.length === 0) {
+                    networkSuggestions.innerHTML = `
+                        <div class="col-span-3 py-8 text-center">
+                            <i class="fas fa-users text-gray-300 text-4xl mb-3"></i>
+                            <p class="text-gray-500">No new suggestions at the moment</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error("Error loading network suggestions:", error);
+                showToast('Error loading network suggestions', 'error');
+            }
+        }
+
+        // Load invitations
+        async function loadInvitations(userId) {
+            try {
+                // Received invitations
+                const receivedQuery = db.collection("connections")
+                    .where("receiverId", "==", userId)
+                    .where("status", "==", "pending");
+                
+                // Sent invitations
+                const sentQuery = db.collection("connections")
+                    .where("senderId", "==", userId)
+                    .where("status", "in", ["pending", "accepted", "rejected"]);
+                
+                const [receivedSnapshot, sentSnapshot] = await Promise.all([
+                    receivedQuery.get(),
+                    sentQuery.get()
+                ]);
+                
+                // Display received invitations
+                receivedInvitations.innerHTML = '';
+                if (receivedSnapshot.empty) {
+                    receivedInvitations.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-user-plus text-2xl mb-2"></i>
+                            <p>No pending connection requests</p>
+                        </div>
+                    `;
+                } else {
+                    for (const doc of receivedSnapshot.docs) {
+                        const connection = doc.data();
+                        const userDoc = await db.collection("users").doc(connection.senderId).get();
+                        
+                        if (userDoc.exists) {
+                            const user = userDoc.data();
+                            const invitationElement = document.createElement('div');
+                            invitationElement.className = 'list-item p-4';
+                            invitationElement.innerHTML = `
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-3 cursor-pointer" onclick="viewProfile('${userDoc.id}')">
+                                            <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium cursor-pointer" onclick="viewProfile('${userDoc.id}')">${user.name}</h4>
+                                            <p class="text-sm text-gray-500">${user.title || 'Professional'}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button onclick="acceptConnectionRequest('${doc.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm font-medium btn-action">
+                                            Accept
+                                        </button>
+                                        <button onclick="rejectConnectionRequest('${doc.id}')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-lg text-sm font-medium btn-action">
+                                            Decline
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                            receivedInvitations.appendChild(invitationElement);
+                        }
+                    }
+                }
+                
+                // Display sent invitations
+                sentInvitations.innerHTML = '';
+                if (sentSnapshot.empty) {
+                    sentInvitations.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-paper-plane text-2xl mb-2"></i>
+                            <p>No sent connection requests</p>
+                        </div>
+                    `;
+                } else {
+                    for (const doc of sentSnapshot.docs) {
+                        const connection = doc.data();
+                        const userDoc = await db.collection("users").doc(connection.receiverId).get();
+                        
+                        if (userDoc.exists) {
+                            const user = userDoc.data();
+                            const invitationElement = document.createElement('div');
+                            invitationElement.className = 'list-item p-4';
+                            invitationElement.innerHTML = `
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-3 cursor-pointer" onclick="viewProfile('${userDoc.id}')">
+                                            <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium cursor-pointer" onclick="viewProfile('${userDoc.id}')">${user.name}</h4>
+                                            <p class="text-sm text-gray-500">${user.title || 'Professional'}</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="status-badge ${connection.status === 'pending' ? 'status-pending' : 
+                                                                     connection.status === 'accepted' ? 'status-accepted' : 
+                                                                     'status-rejected'}">
+                                            ${connection.status}
+                                        </span>
+                                    </div>
+                                </div>
+                            `;
+                            sentInvitations.appendChild(invitationElement);
+                        }
+                    }
+                }
+                
+            } catch (error) {
+                console.error("Error loading invitations:", error);
+                showToast('Error loading invitations', 'error');
+            }
+        }
+
+        // Load connections
+        async function loadConnections(userId) {
+            try {
+                // Get all accepted connections where user is sender
+                const connectionsQuery1 = db.collection("connections")
+                    .where("senderId", "==", userId)
+                    .where("status", "==", "accepted");
+                
+                // Get all accepted connections where user is receiver
+                const connectionsQuery2 = db.collection("connections")
+                    .where("receiverId", "==", userId)
+                    .where("status", "==", "accepted");
+                
+                const [snapshot1, snapshot2] = await Promise.all([
+                    connectionsQuery1.get(),
+                    connectionsQuery2.get()
+                ]);
+                
+                // Get all connected user IDs
+                const connectionIds = [
+                    ...snapshot1.docs.map(doc => doc.data().receiverId),
+                    ...snapshot2.docs.map(doc => doc.data().senderId)
+                ];
+                
+                // Get user data for each connection
+                allConnections = [];
+                for (const id of connectionIds) {
+                    const userDoc = await db.collection("users").doc(id).get();
+                    if (userDoc.exists) {
+                        allConnections.push({ id: userDoc.id, ...userDoc.data() });
+                    }
+                }
+                
+                // Display connections
+                connectionsList.innerHTML = '';
+                if (allConnections.length === 0) {
+                    connectionsList.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-user-friends text-2xl mb-2"></i>
+                            <p>You don't have any connections yet</p>
+                            <p class="text-sm mt-1">Connect with people to see them here</p>
+                        </div>
+                    `;
+                } else {
+                    allConnections.forEach(user => {
+                        const connectionElement = document.createElement('div');
+                        connectionElement.className = 'connection-item list-item p-3';
+                        connectionElement.innerHTML = `
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-3 cursor-pointer" onclick="viewProfile('${user.id}')">
+                                        <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <h4 class="connection-name font-medium cursor-pointer" onclick="viewProfile('${user.id}')">${user.name}</h4>
+                                        <p class="text-sm text-gray-500">${user.title || 'Professional'}</p>
+                                    </div>
+                                </div>
+                                <button onclick="startChat('${userId}', '${user.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm font-medium btn-action">
+                                    <i class="fas fa-comment-dots mr-1"></i> Message
+                                </button>
+                            </div>
+                        `;
+                        connectionsList.appendChild(connectionElement);
+                    });
+                }
                 
             } catch (error) {
                 console.error("Error loading connections:", error);
@@ -562,86 +1221,89 @@
             }
         }
 
-        // Load connection requests
-        async function loadConnectionRequests(userId) {
+        // Load groups
+        async function loadGroups(userId) {
             try {
-                const querySnapshot = await getDocs(query(
-                    collection(db, "connections"),
-                    where("receiverId", "==", userId),
-                    where("status", "==", "pending")
-                ));
+                const querySnapshot = await db.collection("groups")
+                    .where("members", "array-contains", userId)
+                    .get();
                 
-                connectionModalContent.innerHTML = `
-                    <h2 class="text-xl font-bold mb-4">Connection Requests</h2>
-                    <div class="space-y-4">
-                        ${querySnapshot.size === 0 ? '<p class="text-gray-500">No pending requests</p>' : ''}
-                    </div>
-                `;
+                groupsList.innerHTML = '';
                 
-                const requestsContainer = connectionModalContent.querySelector('.space-y-4');
-                
-                for (const doc of querySnapshot.docs) {
-                    const connection = doc.data();
-                    const userDoc = await getDoc(doc(db, "users", connection.senderId));
-                    
-                    if (userDoc.exists()) {
-                        const user = userDoc.data();
-                        const requestElement = document.createElement('div');
-                        requestElement.className = 'flex items-center justify-between p-3 border border-gray-200 rounded-lg';
-                        requestElement.innerHTML = `
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-3">
-                                    <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                if (querySnapshot.empty) {
+                    groupsList.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-users text-2xl mb-2"></i>
+                            <p>You're not in any groups yet</p>
+                            <button id="create-group-btn" class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium btn-action">
+                                <i class="fas fa-plus mr-1"></i> Create Group
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    querySnapshot.forEach(doc => {
+                        const group = doc.data();
+                        const groupElement = document.createElement('div');
+                        groupElement.className = 'list-item p-3';
+                        groupElement.innerHTML = `
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-3">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium">${group.name}</h4>
+                                        <p class="text-sm text-gray-500">${group.description || 'No description'}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="font-medium">${user.name}</h4>
-                                    <p class="text-sm text-gray-500">${user.title || 'Professional'}</p>
+                                <div class="text-sm text-gray-500">
+                                    ${group.members.length} member${group.members.length !== 1 ? 's' : ''}
                                 </div>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button onclick="acceptConnectionRequest('${doc.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-medium">
-                                    Accept
-                                </button>
-                                <button onclick="rejectConnectionRequest('${doc.id}')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-full text-xs font-medium">
-                                    Decline
-                                </button>
                             </div>
                         `;
-                        requestsContainer.appendChild(requestElement);
-                    }
+                        groupsList.appendChild(groupElement);
+                    });
                 }
                 
-                openModal('connection-modal');
-                
             } catch (error) {
-                console.error("Error loading connection requests:", error);
-                showToast('Error loading connection requests', 'error');
+                console.error("Error loading groups:", error);
+                showToast('Error loading groups', 'error');
             }
         }
 
         // Load notifications
         async function loadNotifications(userId) {
             try {
-                const querySnapshot = await getDocs(query(
-                    collection(db, "notifications"),
-                    where("toUserId", "==", userId),
-                    orderBy("timestamp", "desc"),
-                    limit(10)
-                ));
+                const querySnapshot = await db.collection("notifications")
+                    .where("toUserId", "==", userId)
+                    .orderBy("timestamp", "desc")
+                    .limit(10)
+                    .get();
                 
                 notificationsList.innerHTML = '';
                 
-                for (const doc of querySnapshot.docs) {
+                if (querySnapshot.empty) {
+                    notificationsList.innerHTML = `
+                        <div class="p-4 text-center text-gray-500">
+                            No new notifications
+                        </div>
+                    `;
+                    return;
+                }
+                
+                querySnapshot.forEach(async (doc) => {
                     const notification = doc.data();
-                    const fromUserDoc = await getDoc(doc(db, "users", notification.fromUserId));
-                    const fromUserName = fromUserDoc.exists() ? fromUserDoc.data().name : 'Someone';
+                    const fromUserDoc = await db.collection("users").doc(notification.fromUserId).get();
+                    const fromUserName = fromUserDoc.exists ? fromUserDoc.data().name : 'Someone';
                     
                     const notificationElement = document.createElement('div');
                     notificationElement.className = 'p-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer';
                     notificationElement.innerHTML = `
                         <div class="flex items-start">
-                            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 mr-3">
-                                <i class="fas fa-user"></i>
+                            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 mr-3 overflow-hidden">
+                                ${fromUserDoc.exists && fromUserDoc.data().profileImage 
+                                    ? `<img src="${fromUserDoc.data().profileImage}" alt="${fromUserName}" class="w-full h-full object-cover">`
+                                    : `<i class="fas fa-user"></i>`}
                             </div>
                             <div class="flex-1">
                                 <p class="text-sm">${notification.message.replace('User X', fromUserName)}</p>
@@ -653,18 +1315,20 @@
                     
                     notificationElement.addEventListener('click', async () => {
                         // Mark as read
-                        await updateDoc(doc(db, "notifications", doc.id), { read: true });
+                        await db.collection("notifications").doc(doc.id).update({ read: true });
                         
                         // Handle notification click based on type
                         if (notification.type === 'connection_request') {
-                            loadConnectionRequests(userId);
+                            invitationsLink.click();
                         } else if (notification.type === 'profile_view') {
                             viewProfile(notification.fromUserId);
+                        } else if (notification.type === 'group_invitation') {
+                            // Handle group invitation
                         }
                     });
                     
                     notificationsList.appendChild(notificationElement);
-                }
+                });
                 
             } catch (error) {
                 console.error("Error loading notifications:", error);
@@ -675,25 +1339,35 @@
         // Load recent activity
         async function loadRecentActivity(userId) {
             try {
-                const querySnapshot = await getDocs(query(
-                    collection(db, "notifications"),
-                    where("toUserId", "==", userId),
-                    orderBy("timestamp", "desc"),
-                    limit(5)
-                ));
+                const querySnapshot = await db.collection("notifications")
+                    .where("toUserId", "==", userId)
+                    .orderBy("timestamp", "desc")
+                    .limit(5)
+                    .get();
                 
                 recentActivity.innerHTML = '';
                 
-                for (const doc of querySnapshot.docs) {
+                if (querySnapshot.empty) {
+                    recentActivity.innerHTML = `
+                        <div class="text-center text-gray-500 py-4">
+                            No recent activity
+                        </div>
+                    `;
+                    return;
+                }
+                
+                querySnapshot.forEach(async (doc) => {
                     const notification = doc.data();
-                    const fromUserDoc = await getDoc(doc(db, "users", notification.fromUserId));
-                    const fromUserName = fromUserDoc.exists() ? fromUserDoc.data().name : 'Someone';
+                    const fromUserDoc = await db.collection("users").doc(notification.fromUserId).get();
+                    const fromUserName = fromUserDoc.exists ? fromUserDoc.data().name : 'Someone';
                     
                     const activityElement = document.createElement('div');
                     activityElement.className = 'flex items-start';
                     activityElement.innerHTML = `
-                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 mr-3">
-                            <i class="fas fa-bell text-sm"></i>
+                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 mr-3 overflow-hidden">
+                            ${fromUserDoc.exists && fromUserDoc.data().profileImage 
+                                ? `<img src="${fromUserDoc.data().profileImage}" alt="${fromUserName}" class="w-full h-full object-cover">`
+                                : `<i class="fas fa-bell text-sm"></i>`}
                         </div>
                         <div>
                             <p class="text-sm">${notification.message.replace('User X', fromUserName)}</p>
@@ -701,7 +1375,7 @@
                         </div>
                     `;
                     recentActivity.appendChild(activityElement);
-                }
+                });
                 
             } catch (error) {
                 console.error("Error loading recent activity:", error);
@@ -709,52 +1383,93 @@
             }
         }
 
-        // View profile
+        // View profile with chat
         async function viewProfile(userId) {
             try {
-                const userDoc = await getDoc(doc(db, "users", userId));
+                const userDoc = await db.collection("users").doc(userId).get();
+                const currentUser = auth.currentUser;
                 
-                if (userDoc.exists()) {
+                if (userDoc.exists) {
                     const user = userDoc.data();
+                    currentChatUserId = userId;
+                    
+                    // Update profile modal content
+                    profileModalImage.src = user.profileImage || 'https://via.placeholder.com/150';
+                    profileModalName.textContent = user.name;
+                    profileModalTitle.textContent = user.title || 'Professional';
+                    profileModalLocation.textContent = user.location || 'Unknown location';
+                    profileModalAbout.textContent = user.summary || 'No summary provided';
+                    
+                    // Load experience
+                    profileModalExperience.innerHTML = user.experience && user.experience.length > 0 
+                        ? user.experience.map(exp => `
+                            <div class="mb-3">
+                                <p class="font-medium">${exp.position || 'Position'}</p>
+                                <p class="text-sm text-gray-600">${exp.company || 'Company'}</p>
+                                <p class="text-xs text-gray-500">${exp.duration || 'Duration'}</p>
+                            </div>
+                        `).join('')
+                        : '<p class="text-gray-500 text-sm">No experience added</p>';
+                    
+                    // Load education
+                    profileModalEducation.innerHTML = user.education && user.education.length > 0 
+                        ? user.education.map(edu => `
+                            <div class="mb-3">
+                                <p class="font-medium">${edu.degree || 'Degree'}</p>
+                                <p class="text-sm text-gray-600">${edu.institution || 'Institution'}</p>
+                                <p class="text-xs text-gray-500">${edu.year || 'Year'}</p>
+                            </div>
+                        `).join('')
+                        : '<p class="text-gray-500 text-sm">No education added</p>';
+                    
+                    // Check connection status
+                    let connectionStatus = 'not_connected';
+                    if (currentUser && currentUser.uid !== userId) {
+                        const connectionQuery1 = db.collection("connections")
+                            .where("senderId", "==", currentUser.uid)
+                            .where("receiverId", "==", userId);
+                        
+                        const connectionQuery2 = db.collection("connections")
+                            .where("senderId", "==", userId)
+                            .where("receiverId", "==", currentUser.uid);
+                        
+                        const [snapshot1, snapshot2] = await Promise.all([
+                            connectionQuery1.get(),
+                            connectionQuery2.get()
+                        ]);
+                        
+                        if (!snapshot1.empty) {
+                            connectionStatus = snapshot1.docs[0].data().status;
+                        } else if (!snapshot2.empty) {
+                            connectionStatus = snapshot2.docs[0].data().status;
+                        }
+                    }
                     
                     // Create profile view notification if viewing someone else's profile
-                    const currentUser = auth.currentUser;
                     if (currentUser && currentUser.uid !== userId) {
-                        await addDoc(collection(db, "notifications"), {
+                        await db.collection("notifications").add({
                             toUserId: userId,
                             fromUserId: currentUser.uid,
                             type: "profile_view",
                             message: "User X viewed your profile",
-                            timestamp: serverTimestamp(),
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                             read: false
                         });
                     }
                     
-                    // Display profile in modal
-                    profileModalContent.innerHTML = `
-                        <div class="text-center mb-6">
-                            <div class="w-24 h-24 rounded-full bg-gray-200 mx-auto mb-4 overflow-hidden">
-                                <img src="${user.profileImage || 'https://via.placeholder.com/150'}" alt="${user.name}" class="w-full h-full object-cover">
+                    // Load chat messages
+                    if (connectionStatus === 'accepted') {
+                        loadChatMessages(currentUser.uid, userId);
+                    } else {
+                        chatMessages.innerHTML = `
+                            <div class="text-center text-gray-500 py-8">
+                                <i class="fas fa-user-lock text-2xl mb-2"></i>
+                                <p>You need to be connected to message this user</p>
                             </div>
-                            <h2 class="text-xl font-bold">${user.name}</h2>
-                            <p class="text-gray-600">${user.title || 'Professional'}</p>
-                            <p class="text-sm text-gray-500 mt-2">${user.location || 'Unknown location'}</p>
-                        </div>
-                        
-                        <div class="mb-6">
-                            <h3 class="font-medium text-gray-800 mb-2">About</h3>
-                            <p class="text-gray-700">${user.summary || 'No summary provided'}</p>
-                        </div>
-                        
-                        <div class="flex justify-center space-x-4">
-                            <button onclick="startChat('${currentUser.uid}', '${userId}')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full font-medium">
-                                Message
-                            </button>
-                            <button onclick="closeModal('profile-modal')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-full font-medium">
-                                Close
-                            </button>
-                        </div>
-                    `;
+                        `;
+                        chatInput.disabled = true;
+                        sendMessageBtn.disabled = true;
+                    }
                     
                     openModal('profile-modal');
                 } else {
@@ -766,15 +1481,80 @@
             }
         }
 
+        // Load chat messages
+        async function loadChatMessages(userId1, userId2) {
+            try {
+                // Query messages where user1 is sender and user2 is receiver
+                const query1 = db.collection("messages")
+                    .where("senderId", "==", userId1)
+                    .where("receiverId", "==", userId2)
+                    .orderBy("timestamp");
+                
+                // Query messages where user2 is sender and user1 is receiver
+                const query2 = db.collection("messages")
+                    .where("senderId", "==", userId2)
+                    .where("receiverId", "==", userId1)
+                    .orderBy("timestamp");
+                
+                const [snapshot1, snapshot2] = await Promise.all([
+                    query1.get(),
+                    query2.get()
+                ]);
+                
+                // Combine and sort messages
+                const messages = [
+                    ...snapshot1.docs.map(doc => ({ ...doc.data(), id: doc.id, isSent: true })),
+                    ...snapshot2.docs.map(doc => ({ ...doc.data(), id: doc.id, isSent: false }))
+                ].sort((a, b) => a.timestamp?.seconds - b.timestamp?.seconds);
+                
+                // Display messages
+                chatMessages.innerHTML = '';
+                if (messages.length === 0) {
+                    chatMessages.innerHTML = `
+                        <div class="text-center text-gray-500 py-8">
+                            <i class="fas fa-comments text-2xl mb-2"></i>
+                            <p>Start a conversation</p>
+                        </div>
+                    `;
+                } else {
+                    messages.forEach(msg => {
+                        addMessageToChat(msg.senderId, msg.content, msg.isSent);
+                    });
+                }
+                
+                // Enable chat input
+                chatInput.disabled = false;
+                sendMessageBtn.disabled = false;
+                
+                // Set up real-time listener for new messages
+                db.collection("messages")
+                    .where("senderId", "in", [userId1, userId2])
+                    .where("receiverId", "in", [userId1, userId2])
+                    .orderBy("timestamp")
+                    .onSnapshot((snapshot) => {
+                        snapshot.docChanges().forEach(change => {
+                            if (change.type === "added") {
+                                const msg = change.doc.data();
+                                const isSent = msg.senderId === userId1;
+                                addMessageToChat(msg.senderId, msg.content, isSent);
+                            }
+                        });
+                    });
+                
+            } catch (error) {
+                console.error("Error loading chat messages:", error);
+                showToast('Error loading chat messages', 'error');
+            }
+        }
+
         // Send connection request
         async function sendConnectionRequest(senderId, receiverId) {
             try {
                 // Check if request already exists
-                const existingRequest = await getDocs(query(
-                    collection(db, "connections"),
-                    where("senderId", "==", senderId),
-                    where("receiverId", "==", receiverId)
-                ));
+                const existingRequest = await db.collection("connections")
+                    .where("senderId", "==", senderId)
+                    .where("receiverId", "==", receiverId)
+                    .get();
                 
                 if (!existingRequest.empty) {
                     showToast('Connection request already sent', 'error');
@@ -782,20 +1562,20 @@
                 }
                 
                 // Create connection request
-                await addDoc(collection(db, "connections"), {
+                await db.collection("connections").add({
                     senderId,
                     receiverId,
                     status: "pending",
-                    createdAt: serverTimestamp()
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
                 // Create notification
-                await addDoc(collection(db, "notifications"), {
+                await db.collection("notifications").add({
                     toUserId: receiverId,
                     fromUserId: senderId,
                     type: "connection_request",
                     message: "User X wants to connect with you",
-                    timestamp: serverTimestamp(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     read: false
                 });
                 
@@ -810,13 +1590,27 @@
         // Accept connection request
         async function acceptConnectionRequest(connectionId) {
             try {
-                await updateDoc(doc(db, "connections", connectionId), {
+                await db.collection("connections").doc(connectionId).update({
                     status: "accepted",
-                    acceptedAt: serverTimestamp()
+                    acceptedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Get connection details
+                const connectionDoc = await db.collection("connections").doc(connectionId).get();
+                const connection = connectionDoc.data();
+                
+                // Create notification for the sender
+                await db.collection("notifications").add({
+                    toUserId: connection.senderId,
+                    fromUserId: connection.receiverId,
+                    type: "connection_request",
+                    message: "User X accepted your connection request",
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    read: false
                 });
                 
                 showToast('Connection request accepted');
-                closeModal('connection-modal');
+                loadInvitations(auth.currentUser.uid);
                 
             } catch (error) {
                 console.error("Error accepting connection request:", error);
@@ -827,12 +1621,12 @@
         // Reject connection request
         async function rejectConnectionRequest(connectionId) {
             try {
-                await updateDoc(doc(db, "connections", connectionId), {
+                await db.collection("connections").doc(connectionId).update({
                     status: "rejected"
                 });
                 
                 showToast('Connection request declined');
-                closeModal('connection-modal');
+                loadInvitations(auth.currentUser.uid);
                 
             } catch (error) {
                 console.error("Error rejecting connection request:", error);
@@ -840,49 +1634,9 @@
             }
         }
 
-        // Remove connection
-        async function removeConnection(userId, connectionId) {
-            try {
-                // Find the connection document
-                const connectionQuery1 = query(
-                    collection(db, "connections"),
-                    where("senderId", "==", userId),
-                    where("receiverId", "==", connectionId),
-                    where("status", "==", "accepted")
-                );
-                
-                const connectionQuery2 = query(
-                    collection(db, "connections"),
-                    where("senderId", "==", connectionId),
-                    where("receiverId", "==", userId),
-                    where("status", "==", "accepted")
-                );
-                
-                const [snapshot1, snapshot2] = await Promise.all([
-                    getDocs(connectionQuery1),
-                    getDocs(connectionQuery2)
-                ]);
-                
-                const connectionDoc = snapshot1.docs[0] || snapshot2.docs[0];
-                
-                if (connectionDoc) {
-                    await deleteDoc(connectionDoc.ref);
-                    showToast('Connection removed');
-                } else {
-                    showToast('Connection not found', 'error');
-                }
-                
-            } catch (error) {
-                console.error("Error removing connection:", error);
-                showToast('Error removing connection', 'error');
-            }
-        }
-
-        // Start chat (placeholder - would navigate to messages page)
+        // Start chat with connection
         function startChat(currentUserId, otherUserId) {
-            showToast('Redirecting to messages...');
-            // In a real app, you would navigate to a chat page with the selected user
-            // window.location.href = `messages.html?userId=${otherUserId}`;
+            viewProfile(otherUserId);
         }
 
         // Make functions available globally
@@ -890,11 +1644,9 @@
         window.sendConnectionRequest = sendConnectionRequest;
         window.acceptConnectionRequest = acceptConnectionRequest;
         window.rejectConnectionRequest = rejectConnectionRequest;
-        window.removeConnection = removeConnection;
         window.startChat = startChat;
         window.openModal = openModal;
         window.closeModal = closeModal;
-
     </script>
 </body>
 </html>
