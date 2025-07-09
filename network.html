@@ -487,13 +487,13 @@
             messagingSenderId: "462532086346",
             appId: "1:462532086346:web:f3689678f389eb941534b3"
         };
-
+    
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         const storage = firebase.storage();
-
+    
         // DOM elements
         const notificationsBtn = document.getElementById('notifications-btn');
         const notificationsDropdown = document.getElementById('notifications-dropdown');
@@ -545,31 +545,34 @@
         const toast = document.getElementById('toast');
         const toastIcon = document.getElementById('toast-icon');
         const toastMessage = document.getElementById('toast-message');
-
+    
         // State variables
         let currentChatUserId = null;
         let selectedGroupMembers = [];
         let allConnections = [];
-
+        let notificationListener = null;
+        let connectionListener1 = null;
+        let connectionListener2 = null;
+    
         // Toggle dropdowns
         notificationsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             notificationsDropdown.classList.toggle('hidden');
             profileDropdown.classList.add('hidden');
         });
-
+    
         profileBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             profileDropdown.classList.toggle('hidden');
             notificationsDropdown.classList.add('hidden');
         });
-
+    
         // Close dropdowns when clicking outside
         document.addEventListener('click', () => {
             notificationsDropdown.classList.add('hidden');
             profileDropdown.classList.add('hidden');
         });
-
+    
         // Logout functionality
         logoutBtn.addEventListener('click', () => {
             auth.signOut().then(() => {
@@ -579,23 +582,23 @@
                 showToast('Error logging out. Please try again.', 'error');
             });
         });
-
+    
         // Mark all notifications as read
         markAllReadBtn?.addEventListener('click', async () => {
             const currentUser = auth.currentUser;
             if (!currentUser) return;
-
+    
             try {
                 const querySnapshot = await db.collection("notifications")
                     .where("toUserId", "==", currentUser.uid)
                     .where("read", "==", false)
                     .get();
-
+    
                 const batch = db.batch();
                 querySnapshot.forEach(doc => {
                     batch.update(doc.ref, { read: true });
                 });
-
+    
                 await batch.commit();
                 showToast('All notifications marked as read');
             } catch (error) {
@@ -603,7 +606,7 @@
                 showToast('Error marking notifications as read', 'error');
             }
         });
-
+    
         // Tab switching for invitations
         receivedTab.addEventListener('click', () => {
             receivedTab.classList.add('active');
@@ -611,14 +614,14 @@
             receivedInvitations.classList.remove('hidden');
             sentInvitations.classList.add('hidden');
         });
-
+    
         sentTab.addEventListener('click', () => {
             sentTab.classList.add('active');
             receivedTab.classList.remove('active');
             sentInvitations.classList.remove('hidden');
             receivedInvitations.classList.add('hidden');
         });
-
+    
         // Section switching
         invitationsLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -628,7 +631,7 @@
             groupsSection.classList.add('hidden');
             loadInvitations(auth.currentUser.uid);
         });
-
+    
         connectionsLink.addEventListener('click', (e) => {
             e.preventDefault();
             networkSuggestions.parentElement.classList.add('hidden');
@@ -637,7 +640,7 @@
             groupsSection.classList.add('hidden');
             loadConnections(auth.currentUser.uid);
         });
-
+    
         groupsLink.addEventListener('click', (e) => {
             e.preventDefault();
             networkSuggestions.parentElement.classList.add('hidden');
@@ -646,7 +649,7 @@
             groupsSection.classList.remove('hidden');
             loadGroups(auth.currentUser.uid);
         });
-
+    
         // Create group button
         createGroupBtn.addEventListener('click', () => {
             openModal('group-modal');
@@ -655,7 +658,7 @@
             groupSelectedMembers.innerHTML = '';
             selectedGroupMembers = [];
         });
-
+    
         // Group member search
         groupMembersSearch.addEventListener('input', async (e) => {
             const searchTerm = e.target.value.trim();
@@ -663,17 +666,17 @@
                 groupMembersResults.classList.add('hidden');
                 return;
             }
-
+    
             try {
                 const currentUser = auth.currentUser;
                 if (!currentUser) return;
-
+    
                 // Search connections by name
                 const querySnapshot = await db.collection("users")
                     .where("name", ">=", searchTerm)
                     .where("name", "<=", searchTerm + '\uf8ff')
                     .get();
-
+    
                 groupMembersResults.innerHTML = '';
                 
                 querySnapshot.forEach(doc => {
@@ -702,7 +705,7 @@
                         groupMembersResults.appendChild(memberElement);
                     }
                 });
-
+    
                 if (groupMembersResults.children.length > 0) {
                     groupMembersResults.classList.remove('hidden');
                 } else {
@@ -712,7 +715,7 @@
                 console.error("Error searching members:", error);
             }
         });
-
+    
         function renderSelectedMembers() {
             groupSelectedMembers.innerHTML = '';
             selectedGroupMembers.forEach(memberId => {
@@ -735,28 +738,28 @@
                 });
             });
         }
-
+    
         window.removeSelectedMember = function(memberId) {
             selectedGroupMembers = selectedGroupMembers.filter(id => id !== memberId);
             renderSelectedMembers();
         };
-
+    
         // Create group confirmation
         createGroupConfirm.addEventListener('click', async () => {
             const groupName = groupNameInput.value.trim();
             const groupDescription = groupDescriptionInput.value.trim();
             const currentUser = auth.currentUser;
-
+    
             if (!groupName) {
                 showToast('Please enter a group name', 'error');
                 return;
             }
-
+    
             if (selectedGroupMembers.length === 0) {
                 showToast('Please add at least one member', 'error');
                 return;
             }
-
+    
             try {
                 // Add current user to members
                 const allMembers = [...selectedGroupMembers, currentUser.uid];
@@ -769,7 +772,7 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     members: allMembers
                 });
-
+    
                 // Create notifications for invited members
                 const batch = db.batch();
                 selectedGroupMembers.forEach(memberId => {
@@ -778,13 +781,13 @@
                         toUserId: memberId,
                         fromUserId: currentUser.uid,
                         type: "group_invitation",
-                        message: `User X invited you to join the group "${groupName}"`,
+                        message: `You've been invited to join the group "${groupName}"`,
                         groupId: groupRef.id,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                         read: false
                     });
                 });
-
+    
                 await batch.commit();
                 closeModal('group-modal');
                 showToast('Group created successfully');
@@ -794,7 +797,7 @@
                 showToast('Error creating group', 'error');
             }
         });
-
+    
         // Connections search
         connectionsSearch.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
@@ -809,7 +812,7 @@
                 }
             });
         });
-
+    
         // Send message functionality
         sendMessageBtn.addEventListener('click', sendMessage);
         chatInput.addEventListener('keypress', (e) => {
@@ -817,23 +820,30 @@
                 sendMessage();
             }
         });
-
+    
         async function sendMessage() {
             const message = chatInput.value.trim();
-            if (!message || !currentChatUserId) return;
-
+            if (!message || !currentChatUserId) {
+                showToast('Message cannot be empty', 'error');
+                return;
+            }
+    
             const currentUser = auth.currentUser;
-            if (!currentUser) return;
-
+            if (!currentUser) {
+                showToast('You need to be logged in to send messages', 'error');
+                return;
+            }
+    
             try {
                 // Add message to Firestore
                 await db.collection("messages").add({
                     senderId: currentUser.uid,
                     receiverId: currentChatUserId,
                     content: message,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    read: false
                 });
-
+    
                 // Clear input
                 chatInput.value = '';
                 
@@ -844,7 +854,7 @@
                 showToast('Error sending message', 'error');
             }
         }
-
+    
         function addMessageToChat(senderId, message, isSent) {
             const messageElement = document.createElement('div');
             messageElement.className = `message ${isSent ? 'message-sent' : 'message-received'}`;
@@ -852,18 +862,18 @@
             chatMessages.appendChild(messageElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-
+    
         // Modal functions
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-
+    
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-
+    
         // Show toast notification
         function showToast(message, type = 'success') {
             const icon = type === 'success' ? 'fa-check-circle text-green-400' : 
@@ -881,7 +891,7 @@
                 toast.style.pointerEvents = 'none';
             }, 3000);
         }
-
+    
         // Format timestamp
         function formatTimestamp(timestamp) {
             if (!timestamp) return 'Just now';
@@ -895,7 +905,7 @@
             if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
             return `${Math.floor(diffInSeconds / 86400)}d ago`;
         }
-
+    
         // Main initialization when auth state changes
         auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -903,24 +913,34 @@
                 const userId = user.uid;
                 
                 // Load user data
-                const userDoc = await db.collection("users").doc(userId).get();
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    
-                    // Update navbar
-                    if (navbarUsername && userData.name) {
-                        navbarUsername.textContent = userData.name;
+                try {
+                    const userDoc = await db.collection("users").doc(userId).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        
+                        // Update navbar
+                        if (navbarUsername && userData.name) {
+                            navbarUsername.textContent = userData.name;
+                        }
+                        
+                        // Update profile avatar
+                        if (profileAvatar) {
+                            profileAvatar.innerHTML = '';
+                            if (userData.profileImage) {
+                                const img = document.createElement('img');
+                                img.src = userData.profileImage;
+                                img.alt = userData.name;
+                                img.className = 'w-full h-full object-cover rounded-full';
+                                profileAvatar.appendChild(img);
+                            } else {
+                                const icon = document.createElement('i');
+                                icon.className = 'fas fa-user';
+                                profileAvatar.appendChild(icon);
+                            }
+                        }
                     }
-                    
-                    // Update profile avatar
-                    if (profileAvatar && userData.profileImage) {
-                        profileAvatar.innerHTML = '';
-                        const img = document.createElement('img');
-                        img.src = userData.profileImage;
-                        img.alt = userData.name;
-                        img.className = 'w-full h-full object-cover rounded-full';
-                        profileAvatar.appendChild(img);
-                    }
+                } catch (error) {
+                    console.error("Error loading user data:", error);
                 }
                 
                 // Set up real-time listeners
@@ -934,9 +954,13 @@
                 window.location.href = 'login.html';
             }
         });
-
+    
         // Set up connection listeners
         function setupConnectionListeners(userId) {
+            // Clean up previous listeners if they exist
+            if (connectionListener1) connectionListener1();
+            if (connectionListener2) connectionListener2();
+    
             // Listen for incoming connection requests
             db.collection("connections")
                 .where("receiverId", "==", userId)
@@ -947,50 +971,73 @@
                 });
             
             // Listen for accepted connections (where user is sender or receiver)
-            const connectionsQuery1 = db.collection("connections")
+            connectionListener1 = db.collection("connections")
                 .where("senderId", "==", userId)
-                .where("status", "==", "accepted");
+                .where("status", "==", "accepted")
+                .onSnapshot((snapshot) => {
+                    connectionCount.textContent = snapshot.size;
+                });
             
-            const connectionsQuery2 = db.collection("connections")
+            connectionListener2 = db.collection("connections")
                 .where("receiverId", "==", userId)
-                .where("status", "==", "accepted");
-            
-            connectionsQuery1.onSnapshot((snapshot) => {
-                connectionCount.textContent = snapshot.size;
-            });
-            
-            connectionsQuery2.onSnapshot((snapshot) => {
-                connectionCount.textContent = parseInt(connectionCount.textContent || 0) + snapshot.size;
-            });
+                .where("status", "==", "accepted")
+                .onSnapshot((snapshot) => {
+                    connectionCount.textContent = parseInt(connectionCount.textContent || 0) + snapshot.size;
+                });
         }
-
+    
         // Set up notification listeners
         function setupNotificationListeners(userId) {
-            db.collection("notifications")
+            // Clean up previous listener if it exists
+            if (notificationListener) notificationListener();
+    
+            notificationListener = db.collection("notifications")
                 .where("toUserId", "==", userId)
                 .where("read", "==", false)
                 .onSnapshot((snapshot) => {
                     notificationCount.textContent = snapshot.size;
                     notificationCount.classList.toggle('hidden', snapshot.size === 0);
                     loadNotifications(userId);
+                }, (error) => {
+                    console.error("Notification listener error:", error);
+                    showToast('Error loading notifications', 'error');
                 });
         }
-
+    
         // Load network suggestions
         async function loadNetworkSuggestions(userId) {
             try {
+                // First verify the user is authenticated
+                const currentUser = auth.currentUser;
+                if (!currentUser) {
+                    console.error("User not authenticated");
+                    return;
+                }
+    
                 // Get all users except current user
                 const usersSnapshot = await db.collection("users").get();
                 
                 // Get existing connections
-                const connectionsSnapshot = await db.collection("connections")
-                    .where("senderId", "==", userId)
-                    .get();
-                
-                // Get IDs of users we're already connected with
-                const connectedUserIds = connectionsSnapshot.docs.map(doc => 
-                    doc.data().receiverId === userId ? doc.data().senderId : doc.data().receiverId
-                );
+                let connectedUserIds = [];
+                try {
+                    const connectionsQuery1 = db.collection("connections")
+                        .where("senderId", "==", userId);
+                    
+                    const connectionsQuery2 = db.collection("connections")
+                        .where("receiverId", "==", userId);
+                    
+                    const [snapshot1, snapshot2] = await Promise.all([
+                        connectionsQuery1.get(),
+                        connectionsQuery2.get()
+                    ]);
+                    
+                    connectedUserIds = [
+                        ...snapshot1.docs.map(doc => doc.data().receiverId),
+                        ...snapshot2.docs.map(doc => doc.data().senderId)
+                    ];
+                } catch (error) {
+                    console.error("Error fetching connections:", error);
+                }
                 
                 // Filter out current user and existing connections
                 const suggestions = [];
@@ -1036,7 +1083,7 @@
                 showToast('Error loading network suggestions', 'error');
             }
         }
-
+    
         // Load invitations
         async function loadInvitations(userId) {
             try {
@@ -1147,7 +1194,7 @@
                 showToast('Error loading invitations', 'error');
             }
         }
-
+    
         // Load connections
         async function loadConnections(userId) {
             try {
@@ -1220,7 +1267,7 @@
                 showToast('Error loading connections', 'error');
             }
         }
-
+    
         // Load groups
         async function loadGroups(userId) {
             try {
@@ -1270,7 +1317,7 @@
                 showToast('Error loading groups', 'error');
             }
         }
-
+    
         // Load notifications
         async function loadNotifications(userId) {
             try {
@@ -1291,7 +1338,7 @@
                     return;
                 }
                 
-                querySnapshot.forEach(async (doc) => {
+                for (const doc of querySnapshot.docs) {
                     const notification = doc.data();
                     const fromUserDoc = await db.collection("users").doc(notification.fromUserId).get();
                     const fromUserName = fromUserDoc.exists ? fromUserDoc.data().name : 'Someone';
@@ -1328,14 +1375,14 @@
                     });
                     
                     notificationsList.appendChild(notificationElement);
-                });
+                }
                 
             } catch (error) {
                 console.error("Error loading notifications:", error);
                 showToast('Error loading notifications', 'error');
             }
         }
-
+    
         // Load recent activity
         async function loadRecentActivity(userId) {
             try {
@@ -1356,7 +1403,7 @@
                     return;
                 }
                 
-                querySnapshot.forEach(async (doc) => {
+                for (const doc of querySnapshot.docs) {
                     const notification = doc.data();
                     const fromUserDoc = await db.collection("users").doc(notification.fromUserId).get();
                     const fromUserName = fromUserDoc.exists ? fromUserDoc.data().name : 'Someone';
@@ -1375,14 +1422,14 @@
                         </div>
                     `;
                     recentActivity.appendChild(activityElement);
-                });
+                }
                 
             } catch (error) {
                 console.error("Error loading recent activity:", error);
                 showToast('Error loading recent activity', 'error');
             }
         }
-
+    
         // View profile with chat
         async function viewProfile(userId) {
             try {
@@ -1480,7 +1527,7 @@
                 showToast('Error viewing profile', 'error');
             }
         }
-
+    
         // Load chat messages
         async function loadChatMessages(userId1, userId2) {
             try {
@@ -1546,7 +1593,7 @@
                 showToast('Error loading chat messages', 'error');
             }
         }
-
+    
         // Send connection request
         async function sendConnectionRequest(senderId, receiverId) {
             try {
@@ -1586,7 +1633,7 @@
                 showToast('Error sending connection request', 'error');
             }
         }
-
+    
         // Accept connection request
         async function acceptConnectionRequest(connectionId) {
             try {
@@ -1617,7 +1664,7 @@
                 showToast('Error accepting connection request', 'error');
             }
         }
-
+    
         // Reject connection request
         async function rejectConnectionRequest(connectionId) {
             try {
@@ -1633,12 +1680,12 @@
                 showToast('Error rejecting connection request', 'error');
             }
         }
-
+    
         // Start chat with connection
         function startChat(currentUserId, otherUserId) {
             viewProfile(otherUserId);
         }
-
+    
         // Make functions available globally
         window.viewProfile = viewProfile;
         window.sendConnectionRequest = sendConnectionRequest;
@@ -1647,6 +1694,7 @@
         window.startChat = startChat;
         window.openModal = openModal;
         window.closeModal = closeModal;
+        window.removeSelectedMember = removeSelectedMember;
     </script>
 </body>
 </html>
